@@ -15,7 +15,7 @@ try:
     if not GEMINI_API_KEY or GEMINI_API_KEY == "OVDE_IDE_TVOJ_GEMINI_KLJUČ":
         print("UPOZORENJE: API ključ nije unet. AI neće raditi dok se ne unese.")
     else:
-        genai.configure(api_key=GEMINI_API_KEY)
+        genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 
     model = genai.GenerativeModel(
         model_name="gemini-2.5-flash",
@@ -127,4 +127,5 @@ async def generate_rival_strategy(request: Request):
 
     except Exception as e:
         print(f"AI GREŠKA: {e}")
+
         raise HTTPException(status_code=500, detail=f"Greška u AI generisanju: {e}")
