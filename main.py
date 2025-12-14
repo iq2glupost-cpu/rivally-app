@@ -7,81 +7,86 @@ from supabase import create_client, Client
 
 app = FastAPI()
 
-# 1. Dozvoli pristup svima (CORS)
+# 1. CORS Podesavanja
 app.add_middleware(
-
     CORSMiddleware,
+
     allow_origins=["*"],
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# 2. Povezi se sa Google-om (Gemini)
-# UZIMA KLJUC SA RENDERA (Sigurno!)
+# 2. Gemini Povezivanje
 GOOGLE_API_KEY = os.environ.get("GEMINI_API_KEY")
-genai.configure(api_key=GOOGLE_API_KEY)
+if not GOOGLE_API_KEY:
+    print("❌ GRESKA: Nema GEMINI_API_KEY na Renderu!")
+else:
+    genai.configure(api_key=GOOGLE_API_KEY)
 
-# 3. Povezi se sa Bazom (Supabase)
-# UZIMA KLJUCEVE SA RENDERA
+
+# 3. Supabase Povezivanje (SAFE MODE) 🛡️
 SUPA_URL = os.environ.get("SUPABASE_URL")
 SUPA_KEY = os.environ.get("SUPABASE_KEY")
-supabase: Client = create_client(SUPA_URL, SUPA_KEY)
+supabase = None
 
-# Model podataka (sta primamo od korisnika)
+try:
+    if SUPA_URL and SUPA_KEY:
+        supabase = create_client(SUPA_URL, SUPA_KEY)
+        print("✅ Supabase povezan!")
+
+    else:
+        print("⚠️ UPOZORENJE: Nema Supabase kljuceva na Renderu. Baza nece raditi.")
+except Exception as e:
+    print(f"⚠️ Greska pri povezivanju na Supabase: {e}")
+
+# Model podataka
 class RivalryInput(BaseModel):
     my_product: dict
-
     competitor: dict
-    target_audience: str@app.post("/generate-rival-strategy")
-async def generate_strategy(data: RivalryInput):
+    target_audience: str@app.post("/generate-rival-strategy")async def generate_strategy(data: RivalryInput):
     try:
-        # 1. Pripremi Prompt za Gemini
+        # 1. Prompt
         prompt = f"""
-        Act as a ruthless business strategist like Kevin O'Leary.
-        Analyze this battle:
-        ME (The Underdog): {data.my_product}
-        THEM (The Giant): {data.competitor}
-        TARGET AUDIENCE: {data.target_audience}
+        Act as a ruthless business strategist.
+        Analyze:
+        ME: {data.my_product}
+        THEM: {data.competitor}
+        AUDIENCE: {data.target_audience}
 
-        Output specific, aggressive advice.
-        Format exactly like this:
+        Output format:
         Dominance Score: [Score/10]
         Winning Strategy: [3 bullet points]
         Fatherly Advice: [1 sentence]
         """
 
-        # 2. Pitaj Gemini
+        # 2. Gemini Generisanje
+        if not GOOGLE_API_KEY:
+            return {"winning_strategy": "Error: Server nema Gemini API Key."}
+            
         model = genai.GenerativeModel("gemini-pro")
         response = model.generate_content(prompt)
         text_response = response.text
 
-        # 3. Parsiranje odgovora (pretvaranje teksta u delove)
-        # (Ovo je prosta logika, moze se poboljsati kasnije)
+        # 3. Parsiranje
         lines = text_response.split('\n')
-        score = "7/10" # Default
-
-        strategy = text_response # Default
-        
+        score = "7/10"
         for line in lines:
             if "Dominance Score:" in line:
                 score = line.replace("Dominance Score:", "").strip()
 
-        # ---------------------------------------------------------
-        # 4. SACUVAJ U BAZU (SUPABASE) - OVO JE NOVO! 💾
-        # ---------------------------------------------------------
-        try:
-            user_business = data.my_product.get("name", "Unknown Business")
-            
-            supabase.table("history").insert({
-                "business_name": user_business,
-                "ai_response": text_response
-            }).execute()
-            print("✅ Uspesno sacuvano u bazu!")
+        # 4. Cuvanje u Bazu (Samo ako baza radi)
+        if supabase:
+            try:
+                user_business = data.my_product.get("name", "Unknown")
+                supabase.table("history").insert({
+                    "business_name": user_business,
+                    "ai_response": text_response
+                }).execute()
+                print("💾 Sacuvano u bazu!")
+            except Exception as e:
 
-        except Exception as e:
-            print(f"⚠️ Greska pri cuvanju u bazu (nije kriticno): {e}")
+                print(f"⚠️ Nije sacuvano u bazu: {e}")
 
-        # 5. Vrati odgovor sajtu
         return {
             "dominance_score": score,
             "winning_strategy": text_response,
@@ -89,6 +94,5 @@ async def generate_strategy(data: RivalryInput):
         }
 
     except Exception as e:
-        print(f"Error: {e}")
-
+        print(f"General Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
