@@ -4,76 +4,64 @@ from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import google.generativeai as genai
-from supabase import create_client, Client
 
 app = FastAPI()
 
 app.add_middleware(
-
     CORSMiddleware,
     allow_origins=["*"],
+
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# SAMO GOOGLE KLJUC (Bazu smo izbacili)
 GOOGLE_API_KEY = os.environ.get("GEMINI_API_KEY")
 if GOOGLE_API_KEY:
     genai.configure(api_key=GOOGLE_API_KEY)
 
-SUPA_URL = os.environ.get("SUPABASE_URL")
-
-SUPA_KEY = os.environ.get("SUPABASE_KEY")
-supabase = None
-if SUPA_URL and SUPA_KEY:
-    try:
-        supabase = create_client(SUPA_URL, SUPA_KEY)
-    except:
-        pass
-
 @app.get("/")
 async def read_index():
+
     return FileResponse('index.html')
 
-class RivalryInput(BaseModel):
+class InputData(BaseModel):
     my_product: str
+    my_advantage: str
     competitor: str
-    target_audience: str
+    comp_weakness: str
 
-@app.post("/generate-rival-strategy")
-async def generate_strategy(data: RivalryInput):
+@app.post("/generate")
+async def generate(data: InputData):
     try:
-        prompt = f"""
-        Act as a ruthless business strategist.
-        ME: {data.my_product}
-        THEM: {data.competitor}
-
-        AUDIENCE: {data.target_audience}
-        Output: Dominance Score (0-10), 3 Bullet Points Strategy, 1 Sentence Advice.
-        """
-
         if not GOOGLE_API_KEY:
-            return {"winning_strategy": "Error: No API Key"}
+            return {"score": "0", "strategy": "Error: Nema API Ključa"}
 
-        # OVO JE KLJUČNO - NOVI MODEL KOJI RADI
+        # Koristimo brzi Flash model
         model = genai.GenerativeModel("gemini-1.5-flash")
+        
+        prompt = f"""
+        Compare these two:
+        ME: {data.my_product} (Advantage: {data.my_advantage})
+        THEM: {data.competitor} (Weakness: {data.comp_weakness})
+        
 
+        Analyze and return exactly in this format:
+        SCORE: [Number 1-10]
+        STRATEGY: [Detailed text]
+        """
+        
         response = model.generate_content(prompt)
-        text_response = response.text
-
-        if supabase:
-            try:
-                supabase.table("history").insert({
-                    "business_name": data.my_product,
-                    "ai_response": text_response
-                }).execute()
-            except:
-                pass
-
+        text = response.text
+        
+        # Izvlacenje ocene (prosta logika)
+        import re
+        score_match = re.search(r"SCORE:\s*(\d+)", text)
+        score = score_match.group(1) if score_match else "7" # default ako ne nadje
 
         return {
-            "dominance_score": "Analyzing...", 
-            "winning_strategy": text_response,
-            "fatherly_advice": "Go win." 
+            "score": score,
+            "strategy": text.replace("SCORE:", "").replace(score, "").strip()
         }
 
     except Exception as e:
