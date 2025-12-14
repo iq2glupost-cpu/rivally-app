@@ -8,80 +8,118 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f4f6f8;
-            color: #333;
+            background-color: #f8fafc;
+            color: #334155;
             display: flex;
             justify-content: center;
+            align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 20px;
         }
         .container {
             background: white;
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-            width: 100%;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
+            width: 100%;
             max-width: 600px;
         }
-        h1 { text-align: center; color: #111; font-weight: 600; margin-bottom: 30px; letter-spacing: -0.5px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; color: #555; }
+        h1 {
+            text-align: center;
+            color: #0f172a;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 1.875rem;
+        }
+        p.subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 2rem;
+        }
+        .input-group { margin-bottom: 1.5rem; }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
         input {
             width: 100%;
-            padding: 12px;
-            margin-bottom: 20px;
-            border: 1px solid #e1e1e1;
-            border-radius: 8px;
-            font-size: 16px;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            font-size: 1rem;
 
-            box-sizing: border-box; /* Bitno za layout */
+            box-sizing: border-box;
+            transition: all 0.2s;
         }
-        input:focus { outline: none; border-color: #2563eb; }
+        input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
         button {
             width: 100%;
-            padding: 16px;
+            padding: 1rem;
             background-color: #2563eb;
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
+
+            border-radius: 0.5rem;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-
-            transition: background 0.2s;
+            transition: background-color 0.2s;
+            margin-top: 1rem;
         }
         button:hover { background-color: #1d4ed8; }
+        
         #result {
-            margin-top: 30px;
-            padding: 20px;
-            background: #f8fafc;
-            border-radius: 8px;
-            border-left: 4px solid #2563eb;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: #f1f5f9;
+            border-radius: 0.75rem;
+
+            border-left: 5px solid #2563eb;
             display: none;
             white-space: pre-wrap;
             line-height: 1.6;
         }
-
-        .loading { text-align: center; color: #666; display: none; margin-top: 20px; }
+        .loading {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #64748b;
+            display: none;
+        }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <h1>⚡ Rivally Strategy</h1>
 
-        <label>Your Product / Service</label>
-        <input type="text" id="my_product" placeholder="e.g. Coffee Shop in Belgrade">
+        <h1>⚡ Rivally</h1>
+        <p class="subtitle">AI-Powered Competitive Intelligence</p>
 
+        <div class="input-group">
+            <label>Your Product</label>
+            <input type="text" id="my_product" placeholder="e.g. AI SaaS for Legal Tech">
+        </div>
 
-        <label>Main Competitor</label>
-        <input type="text" id="competitor" placeholder="e.g. Starbucks">
+        <div class="input-group">
+            <label>Competitor</label>
 
-        <label>Target Audience</label>
-        <input type="text" id="target_audience" placeholder="e.g. Remote workers, students">
+            <input type="text" id="competitor" placeholder="e.g. LegalZoom">
+        </div>
 
-        <button onclick="generateStrategy()">Generate Winning Strategy</button>
+        <div class="input-group">
+            <label>Target Audience</label>
+            <input type="text" id="target_audience" placeholder="e.g. Small Law Firms in New York">
+        </div>
+
+        <button onclick="generateStrategy()">Generate Analysis</button>
 
         <div id="loading" class="loading">Analyzing market data... 🧠</div>
         <div id="result"></div>
@@ -92,6 +130,7 @@
             const product = document.getElementById('my_product').value;
             const competitor = document.getElementById('competitor').value;
             const audience = document.getElementById('target_audience').value;
+            
             const loading = document.getElementById('loading');
             const resultDiv = document.getElementById('result');
 
@@ -105,14 +144,17 @@
                 const response = await fetch('/generate-rival-strategy', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ my_product: product, competitor: competitor, target_audience: audience })
+                    body: JSON.stringify({
+                        my_product: product,
+                        competitor: competitor,
+                        target_audience: audience
+                    })
                 });
 
-
                 if (!response.ok) throw new Error("Server Error");
+                
                 const data = await response.json();
                 
-                // Lepši ispis rezultata
                 resultDiv.innerHTML = `<strong>🏆 DOMINANCE SCORE:</strong> ${data.dominance_score}\n\n` +
                                       `<strong>⚔️ STRATEGY:</strong>\n${data.winning_strategy}\n\n` +
                                       `<strong>💡 ADVICE:</strong> ${data.fatherly_advice}`;
@@ -122,6 +164,7 @@
                 alert("Error: " + error.message);
             } finally {
                 loading.style.display = 'none';
+
             }
         }
     </script>
