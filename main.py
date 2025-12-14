@@ -36,7 +36,6 @@ async def read_index():
     return FileResponse('index.html')
 
 
-# OVO MORA DA SE POKLAPA SA HTML-OM 100%
 class RivalryInput(BaseModel):
     my_product: str
     competitor: str
@@ -48,6 +47,7 @@ async def generate_strategy(data: RivalryInput):
         prompt = f"""
         Act as a ruthless business strategist. 
         ME: {data.my_product}
+
         THEM: {data.competitor}
         AUDIENCE: {data.target_audience}
         Provide: Dominance Score (0-10), 3 Bullet Points Strategy, 1 Sentence Advice.
@@ -55,21 +55,21 @@ async def generate_strategy(data: RivalryInput):
 
         text_response = "Error: AI not connected."
         if GOOGLE_API_KEY:
-            model = genai.GenerativeModel("gemini-pro")
+            # OVDE JE BILA GREŠKA - STAVILI SMO NOVI MODEL 👇
+            model = genai.GenerativeModel("gemini-1.5-flash") 
 
             response = model.generate_content(prompt)
             text_response = response.text
 
-        # Cuvanje u bazu
         if supabase:
             try:
                 supabase.table("history").insert({
                     "business_name": data.my_product,
                     "ai_response": text_response
                 }).execute()
-            except Exception as e:
+            except:
+                pass
 
-                print(f"Db Error: {e}")
 
         return {
             "dominance_score": "Analyzing...",
