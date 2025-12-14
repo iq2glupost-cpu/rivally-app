@@ -24,7 +24,6 @@ SUPA_URL = os.environ.get("SUPABASE_URL")
 
 SUPA_KEY = os.environ.get("SUPABASE_KEY")
 supabase = None
-
 if SUPA_URL and SUPA_KEY:
     try:
         supabase = create_client(SUPA_URL, SUPA_KEY)
@@ -35,7 +34,6 @@ if SUPA_URL and SUPA_KEY:
 async def read_index():
     return FileResponse('index.html')
 
-
 class RivalryInput(BaseModel):
     my_product: str
     competitor: str
@@ -45,21 +43,22 @@ class RivalryInput(BaseModel):
 async def generate_strategy(data: RivalryInput):
     try:
         prompt = f"""
-        Act as a ruthless business strategist. 
+        Act as a ruthless business strategist.
         ME: {data.my_product}
-
         THEM: {data.competitor}
+
         AUDIENCE: {data.target_audience}
-        Provide: Dominance Score (0-10), 3 Bullet Points Strategy, 1 Sentence Advice.
+        Output: Dominance Score (0-10), 3 Bullet Points Strategy, 1 Sentence Advice.
         """
 
-        text_response = "Error: AI not connected."
-        if GOOGLE_API_KEY:
-            # OVDE JE BILA GREŠKA - STAVILI SMO NOVI MODEL 👇
-            model = genai.GenerativeModel("gemini-1.5-flash") 
+        if not GOOGLE_API_KEY:
+            return {"winning_strategy": "Error: No API Key"}
 
-            response = model.generate_content(prompt)
-            text_response = response.text
+        # OVO JE KLJUČNO - NOVI MODEL KOJI RADI
+        model = genai.GenerativeModel("gemini-1.5-flash")
+
+        response = model.generate_content(prompt)
+        text_response = response.text
 
         if supabase:
             try:
@@ -72,9 +71,9 @@ async def generate_strategy(data: RivalryInput):
 
 
         return {
-            "dominance_score": "Analyzing...",
+            "dominance_score": "Analyzing...", 
             "winning_strategy": text_response,
-            "fatherly_advice": "Execute."
+            "fatherly_advice": "Go win." 
         }
 
     except Exception as e:
