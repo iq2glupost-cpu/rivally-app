@@ -44,7 +44,7 @@ class RivalryInput(BaseModel):
     my_product: dict
     competitor: dict
     target_audience: str@app.post("/generate-rival-strategy")
-    async def generate_strategy(data: RivalryInput):
+async def generate_strategy(data: RivalryInput):
     try:
         # 1. Prompt
         prompt = f"""
@@ -97,4 +97,5 @@ class RivalryInput(BaseModel):
     except Exception as e:
         print(f"General Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
 
