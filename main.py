@@ -85,7 +85,7 @@ IMPORTANT: Respond ONLY in valid JSON format.
 """
 
 model = genai.GenerativeModel(
-    model_name="gemini-1.5-flash",
+    model_name="gemini-pro",
     system_instruction=SYSTEM_INSTRUCTION,
 )
 
@@ -138,6 +138,7 @@ async def save_lead(request: LeadRequest):
     except Exception as e:
         print(f"DB Error: {e}")
         return {"status": "error", "message": str(e)}
+
 
 
 
