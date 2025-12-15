@@ -20,7 +20,7 @@ app.add_middleware(
 )
 
 # Ključevi sa Rendera
-GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
+GEMINI_API_KEY = 'AIzaSyCs9kBP8rejOUh2PFrEVA5P4dkzMleSj3U'
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 
@@ -138,6 +138,25 @@ async def save_lead(request: LeadRequest):
     except Exception as e:
         print(f"DB Error: {e}")
         return {"status": "error", "message": str(e)}
+
+# --- OVO JE DETEKTIV ---
+@app.get("/test-gemini")
+def test_gemini():
+    try:
+        modeli = []
+        # Pitamo Google sta ima na raspolaganju za ovaj kljuc
+        for m in genai.list_models():
+            if 'generateContent' in m.supported_generation_methods:
+                modeli.append(m.name)
+        
+        return {
+            "STATUS": "Uspesno povezan",
+
+            "TVOJ_KLJUC_VIDI_OVE_MODELE": modeli
+        }
+    except Exception as e:
+        return {"GRESKA_SA_GOOGLEOM": str(e)}
+
 
 
 
