@@ -124,9 +124,7 @@ class ProductData(BaseModel):
     features: Any # Može biti lista ili tekst
     weaknesses: Optional[str] = None
 
-class 
-
-ComparisonRequest(BaseModel):
+class ComparisonRequest(BaseModel):
     my_product: ProductData
     competitor_product: ProductData
     target_audience: str
@@ -204,3 +202,4 @@ async def generate_strategy(request: ComparisonRequest):
         print(f"CRITICAL ERROR: {str(e)}")
         # Vraćamo detaljnu grešku da znamo šta nije u redu
         raise HTTPException(status_code=500, detail=f"AI Engine Error: {str(e)}")
+
