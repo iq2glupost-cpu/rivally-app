@@ -85,7 +85,7 @@ IMPORTANT: Respond ONLY in valid JSON format.
 """
 
 model = genai.GenerativeModel(
-    model_name="gemini-2.5-pro",
+    model_name="gemini-2.5-flash",
     system_instruction=SYSTEM_INSTRUCTION,
 )
 
@@ -156,6 +156,7 @@ def test_gemini():
         }
     except Exception as e:
         return {"GRESKA_SA_GOOGLEOM": str(e)}
+
 
 
 
