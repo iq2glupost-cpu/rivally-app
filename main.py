@@ -20,7 +20,7 @@ app.add_middleware(
 )
 
 # Ključevi sa Rendera
-GEMINI_API_KEY = 'AIzaSyCs9kBP8rejOUh2PFrEVA5P4dkzMleSj3U'
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 
@@ -138,6 +138,7 @@ async def save_lead(request: LeadRequest):
     except Exception as e:
         print(f"DB Error: {e}")
         return {"status": "error", "message": str(e)}
+
 
 
 
