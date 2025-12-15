@@ -109,7 +109,9 @@
             <h3 class="text-gray-400 uppercase tracking-widest text-xs font-bold mb-4">MARKET DOMINANCE SCORE</h3>
             <div id="scoreValue" class="text-8xl font-black text-gray-900 mb-2 tracking-tighter"></div>
             <p id="scoreText" class="text-xl text-blue-600 font-medium"></p>
-            <p id="scoreExplanation" class="text-sm text-gray-500 mt-2"></p>
+            <p id="scoreExplanation" 
+
+class="text-sm text-gray-500 mt-2"></p>
         </div>
 
         <div class="bg-gray-900 p-8 rounded-3xl shadow-xl border border-gray-700 flex flex-col md:flex-row items-center justify-between gap-6">
@@ -138,7 +140,9 @@
             </div>
             <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100">
                 <h3 class="text-blue-600 uppercase tracking-widest text-sm font-black mb-6">⚔️ WINNING STRATEGY</h3>
-                <div id="strategyText" class="space-y-4 text-gray-700 leading-relaxed text-lg"></div>
+                <div id="strategyText" 
+
+class="space-y-4 text-gray-700 leading-relaxed text-lg"></div>
             </div>
         </div>
 
@@ -159,7 +163,9 @@
         
         <div class="bg-blue-900 p-8 rounded-3xl text-white">
             <h3 class="text-blue-300 uppercase tracking-widest text-sm font-black mb-4">📣 GO VIRAL (Social Media Copy)</h3>
-            <p id="instaCaption" class="text-lg font-medium leading-relaxed"></p>
+            <p id="instaCaption" 
+
+class="text-lg font-medium leading-relaxed"></p>
         </div>
     </div>
 </div>
@@ -187,24 +193,21 @@
 
         const clientEmail = document.getElementById('clientEmail').value;
 
-        // Validacija Emaila
         if (!clientEmail || !clientEmail.includes('@')) {
             document.getElementById('errorBox').innerText = "Please enter a valid Email Address to receive the analysis.";
             document.getElementById('errorBox').classList.remove('hidden');
             return;
-
         }
 
-        // Reset UI
+
         document.getElementById('results').classList.add('hidden');
         document.getElementById('errorBox').classList.add('hidden');
         document.getElementById('loader').style.display = 'block';
         document.getElementById('statusMsg').innerText = "Consulting Strategy Engine...";
 
-
-        // Prikupljanje podataka
         const data = {
-            client_email: clientEmail, // KLJUČNO: Ovo šaljemo u Bazu
+
+            client_email: clientEmail, 
             my_product: {
                 name: document.getElementById('myName').value,
                 price: document.getElementById('myPrice').value,
@@ -212,6 +215,7 @@
                 weaknesses: document.getElementById('myWeaknesses').value
             },
             competitor_product: {
+
                 name: document.getElementById('compName').value,
                 price: document.getElementById('compPrice').value,
                 features: parseFeatures(document.getElementById('compFeatures').value)
@@ -224,28 +228,28 @@
             document.getElementById('errorBox').classList.remove('hidden');
             document.getElementById('loader').style.display = 'none';
             document.getElementById('statusMsg').innerText = "";
+
             return;
         }
 
         try {
-            // API Poziv
             const response = await fetch('/generate-rival-strategy', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
-
             });
 
             if (!response.ok) {
                 const errorText = await response.text();
+
                 throw new Error("Server Error. Check Render Logs. Detail: " + errorText);
             }
             
             const result = await response.json();
 
-            // Prikaz rezultata
             document.getElementById('scoreValue').innerText = result.dominance_score;
             document.getElementById('scoreExplanation').innerText = result.score_explanation;
+
             document.getElementById('scoreText').innerText = result.dominance_score < 40 ? "Red Zone Threat" : (result.dominance_score > 75 ? "Total Domination" : "Dogfight Zone");
             
             document.getElementById('strategyText').innerHTML = result.html_content; 
@@ -255,14 +259,13 @@
             document.getElementById('compWinsList').innerHTML = createListItems(result.reality_check.competitor_wins);
             document.getElementById('improvementsList').innerHTML = createListItems(result.reality_check.improvements_needed);
 
-            // Widget
+
             document.getElementById('previewScore').innerText = result.dominance_score;
             const widgetHTML = `<a href="https://rivally.app" target="_blank" style="text-decoration:none;display:inline-flex;align-items:center;background:#fff;border:2px solid #2563EB;border-radius:8px;padding:5px 10px;font-family:sans-serif;box-shadow:0 2px 4px rgba(0,0,0,0.1);"><span style="color:#111827;font-weight:700;font-size:12px;margin-right:5px;">Rivally Score:</span><span style="color:#2563EB;font-weight:900;font-size:16px;">${result.dominance_score}</span></a>`;
-
             document.getElementById('embedCode').value = widgetHTML;
 
-            // Prikazi sve
             document.getElementById('results').classList.remove('hidden');
+
 
         } catch (error) {
             document.getElementById('errorBox').innerText = "FATAL SYSTEM ERROR: " + error.message;
@@ -275,14 +278,13 @@
 
     function copyToClipboard() {
         const copyText = document.getElementById("embedCode");
-
         copyText.select();
         document.execCommand("copy");
         document.getElementById("copyMsg").classList.remove("hidden");
+
         setTimeout(() => document.getElementById("copyMsg").classList.add("hidden"), 2000);
     }
 </script>
 
 </body>
-
 </html>
