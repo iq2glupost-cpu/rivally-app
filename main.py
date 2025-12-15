@@ -84,9 +84,12 @@ Viral social media caption.
 IMPORTANT: Respond ONLY in valid JSON format.
 """
 
-model = genai.GenerativeModel(
-    model_name="gemini-2.5-pro",
+model = gemini.GenerativeModel(
+    model_name="gemini-2.5-flash",
     system_instruction=SYSTEM_INSTRUCTION,
+    config=gemini.types.GenerateContentConfig(
+        response_mime_type="application/json",
+    ),
 )
 
 # --- ENDPOINTS ---
@@ -156,6 +159,7 @@ def test_gemini():
         }
     except Exception as e:
         return {"GRESKA_SA_GOOGLEOM": str(e)}
+
 
 
 
