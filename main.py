@@ -10,6 +10,7 @@ from typing import Any, Optional
 
 # --- KONFIGURACIJA ---
 
+
 app = FastAPI()
 
 app.add_middleware(
@@ -19,9 +20,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Ključevi sa Rendera
+# Ključevi sa Rendera / Vercela
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
+
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 
 supabase: Optional[Client] = None
@@ -32,6 +34,7 @@ if SUPABASE_URL and SUPABASE_KEY:
         supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
         print("✅ Supabase povezan.")
     except Exception as e:
+
         print(f"⚠️ Supabase greška: {e}")
 
 # Povezivanje na Gemini
@@ -51,13 +54,13 @@ class ComparisonRequest(BaseModel):
     my_product: ProductData
     competitor_product: ProductData
     target_audience: str
-    # Email više nije obavezan za generisanje!
     
 class LeadRequest(BaseModel):
     email: str
     score: int
     product_name: str
     competitor_name: str
+
 
 
 # --- PROMPT I AI ---
@@ -70,34 +73,36 @@ YOUR TASK:
 Generate a JSON response containing 6 specific parts based on the input data.
 
 JSON STRUCTURE:
-1. "dominance_score" (Integer 
 
-0-100): Calculated probability of winning.
+1. "dominance_score" (Integer 0-100): Calculated probability of winning.
 2. "score_explanation" (String): Short punchy sentence explaining the score.
 3. "reality_check" (Object): { "competitor_wins": [List of strings], "improvements_needed": [List of strings] }
 4. "fatherly_advice" (String): Direct mentorship advice.
 5. "html_content" (String): The detailed strategy (HTML format with <p>, <strong>, <ul>).
-6. "instagram_caption" (String): 
 
-Viral social media caption.
+6. "instagram_caption" (String): Viral social media caption.
 
 IMPORTANT: Respond ONLY in valid JSON format.
 """
 
+# --- POPRAVLJENA DEFINICIJA MODELA (Ovo je bilo kritično) ---
 model = genai.GenerativeModel(
     model_name="gemini-2.5-flash",
     system_instruction=SYSTEM_INSTRUCTION,
-    generation_config=genai.GenerationConfig(
+    
+
+generation_config=genai.GenerationConfig(
         response_mime_type="application/json"
     )
 )
+
 # --- ENDPOINTS ---
 
 @app.get("/", response_class=HTMLResponse)
 async def read_index():
     return FileResponse('index.html')
 
-# 1. GENERISANJE ANALIZE (Ne traži email, vraća rezultat)
+# 1. GENERISANJE ANALIZE (Vraća rezultat + čuva u bazu bez maila)
 @app.post("/generate-rival-strategy")
 async def generate_strategy(request: ComparisonRequest):
     if not GEMINI_API_KEY:
@@ -115,11 +120,30 @@ async def generate_strategy(request: ComparisonRequest):
     """
 
     try:
+        # Generisanje odgovora
         response = model.generate_content(prompt)
-        return json.loads(response.text.strip())
+        # Čišćenje i parsiranje JSON-a
+        ai_output_text = response.text.strip()
+        parsed_json = json.loads(ai_output_text)
+
+        # --- ČUVANJE U SUPABASE (Tabela history) ---
+        if supabase:
+            try:
+                # Čuvamo ime firme i ceo JSON odgovor kao tekst
+                supabase.table("history").insert({
+                    "business_name": request.my_product.name,
+                    "ai_response": ai_output_text
+                }).execute()
+                print("✅ Analiza sačuvana u history tabelu.")
+            except Exception as db_e:
+
+                print(f"⚠️ Nije uspelo čuvanje u bazu: {db_e}")
+        # -------------------------------------------
+
+        return parsed_json
+
     except Exception as e:
         print(f"AI Error: {e}")
-
         raise HTTPException(status_code=500, detail="Greška u AI analizi.")
 
 # 2. ČUVANJE EMAILA (Ovo se zove kad kliknu "Unlock")
@@ -129,44 +153,39 @@ async def save_lead(request: LeadRequest):
         return {"status": "skipped", "message": "No database connected"}
     
     try:
-        supabase.table("leads").insert({
-            "email": request.email,
-            "product_name": request.product_name,
-            "competitor": request.competitor_name,
-            "score": request.score,
-            "status": "unlocked"
+        # Upisujemo u tabelu 'history' jer nju sigurno imaš
+        # Mapiramo podatke na kolone koje postoje: business_name, email, ai_response
+        info_text = f"Lead Captured! Score: {request.score}, Competitor: {request.competitor_name}"
+        
+        supabase.table("history").insert({
+            "business_name": request.product_name, # Ime proizvoda
+            "email": request.email,                # Email (Moraš imati ovu kolonu u Supabase!)
+            "ai_response": info_text               # Dodatni info
         }).execute()
-        return {"status": "success"}
+        
+        return {"status": "success", "message": "Email sačuvan!"}
+
+    
     except Exception as e:
         print(f"DB Error: {e}")
         return {"status": "error", "message": str(e)}
 
-# --- OVO JE DETEKTIV ---
+# --- OVO JE DETEKTIV (Test funkcija) ---
 @app.get("/test-gemini")
 def test_gemini():
     try:
         modeli = []
-        # Pitamo Google sta ima na raspolaganju za ovaj kljuc
         for m in genai.list_models():
             if 'generateContent' in m.supported_generation_methods:
+
                 modeli.append(m.name)
         
         return {
             "STATUS": "Uspesno povezan",
-
-            "TVOJ_KLJUC_VIDI_OVE_MODELE": modeli
+            "DOSTUPNI_MODELI": modeli
         }
     except Exception as e:
-        return {"GRESKA_SA_GOOGLEOM": str(e)}
-
-
-
-
-
-
-
-
-
+        return {"GRESKA": str(e)}
 
 
 
