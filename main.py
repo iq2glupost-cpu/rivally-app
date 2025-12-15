@@ -20,7 +20,7 @@ app.add_middleware(
 )
 
 # Ključevi sa Rendera
-GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
+GEMINI_API_KEY = 'AIzaSyCc0YILD8qQv2pyA5GDBzPNPcHcj9NpevU'
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 
@@ -156,6 +156,7 @@ def test_gemini():
         }
     except Exception as e:
         return {"GRESKA_SA_GOOGLEOM": str(e)}
+
 
 
 
