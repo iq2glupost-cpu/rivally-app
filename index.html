@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rivally - Crush Your Competition</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
 
     <style>
         body { 
             font-family: 'Inter', sans-serif; 
-            background: #f3f4f6; /* Soft gray background */
-            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+            background: #f8fafc; /* Clean background */
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
             background-size: 24px 24px;
         }
         
@@ -20,39 +20,39 @@
         .modern-input {
 
             transition: all 0.2s ease-in-out;
-            border: 1px solid #e5e7eb;
+            border: 1px solid #e2e8f0;
+            background-color: #f8fafc;
         }
         .modern-input:focus {
             border-color: #2563EB;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
             outline: none;
         }
 
         /* Buttons */
         .gradient-btn { 
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); 
-
+            background: linear-gradient(135deg, #111827 0%, #374151 100%); 
             transition: transform 0.2s, box-shadow 0.2s;
         }
         .gradient-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.5);
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.2);
         }
 
         /* Unlock Overlay */
         .blur-lock { 
-            filter: blur(12px); 
+            filter: blur(10px); 
             user-select: none; 
-            pointer-events: none; 
-            opacity: 0.6;
 
+            pointer-events: none; 
+            opacity: 0.7;
         }
         
         .glass-panel {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
         }
 
         .loader { border: 3px solid #f3f3f3; border-top: 3px solid #2563EB; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: none; margin: 0 auto; }
@@ -61,127 +61,124 @@
 </head>
 <body class="text-gray-800 antialiased min-h-screen flex flex-col">
 
-<div class="w-full bg-white border-b border-gray-100 py-4 mb-8">
+<div class="w-full bg-white/80 backdrop-blur-md border-b border-gray-100 py-4 fixed top-0 z-50">
     <div class="max-w-5xl mx-auto px-4 flex items-center justify-between">
         <div class="flex items-center gap-2">
             <h1 class="text-2xl font-black tracking-tighter text-gray-900">Rivally<span class="text-blue-600">.</span></h1>
-            <span class="bg-blue-100 text-blue-700 text-xs font-bold px-2 py-1 rounded-full">BETA</span>
+            <span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide">Beta</span>
         </div>
-        <div class="text-sm font-medium text-gray-500 hidden md:block">AI Competitive Intelligence</div>
     </div>
+
 </div>
 
-<div class="max-w-4xl mx-auto p-4 md:p-0 flex-grow">
+<div class="max-w-4xl mx-auto p-4 md:p-0 flex-grow mt-24">
     
-    <div class="text-center mb-10">
-        <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-3">
-            Stop Guessing. <br class="md:hidden" />Start <span class="text-blue-600">Winning.</span>
-
+    <div class="text-center mb-12">
+        <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-4">
+            Stop Guessing. Start <span class="text-blue-600">Winning.</span>
         </h2>
-        <p class="text-lg text-gray-500 max-w-xl mx-auto">
-            Our AI analyzes your product against your biggest rival and reveals exactly how to steal their customers.
+        <p class="text-gray-500 max-w-lg mx-auto text-lg">
+
+            Compare your product against your biggest rival and get an AI strategy to steal their customers.
         </p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-            <div class="flex items-center gap-2 mb-4">
-                <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">1</div>
-                <h2 class="text-lg font-bold text-gray-900">Your Product</h2>
+        <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-blue-600">
+            <div class="flex items-center gap-2 mb-6">
+                <h2 class="text-xl font-bold text-gray-900">Your Business</h2>
             </div>
             
-            <div class="space-y-3">
+            <div class="space-y-4">
                 <div>
-                    <label class="text-xs font-semibold text-gray-500 uppercase">Product Name</label>
-                    <input id="myName" type="text" placeholder="e.g. Acme CRM for Dentists" class="modern-input w-full p-3 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400">
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Product Name</label>
+                    <input id="myName" type="text" placeholder="e.g. Acme CRM" class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400 font-medium">
+
                 </div>
                 
                 <div>
-                    <label class="text-xs font-semibold text-gray-500 uppercase">Price</label>
-                    <input id="myPrice" type="text" placeholder="e.g. $49/mo per user" class="modern-input w-full p-3 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400">
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Price</label>
+                    <input id="myPrice" type="text" placeholder="e.g. $49/mo" class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400">
                 </div>
 
                 <div>
-                    <label class="text-xs font-semibold text-gray-500 uppercase">Key Features</label>
-                    <textarea id="myFeatures" rows="3" placeholder="e.g. 24/7 Support, AI Scheduling, Mobile App, Free Migration..." class="modern-input w-full p-3 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400"></textarea>
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Key Features</label>
+                    <textarea id="myFeatures" rows="3" placeholder="e.g. 24/7 Support, Free Shipping..." class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400"></textarea>
                 </div>
 
                 <div>
-                    <label class="text-xs font-semibold text-red-400 uppercase">Your Weaknesses (Be Honest)</label>
-                    <textarea id="myWeaknesses" rows="2" placeholder="e.g. No mobile app yet, higher price than competitors..." class="modern-input w-full p-3 rounded-lg bg-red-50 border-red-100 text-gray-900 placeholder-red-300"></textarea>
+                    <label class="text-xs font-bold text-red-400 uppercase tracking-wider ml-1">Weakness (Optional)</label>
+                    <textarea id="myWeaknesses" rows="2" placeholder="e.g. No mobile app yet..." class="modern-input w-full p-3 rounded-lg bg-red-50/50 border-red-100 text-gray-900 placeholder-red-300"></textarea>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
-            <div class="flex items-center gap-2 mb-4">
-                <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 font-bold">2</div>
-
-                <h2 class="text-lg font-bold text-gray-900">The Rival</h2>
+        <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-gray-800">
+            <div class="flex items-center gap-2 mb-6">
+                <h2 class="text-xl font-bold text-gray-900">The Rival</h2>
             </div>
 
-            <div class="space-y-3">
+            <div class="space-y-4">
                 <div>
-                    <label class="text-xs font-semibold text-gray-500 uppercase">Competitor Name</label>
-                    <input id="compName" type="text" placeholder="e.g. Salesforce Health Cloud" class="modern-input w-full p-3 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400">
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Competitor Name</label>
+                    <input id="compName" type="text" placeholder="e.g. Salesforce" class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400 font-medium">
                 </div>
                 
                 <div>
-                    <label class="text-xs font-semibold text-gray-500 uppercase">Their Price</label>
-                    <input id="compPrice" type="text" placeholder="e.g. Starts at $300/mo" class="modern-input w-full p-3 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400">
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Their Price</label>
+                    <input id="compPrice" type="text" placeholder="e.g. $300/mo" class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400">
+
                 </div>
 
                 <div>
-                    <label class="text-xs font-semibold text-gray-500 uppercase">Their Known Features</label>
-                    <textarea id="compFeatures" rows="3" placeholder="e.g. Huge ecosystem, complex setup, slow support..." class="modern-input w-full p-3 rounded-lg bg-gray-50 text-gray-900 placeholder-gray-400"></textarea>
+                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Their Features</label>
+                    <textarea id="compFeatures" rows="3" placeholder="e.g. Huge ecosystem, complex..." class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400"></textarea>
                 </div>
+
             </div>
         </div>
-
     </div>
 
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200 mb-8">
-        <label class="block text-sm font-bold text-gray-900 mb-2">Who is the Target Audience?</label>
-        <input id="targetAudience" type="text" placeholder="e.g. Private dental practice owners in the USA with 5+ employees" class="modern-input w-full p-3 rounded-lg bg-white placeholder-gray-400">
-
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-10 max-w-2xl mx-auto">
+        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 ml-1">Who is the Target Audience?</label>
+        <input id="targetAudience" type="text" placeholder="e.g. Small business owners in New York..." class="modern-input w-full p-3 rounded-lg">
     </div>
 
-    <div class="text-center mb-16">
-        <button onclick="generateStrategy()" class="gradient-btn text-white font-bold py-4 px-12 rounded-full shadow-xl text-lg w-full md:w-auto">
-            Analyze My Strategy 🚀
+    <div class="text-center mb-20">
+        <button onclick="generateStrategy()" class="gradient-btn text-white font-bold py-4 px-12 rounded-full shadow-xl text-lg w-full md:w-auto hover:scale-105 transition-transform">
+            🚀 Analyze Strategy (Free)
         </button>
 
         <div id="loader" class="loader mt-6"></div>
-        <p id="errorBox" class="hidden mt-4 text-red-600 font-medium bg-red-50 inline-block px-4 py-2 rounded-lg"></p>
+        <p id="errorBox" class="hidden mt-4 text-red-600 font-bold bg-red-50 inline-block px-4 py-2 rounded-lg text-sm"></p>
     </div>
 
 
     <div id="results" class="hidden pb-20">
         
-        <div class="bg-white p-10 rounded-3xl shadow-xl border border-gray-100 text-center mb-10 transform scale-100 hover:scale-[1.01] transition-transform duration-500">
-            <h3 class="text-gray-400 uppercase tracking-widest text-xs font-bold mb-4">DOMINANCE PROBABILITY</h3>
+        <div class="bg-white p-10 rounded-3xl shadow-xl border-b-4 border-blue-600 text-center mb-10">
+            <h3 class="text-gray-400 uppercase tracking-widest text-xs font-bold mb-4">YOUR WIN PROBABILITY</h3>
             <div class="relative inline-block">
                 <div id="scoreValue" class="text-8xl font-black text-gray-900 tracking-tighter"></div>
             </div>
             <p id="scoreExplanation" class="text-xl text-blue-600 font-medium mt-4 max-w-2xl mx-auto leading-relaxed"></p>
         </div>
 
-        <div class="relative">
 
+        <div class="relative">
             
             <div id="lockedContent" class="blur-lock transition duration-1000">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-red-500">
                         <h3 class="font-bold text-gray-900 text-lg mb-4 flex items-center gap-2">
-                            <span class="text-xl">⚠️</span> Why They Might Win
-
+                            ⚠️ Why They Might Win
                         </h3>
                         <ul id="compWinsList" class="space-y-2 text-gray-600 text-sm list-disc list-inside"></ul>
                     </div>
                     <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-green-500">
                         <h3 class="font-bold text-gray-900 text-lg mb-4 flex items-center gap-2">
-                            <span class="text-xl">🛠️</span> Fix This Immediately
+                             🛠️ Fix This Immediately
                         </h3>
 
                         <ul id="improvementsList" class="space-y-2 text-gray-600 text-sm list-disc list-inside"></ul>
@@ -196,43 +193,40 @@
             </div>
 
             <div id="unlockOverlay" class="absolute inset-0 z-10 flex flex-col items-center justify-center pt-20">
-                <div class="glass-panel p-8 rounded-3xl shadow-2xl text-center max-w-md mx-4 transform transition-all hover:scale-105 border-t border-white">
+                <div class="glass-panel p-8 rounded-3xl shadow-2xl text-center max-w-md mx-4 transform transition-all hover:scale-105">
                     <div class="text-5xl mb-4">🔒</div>
 
-                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Unlock The Full Strategy</h3>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Unlock Full Report</h3>
                     <p class="text-gray-600 mb-6 text-sm leading-relaxed">
-                        Reveal the complete breakdown, "Fatherly Advice", and viral marketing hooks tailored for your brand.
+                        Get the complete breakdown, mentorship advice, and viral marketing hooks.
                     </p>
                     
                     <div class="relative">
-                        <input id="unlockEmail" type="email" placeholder="name@company.com" class="modern-input w-full p-4 border rounded-xl mb-4 text-center font-medium">
+                        <input id="unlockEmail" type="email" placeholder="Enter your email" class="modern-input w-full p-4 border rounded-xl mb-4 text-center font-medium">
                     </div>
 
                     <button onclick="unlockContent()" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
                         <span>Reveal Everything</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
                     </button>
                     
-                    <p class="text-xs text-gray-400 mt-4">100% Free. Secure. No Spam.</p>
+                    <p class="text-xs text-gray-400 mt-4">We hate spam too. Your email is safe.</p>
                 </div>
             </div>
 
         </div>
-
     </div>
 
 </div>
 
-<div class="text-center py-8 text-gray-400 text-sm">
-    &copy; 2025 Rivally AI. Built for Winners.
+<div class="text-center py-8 text-gray-400 text-xs">
+    &copy; 2025 Rivally AI.
 </div>
 
 <script>
     let globalResult = null; 
 
-    async function generateStrategy() {
-        // Validation
 
+    async function generateStrategy() {
         const myName = document.getElementById('myName').value;
         const compName = document.getElementById('compName').value;
         
@@ -241,9 +235,9 @@
             return;
         }
 
+
         const data = {
             my_product: {
-
                 name: myName,
                 price: document.getElementById('myPrice').value,
                 features: document.getElementById('myFeatures').value,
@@ -251,20 +245,18 @@
             },
             competitor_product: {
                 name: compName,
-                price: document.getElementById('compPrice').value,
 
+                price: document.getElementById('compPrice').value,
                 features: document.getElementById('compFeatures').value
             },
             target_audience: document.getElementById('targetAudience').value
         };
 
-        // UI Updates
         document.getElementById('loader').style.display = 'block';
         document.getElementById('errorBox').classList.add('hidden');
-
         document.getElementById('results').classList.add('hidden');
         
-        // Reset overlay just in case
+        // Reset overlay
         document.getElementById('lockedContent').classList.add('blur-lock');
         document.getElementById('unlockOverlay').classList.remove('hidden');
 
@@ -279,59 +271,49 @@
             
             globalResult = await response.json(); 
 
-            // Fill Data
 
             document.getElementById('scoreValue').innerText = globalResult.dominance_score + "/100";
             document.getElementById('scoreExplanation').innerText = globalResult.score_explanation;
             document.getElementById('strategyText').innerHTML = globalResult.html_content;
             
-            // Lists
             document.getElementById('compWinsList').innerHTML = globalResult.reality_check.competitor_wins.map(i => `<li>${i}</li>`).join('');
             document.getElementById('improvementsList').innerHTML = globalResult.reality_check.improvements_needed.map(i => `<li>${i}</li>`).join('');
 
-            // Show Results
             document.getElementById('results').classList.remove('hidden');
-
             document.getElementById('loader').style.display = 'none';
             
-            // Smooth Scroll
             setTimeout(() => {
                 document.getElementById('results').scrollIntoView({behavior: "smooth", block: "start"});
             }, 100);
 
         } catch (error) {
             document.getElementById('loader').style.display = 'none';
-
-            document.getElementById('errorBox').innerText = "AI is busy. Please try again in 10 seconds. (" + error.message + ")";
+            document.getElementById('errorBox').innerText = "AI is busy. Please try again in 10 seconds.";
             document.getElementById('errorBox').classList.remove('hidden');
         }
     }
 
     async function unlockContent() {
         const email = document.getElementById('unlockEmail').value;
-
         const btn = document.querySelector('#unlockOverlay button');
 
+
         if (!email || !email.includes('@')) {
-            alert("Please enter a valid email address to see the report.");
+            alert("Please enter a valid email address.");
             return;
         }
 
-        // UX: Change button text
-        const oldText = btn.innerHTML;
         btn.innerHTML = "Unlocking...";
 
-
         try {
-            // Send data to backend (silently)
             await fetch('/save-lead', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+
                 body: JSON.stringify({
                     email: email,
                     score: globalResult.dominance_score || 0,
                     product_name: document.getElementById('myName').value,
-
                     competitor_name: document.getElementById('compName').value
                 })
             });
@@ -341,11 +323,11 @@
             console.log("Analytics error (non-fatal).");
         }
 
-        // Reveal Content
         document.getElementById('lockedContent').classList.remove('blur-lock');
         document.getElementById('unlockOverlay').classList.add('hidden');
     }
 </script>
 
 </body>
+
 </html>
