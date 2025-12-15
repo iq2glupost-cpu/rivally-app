@@ -114,7 +114,7 @@ async def generate_strategy(request: ComparisonRequest):
 
     try:
         response = model.generate_content(prompt)
-        return json.loads(response.text)
+        return json.loads(response.text.strip())
     except Exception as e:
         print(f"AI Error: {e}")
 
@@ -156,6 +156,7 @@ def test_gemini():
         }
     except Exception as e:
         return {"GRESKA_SA_GOOGLEOM": str(e)}
+
 
 
 
