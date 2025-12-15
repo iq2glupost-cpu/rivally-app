@@ -3,133 +3,286 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rivally - AI Strategy</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Rivally - AI Competitive Intelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+
     <style>
-        body { font-family: 'Inter', sans-serif; background: #f0f2f5; margin: 0; padding: 40px 20px; color: #1f2937; }
-        .container { max-width: 900px; margin: 0 auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
-        
-        h1 { text-align: center; font-weight: 800; font-size: 2.5rem; margin-bottom: 10px; color: #111; }
-        p.sub { text-align: center; color: #666; margin-bottom: 40px; }
-
-
-        /* DIZAJN LEVO - DESNO */
-        .battle-arena { display: flex; gap: 40px; margin-bottom: 30px; }
-        .side { flex: 1; padding: 20px; border-radius: 12px; }
-        .side.left { background: #eff6ff; border: 2px solid #bfdbfe; } /* Plavo za tebe */
-        .side.right { background: #fef2f2; border: 2px solid #fecaca; } /* Crveno za njih */
-
-        h2 { font-size: 1.2rem; margin-top: 0; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
-        .left h2 { color: #2563eb; }
-        .right h2 { color: #dc2626; }
-
-        label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.9rem; }
-        input, textarea { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: inherit; }
-        
-        button.cta {
-            width: 100%; padding: 20px; background: #111; color: white; font-size: 1.2rem; font-weight: bold; border: none; border-radius: 12px; cursor: pointer; transition: transform 0.1s;
-        }
-        button.cta:hover { transform: scale(1.02); background: #000; }
-
-        /* REZULTAT I BADGE */
-        #result-area { display: none; margin-top: 40px; border-top: 2px dashed #ddd; padding-top: 40px; }
-
-        .score-display { font-size: 3rem; font-weight: 800; color: #2563eb; text-align: center; margin-bottom: 20px; }
-        .strategy-text { white-space: pre-wrap; line-height: 1.6; background: #f9fafb; padding: 20px; border-radius: 12px; margin-bottom: 30px; }
-
-        .embed-box { background: #2d3748; color: #a0aec0; padding: 20px; border-radius: 8px; font-family: monospace; font-size: 14px; position: relative; }
-
-        .embed-label { color: #fff; font-weight: bold; margin-bottom: 10px; display: block; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .gradient-btn { background: linear-gradient(90deg, #111827 0%, #374151 100%); }
+        .loader { border: 4px solid #f3f3f3; border-top: 4px solid #2563EB; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; display: none; margin: 0 auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
-<body>
+<body class="text-gray-800 antialiased">
 
-    <div class="container">
-        <h1>⚡ RIVALLY</h1>
-        <p class="sub">Unesite podatke i saznajte ko pobeđuje.</p>
+<div class="max-w-5xl mx-auto p-4 md:p-8">
+    <div class="text-center mb-12 mt-6">
+        <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight mb-3">Rivally<span class="text-blue-600">.</span></h1>
+        <p class="text-xl text-gray-500 font-medium">Your Product vs. Theirs. Prove you are better.</p>
+    </div>
 
-        <div class="battle-arena">
-            <div class="side left">
-                <h2>🔵 Vaš Biznis</h2>
+    <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-4 mb-8 max-w-4xl mx-auto rounded-lg" role="alert">
+        <p class="font-bold text-base">Facing a threat from the competition?</p>
+        <p class="text-sm mt-1">We can help you strike back. Just provide the necessary details about your business and your rival. <strong class="text-blue-900">Please be as detailed as possible in your descriptions to receive a lethal strategy.</strong></p>
+    </div>
 
-                <label>Naziv i Opis</label>
-                <input type="text" id="my_product" placeholder="npr. Moja Picerija, pravimo domaće testo...">
-                <label>Vaša Prednost</label>
-                <input type="text" id="my_advantage" placeholder="npr. Besplatna dostava">
-            </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10">
+        
+        <div class="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-blue-600 relative">
+            <div class="absolute -top-3 left-6 bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide shadow-sm">YOU</div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 mt-2">Your Product</h2>
+            
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Product Name</label>
+                    <input id="myName" type="text" placeholder="e.g. AI-Powered CRM" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition font-medium">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Price</label>
+                    <input id="myPrice" type="text" placeholder="e.g. $50 / month" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Key Features (What are you proud of?)</label>
+                    <textarea id="myFeatures" rows="3" placeholder="e.g. Seamless Zapier integration, 24/7 support..." class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition"></textarea>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-red-400 uppercase mb-1">Weaknesses (Be honest)</label>
+                    <textarea id="myWeaknesses" rows="2" placeholder="e.g. Small team, No Android App yet..." class="w-full p-3 bg-red-50 border border-red-100 rounded-xl focus:ring-2 focus:ring-red-300 focus:bg-white outline-none transition"></textarea>
 
-            <div class="side right">
-                <h2>🔴 Konkurencija</h2>
-                <label>Naziv Konkurenta</label>
-                <input type="text" id="competitor" placeholder="npr. Domino's Pizza">
-                <label>Njihova Slabost</label>
-                <input type="text" id="comp_weakness" placeholder="npr. Skupi su, industrijski ukus">
+                </div>
             </div>
         </div>
 
-        <button class="cta" onclick="generate()">Generiši Analizu & Bedž 🚀</button>
-        <div id="loading" style="text-align:center; display:none; margin-top:20px;">Analiziram...</div>
+        <div class="bg-white p-6 rounded-2xl shadow-lg border-t-4 border-gray-800 relative">
+            <div class="absolute -top-3 left-6 bg-gray-800 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide shadow-sm">THEM</div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 mt-2">The Competitor</h2>
+            
 
-        <div id="result-area">
-            <div id="score" class="score-display"></div>
-            <div id="strategy" class="strategy-text"></div>
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Competitor Name</label>
+                    <input id="compName" type="text" placeholder="e.g. Salesforce" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-500 focus:bg-white outline-none transition font-medium">
+                </div>
+                <div>
 
-            <label class="embed-label">📋 KOD ZA VAŠ SAJT (Embed Badge):</label>
-            <div class="embed-box" id="embed-code">
-                &lt;div style="border:2px solid #2563eb; padding:10px; border-radius:5px; text-align:center;"&gt;
-                   &lt;strong&gt;RIVALLY VERIFIED&lt;/strong&gt;<br>
-                   Dominance Score: <span id="embed-score">0</span>/10
-                &lt;/div&gt;
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Competitor Price</label>
+                    <input id="compPrice" type="text" placeholder="e.g. $120 / month" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-500 focus:bg-white outline-none transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Their Features</label>
+                    <textarea id="compFeatures" rows="3" placeholder="e.g. Huge brand, Global presence, Complex features..." class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-500 focus:bg-white outline-none transition"></textarea>
+                </div>
             </div>
         </div>
     </div>
 
 
-    <script>
-        async function generate() {
-            const btn = document.querySelector('.cta');
-            const load = document.getElementById('loading');
-            const res = document.getElementById('result-area');
-            
-            // Skupljamo podatke
-            const data = {
-                my_product: document.getElementById('my_product').value,
-                my_advantage: document.getElementById('my_advantage').value,
-                competitor: document.getElementById('competitor').value,
-                comp_weakness: document.getElementById('comp_weakness').value
-            };
+    <div class="mt-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+        <label class="block text-sm font-bold text-gray-900 mb-2">Email Address (Required for full analysis)</label>
+        <input id="clientEmail" type="email" placeholder="e.g. founder@mycoolstartup.com" class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition" required>
+    </div>
 
-            if(!data.my_product || !data.competitor) { alert("Unesite bar imena firmi!"); return; }
 
-            btn.disabled = true; load.style.display = 'block'; res.style.display = 'none';
+    <div class="mt-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+        <label class="block text-sm font-bold text-gray-900 mb-2">Target Audience (Who buys this?)</label>
+        <input id="targetAudience" type="text" placeholder="e.g. Startup Founders, SMB Owners, Enterprise Sales Teams..." class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition">
 
-            try {
-                const response = await fetch('/generate', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(data)
-                });
+    </div>
 
-                if(!response.ok) throw new Error("Server Error");
+    <div class="mt-10 text-center pb-10">
+        <button onclick="generateStrategy()" class="gradient-btn text-white font-extrabold py-5 px-12 rounded-2xl shadow-xl hover:scale-105 transform transition duration-200 w-full md:w-auto text-xl tracking-wide">
+            ⚡ GENERATE WINNING STRATEGY
+        </button>
+        
 
-                const result = await response.json();
+        <div id="loader" class="loader mt-6"></div>
+        <p id="statusMsg" class="text-gray-500 text-sm mt-3 animate-pulse"></p>
+        <div id="errorBox" class="hidden mt-6 bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-xl max-w-2xl mx-auto text-left"></div>
+    </div>
 
-                // Prikaz
-                document.getElementById('score').innerText = "SCORE: " + result.score + "/10";
-                document.getElementById('strategy').innerText = result.strategy;
-                
-                // Azuriraj embed kod
-                document.getElementById('embed-score').innerText = result.score;
+    <div id="results" class="hidden mt-4 mb-20 space-y-8">
+        
 
-                
-                res.style.display = 'block';
+        <div class="bg-white p-10 rounded-3xl shadow-2xl border-b-8 border-blue-600 text-center relative overflow-hidden">
+            <h3 class="text-gray-400 uppercase tracking-widest text-xs font-bold mb-4">MARKET DOMINANCE SCORE</h3>
+            <div id="scoreValue" class="text-8xl font-black text-gray-900 mb-2 tracking-tighter"></div>
+            <p id="scoreText" class="text-xl text-blue-600 font-medium"></p>
+            <p id="scoreExplanation" class="text-sm text-gray-500 mt-2"></p>
+        </div>
 
-            } catch(e) {
-                alert("Greška: " + e.message);
-            } finally {
-                btn.disabled = false; load.style.display = 'none';
-            }
+        <div class="bg-gray-900 p-8 rounded-3xl shadow-xl border border-gray-700 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="text-left">
+                <h3 class="text-white text-xl font-bold">🏆 Show off this score!</h3>
+                <p class="text-gray-400 text-sm mt-1">Add this badge to your site footer. Prove you are the best.</p>
+            </div>
+            <div class="flex flex-col items-center gap-3 w-full md:w-auto">
+                 <div class="bg-white border-2 border-blue-600 rounded-lg px-3 py-1 shadow-sm">
+                    <span class="font-bold text-gray-900 text-xs">Rivally Score:</span>
+                    <span id="previewScore" class="text-blue-600 font-black text-lg ml-1"></span>
+
+                </div>
+                <div class="relative w-full">
+                    <input id="embedCode" readonly class="w-full bg-black text-green-400 font-mono text-xs p-2 pr-16 rounded border border-gray-700 focus:outline-none" value="<a href='...'>Code loading...</a>">
+                    <button onclick="copyToClipboard()" class="absolute top-0 right-0 h-full bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3 rounded-r transition">COPY</button>
+                    <p id="copyMsg" class="hidden absolute -bottom-5 left-0 text-green-400 text-[10px]">Copied!</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100">
+                <h3 class="text-blue-600 uppercase tracking-widest text-sm font-black mb-6">💡 FATHERLY ADVICE</h3>
+                <p id="adviceText" class="text-gray-800 text-xl italic font-serif leading-relaxed"></p>
+            </div>
+            <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100">
+                <h3 class="text-blue-600 uppercase tracking-widest text-sm font-black mb-6">⚔️ WINNING STRATEGY</h3>
+                <div id="strategyText" class="space-y-4 text-gray-700 leading-relaxed text-lg"></div>
+            </div>
+        </div>
+
+        <div class="bg-gray-100 p-8 rounded-3xl shadow-inner">
+            <h3 class="text-gray-500 uppercase tracking-widest text-sm font-bold mb-6">💀 REALITY CHECK (Internal Memo)</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-2 flex items-center"><span class="text-red-500 mr-2">⚠️</span> What Rival Does Better</h4>
+                    <ul id="compWinsList" class="text-gray-600 text-sm leading-relaxed list-disc list-inside space-y-1"></ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-gray-900 mb-2 flex items-center"><span class="text-green-500 mr-2">🎯</span> Improvements Needed ASAP</h4>
+
+                    <ul id="improvementsList" class="text-gray-600 text-sm leading-relaxed list-disc list-inside space-y-1"></ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-blue-900 p-8 rounded-3xl text-white">
+            <h3 class="text-blue-300 uppercase tracking-widest text-sm font-black mb-4">📣 GO VIRAL (Social Media Copy)</h3>
+            <p id="instaCaption" class="text-lg font-medium leading-relaxed"></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function parseFeatures(features) {
+        if (typeof features === 'string') {
+            return features.split(',').map(f => f.trim());
         }
-    </script>
+        return features; 
+
+    }
+
+    function createListItems(data) {
+        let listHtml = '';
+        if (Array.isArray(data)) {
+            data.forEach(item => {
+                listHtml += `<li>${item}</li>`;
+            });
+        }
+        return listHtml;
+    }
+
+    async function generateStrategy() {
+
+        const clientEmail = document.getElementById('clientEmail').value;
+
+        // Validacija Emaila
+        if (!clientEmail || !clientEmail.includes('@')) {
+            document.getElementById('errorBox').innerText = "Please enter a valid Email Address to receive the analysis.";
+            document.getElementById('errorBox').classList.remove('hidden');
+            return;
+
+        }
+
+        // Reset UI
+        document.getElementById('results').classList.add('hidden');
+        document.getElementById('errorBox').classList.add('hidden');
+        document.getElementById('loader').style.display = 'block';
+        document.getElementById('statusMsg').innerText = "Consulting Strategy Engine...";
+
+
+        // Prikupljanje podataka
+        const data = {
+            client_email: clientEmail, // KLJUČNO: Ovo šaljemo u Bazu
+            my_product: {
+                name: document.getElementById('myName').value,
+                price: document.getElementById('myPrice').value,
+                features: parseFeatures(document.getElementById('myFeatures').value),
+                weaknesses: document.getElementById('myWeaknesses').value
+            },
+            competitor_product: {
+                name: document.getElementById('compName').value,
+                price: document.getElementById('compPrice').value,
+                features: parseFeatures(document.getElementById('compFeatures').value)
+            },
+            target_audience: document.getElementById('targetAudience').value
+        };
+
+        if (!data.my_product.name || !data.competitor_product.name || !data.target_audience) {
+            document.getElementById('errorBox').innerText = "Please fill in the Product Name, Competitor Name, and Target Audience.";
+            document.getElementById('errorBox').classList.remove('hidden');
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('statusMsg').innerText = "";
+            return;
+        }
+
+        try {
+            // API Poziv
+            const response = await fetch('/generate-rival-strategy', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error("Server Error. Check Render Logs. Detail: " + errorText);
+            }
+            
+            const result = await response.json();
+
+            // Prikaz rezultata
+            document.getElementById('scoreValue').innerText = result.dominance_score;
+            document.getElementById('scoreExplanation').innerText = result.score_explanation;
+            document.getElementById('scoreText').innerText = result.dominance_score < 40 ? "Red Zone Threat" : (result.dominance_score > 75 ? "Total Domination" : "Dogfight Zone");
+            
+            document.getElementById('strategyText').innerHTML = result.html_content; 
+            document.getElementById('adviceText').innerText = result.fatherly_advice;
+            document.getElementById('instaCaption').innerText = result.instagram_caption;
+
+            document.getElementById('compWinsList').innerHTML = createListItems(result.reality_check.competitor_wins);
+            document.getElementById('improvementsList').innerHTML = createListItems(result.reality_check.improvements_needed);
+
+            // Widget
+            document.getElementById('previewScore').innerText = result.dominance_score;
+            const widgetHTML = `<a href="https://rivally.app" target="_blank" style="text-decoration:none;display:inline-flex;align-items:center;background:#fff;border:2px solid #2563EB;border-radius:8px;padding:5px 10px;font-family:sans-serif;box-shadow:0 2px 4px rgba(0,0,0,0.1);"><span style="color:#111827;font-weight:700;font-size:12px;margin-right:5px;">Rivally Score:</span><span style="color:#2563EB;font-weight:900;font-size:16px;">${result.dominance_score}</span></a>`;
+
+            document.getElementById('embedCode').value = widgetHTML;
+
+            // Prikazi sve
+            document.getElementById('results').classList.remove('hidden');
+
+        } catch (error) {
+            document.getElementById('errorBox').innerText = "FATAL SYSTEM ERROR: " + error.message;
+            document.getElementById('errorBox').classList.remove('hidden');
+        } finally {
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('statusMsg').innerText = "";
+        }
+    }
+
+    function copyToClipboard() {
+        const copyText = document.getElementById("embedCode");
+
+        copyText.select();
+        document.execCommand("copy");
+        document.getElementById("copyMsg").classList.remove("hidden");
+        setTimeout(() => document.getElementById("copyMsg").classList.add("hidden"), 2000);
+    }
+</script>
+
 </body>
+
 </html>
