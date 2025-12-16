@@ -3,346 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rivally - Crush Your Competition</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-
-
+    <title>Rivally - AI Competitive Intelligence</title>
+    <script src="[https://cdn.tailwindcss.com](https://cdn.tailwindcss.com)"></script>
+    <link href="[https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap](https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap)" rel="stylesheet">
     <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: #f8fafc; 
-            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
-            background-size: 24px 24px;
-        }
-        
-        /* Modern Input Styling */
-        .modern-input {
-            transition: all 0.2s ease-in-out;
-            border: 1px solid #e2e8f0;
-            background-color: #f8fafc;
-        }
-        .modern-input:focus {
-            border-color: #2563EB;
-            background-color: #ffffff;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-            outline: none;
-        }
-
-        /* Buttons */
-        .gradient-btn { 
-            background: linear-gradient(135deg, #111827 0%, #374151 100%); 
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .gradient-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Unlock Overlay */
-        .blur-lock { 
-            filter: blur(10px); 
-            user-select: none; 
-            pointer-events: none; 
-
-            opacity: 0.7;
-        }
-        
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-        }
-
-        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #2563EB; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: none; margin: 0 auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        body { font-family: 'Inter', sans-serif; }
+        .hidden { display: none; }
     </style>
 </head>
-<body class="text-gray-800 antialiased min-h-screen flex flex-col">
+<body class="bg-gray-50 text-gray-900 min-h-screen selection:bg-blue-100">
 
-<div class="w-full bg-white/80 backdrop-blur-md border-b border-gray-100 py-4 fixed top-0 z-50">
-    <div class="max-w-5xl mx-auto px-4 flex items-center justify-between">
-        
-        <a href="/" class="flex items-center gap-2 hover:opacity-75 transition-opacity cursor-pointer group">
-            <h1 class="text-2xl font-black tracking-tighter text-gray-900">Rivally<span class="text-blue-600">.</span></h1>
-            <span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide group-hover:bg-blue-100 transition-colors">Beta</span>
-        </a>
+    <header class="p-6 max-w-5xl mx-auto flex justify-between items-center">
 
-    </div>
-</div>
-
-<div class="max-w-4xl mx-auto p-4 md:p-0 flex-grow mt-24">
-    
-    <div class="text-center mb-12">
-        <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-4">
-            Stop Guessing. Start <span class="text-blue-600">Winning.</span>
-        </h2>
-        <p class="text-gray-500 max-w-lg mx-auto text-lg">
-            Compare your product against your biggest rival and get an AI strategy to steal their customers.
-        </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-        
-        <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-blue-600">
-            <div class="flex items-center gap-2 mb-6">
-                <h2 class="text-xl font-bold text-gray-900">Your Business</h2>
-            </div>
-            
-            <div class="space-y-4">
-                <div>
-                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Product Name</label>
-                    <input id="myName" type="text" placeholder="e.g. Acme CRM" class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400 font-medium">
-                </div>
-                
-                <div>
-                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Price</label>
-                    <input id="myPrice" type="text" placeholder="e.g. $49/mo" class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400">
-
-                </div>
-
-                <div>
-                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Key Features</label>
-                    <textarea id="myFeatures" rows="3" placeholder="e.g. 24/7 Support, Free Shipping..." class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400"></textarea>
-                </div>
-
-                <div>
-                    <label class="text-xs font-bold text-red-400 uppercase tracking-wider ml-1">Weakness (Optional)</label>
-                    <textarea id="myWeaknesses" rows="2" placeholder="e.g. No mobile app yet..." class="modern-input w-full p-3 rounded-lg bg-red-50/50 border-red-100 text-gray-900 placeholder-red-300"></textarea>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-gray-800">
-            <div class="flex items-center gap-2 mb-6">
-                <h2 class="text-xl font-bold text-gray-900">The Rival</h2>
-            </div>
-
-            <div class="space-y-4">
-                <div>
-                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Competitor Name</label>
-
-                    <input id="compName" type="text" placeholder="e.g. Salesforce" class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400 font-medium">
-                </div>
-                
-                <div>
-                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Their Price</label>
-                    <input id="compPrice" type="text" placeholder="e.g. $300/mo" class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400">
-                </div>
-
-                <div>
-                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Their Features</label>
-                    <textarea id="compFeatures" rows="3" placeholder="e.g. Huge ecosystem, complex..." class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400"></textarea>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-10 max-w-2xl mx-auto">
-        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 ml-1">Who is the Target Audience?</label>
-        <input id="targetAudience" type="text" placeholder="e.g. Small business owners in New York..." class="modern-input w-full p-3 rounded-lg">
-    </div>
-
-    <div class="text-center mb-20">
-        <button onclick="generateStrategy()" class="gradient-btn text-white font-bold py-4 px-12 rounded-full shadow-xl text-lg w-full md:w-auto hover:scale-105 transition-transform">
-            🚀 Analyze Strategy (Free)
+        <button onclick="window.location.reload()" class="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
+            <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-md">R</div>
+            <span class="font-bold text-xl tracking-tight text-gray-900">Rivally</span>
         </button>
+        <span class="text-sm text-gray-400 font-medium hidden sm:block">AI Strategic Analysis</span>
+    </header>
 
-        <div id="loader" class="loader mt-6"></div>
-        <p id="errorBox" class="hidden mt-4 text-red-600 font-bold bg-red-50 inline-block px-4 py-2 rounded-lg text-sm"></p>
-    </div>
+    <main class="max-w-2xl mx-auto px-6 py-10 md:py-16">
 
-
-    <div id="results" class="hidden pb-20">
-
-        
-        <div class="bg-white p-10 rounded-3xl shadow-xl border-b-4 border-blue-600 text-center mb-10">
-            <h3 class="text-gray-400 uppercase tracking-widest text-xs font-bold mb-4">YOUR WIN PROBABILITY</h3>
-            <div class="relative inline-block">
-                <div id="scoreValue" class="text-8xl font-black text-gray-900 tracking-tighter"></div>
+        <div id="step-input" class="bg-white p-8 rounded-2xl shadow-xl shadow-gray-200/50 border border-gray-100 space-y-6">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3 tracking-tight">
+                    Win the market.
+                </h1>
+                <p class="text-gray-500 text-lg">Enter two companies. Get a winning strategy.</p>
             </div>
-            <p id="scoreExplanation" class="text-xl text-blue-600 font-medium mt-4 max-w-2xl mx-auto leading-relaxed"></p>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Your Company</label>
+                <input type="text" id="myCompany" placeholder="e.g. My Agency" 
+                    class="w-full p-4 bg-gray-50 rounded-xl border border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition text-lg placeholder:text-gray-400">
+            </div>
+
+            <div class="flex items-center gap-4 py-2">
+                <div class="h-px bg-gray-200 flex-1"></div>
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-widest bg-gray-50 px-2 py-1 rounded">VS</span>
+                <div class="h-px bg-gray-200 flex-1"></div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Competitor Name</label>
+                <input type="text" id="competitorName" placeholder="e.g. The Big Guy Inc." 
+                    class="w-full p-4 bg-gray-50 rounded-xl border border-gray-200 focus:bg-white focus:border-red-500 focus:ring-4 focus:ring-red-500/10 outline-none transition text-lg placeholder:text-gray-400">
+            </div>
+
+            <div>
+                <label class="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+                    Competitor Website 
+                    <span class="text-gray-400 font-normal text-xs bg-gray-100 px-2 py-0.5 rounded-full">Optional</span>
+                </label>
+                <input type="text" id="competitorUrl" placeholder="e.g. [https://www.competitor.com](https://www.competitor.com)" 
+                    class="w-full p-3 bg-gray-50 rounded-xl border border-gray-200 focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition text-base placeholder:text-gray-400">
+                <p class="text-xs text-gray-400 mt-2 ml-1">Helps AI understand their exact business model.</p>
+            </div>
+
+            <button onclick="startAnalysis()" 
+                class="w-full py-4 mt-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-lg shadow-lg shadow-blue-600/20 transition-all transform active:scale-95 flex items-center justify-center gap-2">
+                Analyze Battle <span class="text-xl">⚔️</span>
+            </button>
         </div>
 
-        <div class="relative">
-            
-            <div id="lockedContent" class="blur-lock transition duration-1000">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-red-500">
-
-                        <h3 class="font-bold text-gray-900 text-lg mb-4 flex items-center gap-2">
-                            ⚠️ Why They Might Win
-                        </h3>
-                        <ul id="compWinsList" class="space-y-2 text-gray-600 text-sm list-disc list-inside"></ul>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-green-500">
-                        <h3 class="font-bold text-gray-900 text-lg mb-4 flex items-center gap-2">
-                             🛠️ Fix This Immediately
-                        </h3>
-                        <ul id="improvementsList" class="space-y-2 text-gray-600 text-sm list-disc list-inside"></ul>
-                    </div>
-                </div>
-
-                <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-                    <h3 class="text-gray-900 font-black text-2xl mb-6">⚔️ The Battle Plan</h3>
-                    <div id="strategyText" class="prose prose-blue max-w-none text-gray-700"></div>
-                </div>
+        <div id="step-loading" class="hidden text-center py-20">
+            <div class="relative w-20 h-20 mx-auto mb-8">
+                <div class="absolute inset-0 border-4 border-gray-100 rounded-full"></div>
+                <div class="absolute inset-0 border-4 border-blue-600 rounded-full border-t-transparent animate-spin"></div>
             </div>
 
-            <div id="unlockOverlay" class="absolute inset-0 z-10 flex flex-col items-center justify-center pt-20">
-                <div class="glass-panel p-8 rounded-3xl shadow-2xl text-center max-w-md mx-4 transform transition-all hover:scale-105">
-
-                    <div class="text-5xl mb-4">🔒</div>
-
-                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Unlock Full Report</h3>
-                    <p class="text-gray-600 mb-6 text-sm leading-relaxed">
-                        Get the complete breakdown, mentorship advice, and viral marketing hooks.
-                    </p>
-                    
-                    <div class="relative">
-                        <input id="unlockEmail" type="email" placeholder="name@company.com" class="modern-input w-full p-4 border rounded-xl mb-4 text-center font-medium">
-                    </div>
-
-                    <button onclick="unlockContent()" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
-                        <span>Reveal Everything</span>
-
-                    </button>
-                    
-                    <p class="text-xs text-gray-400 mt-4">We hate spam too. Your email is safe.</p>
-                </div>
-            </div>
-
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Scanning Market Data...</h2>
+            <p class="text-gray-500 animate-pulse">Analyzing weaknesses & finding gaps.</p>
         </div>
-    </div>
 
-</div>
+        <div id="step-results" class="hidden space-y-6">
+            <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+                <div class="p-8 text-center bg-gradient-to-b from-blue-50/50 to-white border-b border-gray-100">
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">WIN PROBABILITY</p>
+                    <div class="flex items-center justify-center gap-1 mb-4">
+                        <span id="scoreValue" class="text-7xl font-black text-blue-600 tracking-tighter">0</span>
+                        <span class="text-3xl text-gray-300 font-bold mb-2">/100</span>
 
-<div class="text-center py-8 text-gray-400 text-xs">
-    &copy; 2025 Rivally AI.
+                    </div>
+                    <p id="summaryText" class="text-lg font-medium text-gray-800 leading-relaxed max-w-lg mx-auto"></p>
+                </div>
 
-</div>
+                <div class="grid md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-gray-100">
+                    <div class="p-8">
+                        <h3 class="font-bold text-blue-700 mb-5 flex items-center gap-2 text-sm uppercase tracking-wide">
+                            <span class="w-2 h-2 rounded-full bg-blue-600"></span> Your Advantages
+                        </h3>
+                        <ul id="strengthsList" class="space-y-4 text-gray-600 text-sm font-medium"></ul>
+                    </div>
+                    <div class="p-8 bg-red-50/30">
+                        <h3 class="font-bold text-red-600 mb-5 flex items-center gap-2 text-sm uppercase tracking-wide">
+                            <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span> Their Weaknesses
+                        </h3>
+                        <ul id="weaknessesList" class="space-y-4 text-gray-600 text-sm font-medium"></ul>
+                    </div>
+                </div>
 
-<script>
-    let globalResult = null; 
+                <div class="p-6 bg-gray-900 text-white text-center">
+                    <h4 class="text-blue-400 font-bold text-xs uppercase mb-2 tracking-widest">FINAL VERDICT</h4>
+                    <p id="verdictText" class="opacity-90 text-lg leading-snug"></p>
+                </div>
+            </div>
 
-    async function generateStrategy() {
-        const myName = document.getElementById('myName').value;
-        const compName = document.getElementById('compName').value;
-        
-        if(!myName || !compName) {
-            alert("Please enter at least your product name and the competitor's name.");
-            return;
+            <button onclick="window.location.reload()" 
+                class="w-full py-4 bg-white border-2 border-gray-100 text-gray-600 font-bold rounded-xl hover:bg-gray-50 hover:border-gray-200 transition text-lg">
+                Analyze Another Competitor ↺
+            </button>
+        </div>
+
+    </main>
+
+    <script>
+        async function startAnalysis() {
+            const myCompany = document.getElementById('myCompany').value.trim();
+            const competitorName = document.getElementById('competitorName').value.trim();
+            const competitorUrl = document.getElementById('competitorUrl').value.trim();
+
+            if (!myCompany || !competitorName) {
+                alert("Please enter both company names to start the battle!");
+                return;
+            }
+
+            // Sakrij formu, prikaži loading
+            document.getElementById('step-input').classList.add('hidden');
+
+            document.getElementById('step-loading').classList.remove('hidden');
+
+            try {
+                // Slanje podataka na backend (FastAPI)
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        companyName: myCompany, 
+                        competitorName: competitorName,
+                        competitorUrl: competitorUrl 
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || "Server error");
+                }
+                
+
+                const data = await response.json();
+
+                // Popunjavanje rezultata
+                document.getElementById('scoreValue').innerText = data.score;
+                document.getElementById('summaryText').innerText = `"${data.summary}"`;
+                document.getElementById('verdictText').innerText = data.verdict;
+
+                // Bojenje skora
+                const scoreEl = document.getElementById('scoreValue');
+                if(data.score < 50) {
+                    scoreEl.className = "text-7xl font-black text-orange-500 tracking-tighter";
+                } else {
+                    scoreEl.className = "text-7xl font-black text-blue-600 tracking-tighter";
+                }
+
+                // Generisanje listi
+                const sList = document.getElementById('strengthsList');
+                sList.innerHTML = data.strengths.map(s => `
+                    <li class="flex gap-3 items-start">
+                        <svg class="w-5 h-5 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                        <span>${s}</span>
+                    </li>`).join('');
+
+
+                const wList = document.getElementById('weaknessesList');
+                wList.innerHTML = data.weaknesses.map(w => `
+                    <li class="flex gap-3 items-start">
+                        <svg class="w-5 h-5 text-red-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        <span>${w}</span>
+                    </li>`).join('');
+
+                // Prikaži rezultate
+                document.getElementById('step-loading').classList.add('hidden');
+                document.getElementById('step-results').classList.remove('hidden');
+                
+
+                // Skroluj na vrh da se lepo vidi
+                window.scrollTo(0, 0);
+
+            } catch (error) {
+                console.error(error);
+                alert("AI Error: " + error.message);
+                window.location.reload();
+            }
         }
-
-        const data = {
-            my_product: {
-                name: myName,
-                price: document.getElementById('myPrice').value,
-                features: document.getElementById('myFeatures').value,
-                weaknesses: document.getElementById('myWeaknesses').value
-            },
-            competitor_product: {
-                name: compName,
-                price: document.getElementById('compPrice').value,
-                features: document.getElementById('compFeatures').value
-            },
-            target_audience: document.getElementById('targetAudience').value
-        };
-
-        document.getElementById('loader').style.display = 'block';
-        document.getElementById('errorBox').classList.add('hidden');
-        document.getElementById('results').classList.add('hidden');
-        
-        // Reset overlay
-        document.getElementById('lockedContent').classList.add('blur-lock');
-        document.getElementById('unlockOverlay').classList.remove('hidden');
-
-        try {
-            const response = await fetch('/generate-rival-strategy', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            if (!response.ok) throw new Error("Server communication error.");
-            
-            globalResult = await response.json(); 
-
-            document.getElementById('scoreValue').innerText = globalResult.dominance_score + "/100";
-            document.getElementById('scoreExplanation').innerText = globalResult.score_explanation;
-            document.getElementById('strategyText').innerHTML = globalResult.html_content;
-            
-            document.getElementById('compWinsList').innerHTML = globalResult.reality_check.competitor_wins.map(i => `<li>${i}</li>`).join('');
-            document.getElementById('improvementsList').innerHTML = globalResult.reality_check.improvements_needed.map(i => `<li>${i}</li>`).join('');
-
-            document.getElementById('results').classList.remove('hidden');
-            document.getElementById('loader').style.display = 'none';
-            
-            setTimeout(() => {
-                document.getElementById('results').scrollIntoView({behavior: "smooth", block: "start"});
-            }, 100);
-
-        } catch (error) {
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('errorBox').innerText = "AI is busy. Please try again in 10 seconds.";
-            document.getElementById('errorBox').classList.remove('hidden');
-        }
-    }
-
-    // --- PAMETNO OTKLJUČAVANJE ---
-    async function unlockContent() {
-
-        const emailInput = document.getElementById('unlockEmail');
-        const email = emailInput.value.trim();
-        const btn = document.querySelector('#unlockOverlay button');
-
-        // 1. REGEX PROVERA (Mora biti format: slova@slova.slova)
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!emailPattern.test(email)) {
-
-            alert("Please enter a valid email address (e.g. name@company.com).");
-            emailInput.focus(); 
-            return;
-        }
-
-        // 2. Vizuelni efekat
-        const originalText = btn.innerHTML;
-        btn.innerHTML = "Unlocking...";
-        btn.disabled = true;
-
-        try {
-            // 3. Slanje u bazu
-
-            await fetch('/save-lead', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    email: email,
-                    score: globalResult.dominance_score || 0,
-                    product_name: document.getElementById('myName').value,
-                    competitor_name: document.getElementById('compName').value
-                })
-
-            });
-            console.log("Lead captured.");
-
-        } catch (e) {
-            console.log("Error saving lead (non-fatal).");
-        }
-
-        // 4. Otključavanje sa malom zadrškom (psihološki efekat)
-        setTimeout(() => {
-            document.getElementById('lockedContent').classList.remove('blur-lock');
-
-            document.getElementById('unlockOverlay').classList.add('hidden');
-            
-            // Resetujemo dugme za sledeci put
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-        }, 800); 
-    }
-</script>
-
+    </script>
 </body>
 </html>
