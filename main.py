@@ -1,9 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 import os
 import google.generativeai as genai
-import json
-
-app = Flask(__name__, template_folder=".")
+import jsonapp = Flask(__name__, template_folder=".")
 
 # Konfiguracija
 genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
@@ -70,3 +68,4 @@ def analyze():
 if __name__ == '__main__':
 
     app.run(debug=True)
+
