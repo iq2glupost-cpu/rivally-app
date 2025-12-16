@@ -87,7 +87,7 @@ IMPORTANT: Respond ONLY in valid JSON format.
 
 # --- POPRAVLJENA DEFINICIJA MODELA (Ovo je bilo kritično) ---
 model = genai.GenerativeModel(
-    model_name="gemini-pro",
+    model_name="gemini-2.5-pro",
     system_instruction=SYSTEM_INSTRUCTION,
     
 
@@ -186,6 +186,7 @@ def test_gemini():
         }
     except Exception as e:
         return {"GRESKA": str(e)}
+
 
 
 
