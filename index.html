@@ -11,14 +11,13 @@
     <style>
         body { 
             font-family: 'Inter', sans-serif; 
-            background: #f8fafc; /* Clean background */
+            background: #f8fafc; 
             background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
             background-size: 24px 24px;
         }
         
         /* Modern Input Styling */
         .modern-input {
-
             transition: all 0.2s ease-in-out;
             border: 1px solid #e2e8f0;
             background-color: #f8fafc;
@@ -44,8 +43,8 @@
         .blur-lock { 
             filter: blur(10px); 
             user-select: none; 
-
             pointer-events: none; 
+
             opacity: 0.7;
         }
         
@@ -68,8 +67,8 @@
             <span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide">Beta</span>
         </div>
     </div>
-
 </div>
+
 
 <div class="max-w-4xl mx-auto p-4 md:p-0 flex-grow mt-24">
     
@@ -78,7 +77,6 @@
             Stop Guessing. Start <span class="text-blue-600">Winning.</span>
         </h2>
         <p class="text-gray-500 max-w-lg mx-auto text-lg">
-
             Compare your product against your biggest rival and get an AI strategy to steal their customers.
         </p>
     </div>
@@ -94,8 +92,8 @@
                 <div>
                     <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Product Name</label>
                     <input id="myName" type="text" placeholder="e.g. Acme CRM" class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400 font-medium">
-
                 </div>
+
                 
                 <div>
                     <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Price</label>
@@ -109,6 +107,7 @@
 
                 <div>
                     <label class="text-xs font-bold text-red-400 uppercase tracking-wider ml-1">Weakness (Optional)</label>
+
                     <textarea id="myWeaknesses" rows="2" placeholder="e.g. No mobile app yet..." class="modern-input w-full p-3 rounded-lg bg-red-50/50 border-red-100 text-gray-900 placeholder-red-300"></textarea>
                 </div>
             </div>
@@ -116,6 +115,7 @@
 
         <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-gray-800">
             <div class="flex items-center gap-2 mb-6">
+
                 <h2 class="text-xl font-bold text-gray-900">The Rival</h2>
             </div>
 
@@ -128,15 +128,15 @@
                 <div>
                     <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Their Price</label>
                     <input id="compPrice" type="text" placeholder="e.g. $300/mo" class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400">
-
                 </div>
+
 
                 <div>
                     <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Their Features</label>
                     <textarea id="compFeatures" rows="3" placeholder="e.g. Huge ecosystem, complex..." class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400"></textarea>
                 </div>
-
             </div>
+
         </div>
     </div>
 
@@ -158,13 +158,13 @@
     <div id="results" class="hidden pb-20">
         
         <div class="bg-white p-10 rounded-3xl shadow-xl border-b-4 border-blue-600 text-center mb-10">
+
             <h3 class="text-gray-400 uppercase tracking-widest text-xs font-bold mb-4">YOUR WIN PROBABILITY</h3>
             <div class="relative inline-block">
                 <div id="scoreValue" class="text-8xl font-black text-gray-900 tracking-tighter"></div>
             </div>
             <p id="scoreExplanation" class="text-xl text-blue-600 font-medium mt-4 max-w-2xl mx-auto leading-relaxed"></p>
         </div>
-
 
         <div class="relative">
             
@@ -173,6 +173,7 @@
                     <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-red-500">
                         <h3 class="font-bold text-gray-900 text-lg mb-4 flex items-center gap-2">
                             ⚠️ Why They Might Win
+
                         </h3>
                         <ul id="compWinsList" class="space-y-2 text-gray-600 text-sm list-disc list-inside"></ul>
                     </div>
@@ -180,7 +181,6 @@
                         <h3 class="font-bold text-gray-900 text-lg mb-4 flex items-center gap-2">
                              🛠️ Fix This Immediately
                         </h3>
-
                         <ul id="improvementsList" class="space-y-2 text-gray-600 text-sm list-disc list-inside"></ul>
                     </div>
                 </div>
@@ -188,8 +188,8 @@
                 <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
                     <h3 class="text-gray-900 font-black text-2xl mb-6">⚔️ The Battle Plan</h3>
                     <div id="strategyText" class="prose prose-blue max-w-none text-gray-700"></div>
-
                 </div>
+
             </div>
 
             <div id="unlockOverlay" class="absolute inset-0 z-10 flex flex-col items-center justify-center pt-20">
@@ -202,7 +202,8 @@
                     </p>
                     
                     <div class="relative">
-                        <input id="unlockEmail" type="email" placeholder="Enter your email" class="modern-input w-full p-4 border rounded-xl mb-4 text-center font-medium">
+                        <input id="unlockEmail" type="email" placeholder="name@company.com" class="modern-input w-full p-4 border rounded-xl mb-4 text-center font-medium">
+
                     </div>
 
                     <button onclick="unlockContent()" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
@@ -210,6 +211,7 @@
                     </button>
                     
                     <p class="text-xs text-gray-400 mt-4">We hate spam too. Your email is safe.</p>
+
                 </div>
             </div>
 
@@ -225,7 +227,6 @@
 <script>
     let globalResult = null; 
 
-
     async function generateStrategy() {
         const myName = document.getElementById('myName').value;
         const compName = document.getElementById('compName').value;
@@ -234,7 +235,6 @@
             alert("Please enter at least your product name and the competitor's name.");
             return;
         }
-
 
         const data = {
             my_product: {
@@ -245,7 +245,6 @@
             },
             competitor_product: {
                 name: compName,
-
                 price: document.getElementById('compPrice').value,
                 features: document.getElementById('compFeatures').value
             },
@@ -261,6 +260,7 @@
         document.getElementById('unlockOverlay').classList.remove('hidden');
 
         try {
+
             const response = await fetch('/generate-rival-strategy', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -270,7 +270,6 @@
             if (!response.ok) throw new Error("Server communication error.");
             
             globalResult = await response.json(); 
-
 
             document.getElementById('scoreValue').innerText = globalResult.dominance_score + "/100";
             document.getElementById('scoreExplanation').innerText = globalResult.score_explanation;
@@ -293,24 +292,35 @@
         }
     }
 
+    // --- NOVA STROŽA FUNKCIJA ZA OTKLJUČAVANJE ---
     async function unlockContent() {
-        const email = document.getElementById('unlockEmail').value;
+        const emailInput = document.getElementById('unlockEmail');
+        const email = emailInput.value.trim();
+
         const btn = document.querySelector('#unlockOverlay button');
 
+        // 1. REGEX PROVERA (Mora biti: tekst@tekst.tekst)
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (!email || !email.includes('@')) {
-            alert("Please enter a valid email address.");
+        if (!emailPattern.test(email)) {
+            alert("Please enter a valid email address (e.g. name@company.com).");
+            emailInput.focus(); 
             return;
+
         }
 
+        // 2. Vizuelni efekat
+        const originalText = btn.innerHTML;
         btn.innerHTML = "Unlocking...";
+        btn.disabled = true;
 
         try {
+            // 3. Slanje u bazu
             await fetch('/save-lead', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-
                 body: JSON.stringify({
+
                     email: email,
                     score: globalResult.dominance_score || 0,
                     product_name: document.getElementById('myName').value,
@@ -320,14 +330,21 @@
             console.log("Lead captured.");
 
         } catch (e) {
-            console.log("Analytics error (non-fatal).");
+
+            console.log("Error saving lead (non-fatal).");
         }
 
-        document.getElementById('lockedContent').classList.remove('blur-lock');
-        document.getElementById('unlockOverlay').classList.add('hidden');
+        // 4. Otključavanje sa zadrškom (psihološki efekat)
+        setTimeout(() => {
+            document.getElementById('lockedContent').classList.remove('blur-lock');
+            document.getElementById('unlockOverlay').classList.add('hidden');
+            // Resetujemo dugme ako zatreba ponovo
+
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }, 800); 
     }
 </script>
 
 </body>
-
 </html>
