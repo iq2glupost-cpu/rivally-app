@@ -1,83 +1,72 @@
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
-from starlette.responses import HTMLResponse
+from flask import Flask, request, jsonify, render_template
 import os
 import google.generativeai as genai
 import json
 
-# INICIJALIZACIJA (Tvoja baza)
-app = FastAPI()
+app = Flask(__name__, template_folder=".")
+
+# Konfiguracija
 genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
 
-# KONAČAN MODEL KOJI SE KORISTI (NAJBRŽI PRO MODEL)
+# MODEL
 MODEL_NAME = "gemini-2.5-pro"
 
-# Pydantic model za prihvatanje podataka (uključujući NOVO URL polje)
-class AnalysisRequest(BaseModel):
-    companyName: str
-    competitorName: str
-    competitorUrl: str | None = None # Novo opcionalno polje
+@app.route('/')
+def home():
+    return render_template('index.html')
 
-# RUTA ZA PRIKAZ HTML-a
-
-@app.get("/", response_class=HTMLResponse)
-async def home():
+@app.route('/api/analyze', methods=['POST'])
+def analyze():
     try:
-        with open("index.html", "r") as f:
-            return f.read()
-    except FileNotFoundError:
-        return "<h1>Error: index.html not found!</h1>", 404
+        data = request.json
+        company_name = data.get('companyName')
 
-# RUTA ZA ANALIZU
-@app.post("/api/analyze")
-async def analyze_competition(request: AnalysisRequest):
+        competitor_name = data.get('competitorName')
+        # NOVO: Čitamo URL ako postoji
+        competitor_url = data.get('competitorUrl', '')
 
-    try:
-        # Povezivanje na model
+        if not company_name or not competitor_name:
+            return jsonify({"error": "Missing company names"}), 400
+
+        # Model setup
         model = genai.GenerativeModel(MODEL_NAME)
 
-        # Kreiranje Prompta
-        url_context = (
-            f"3. COMPETITOR WEBSITE: \"{request.competitorUrl}\" (Use this to identify their exact industry)" 
-            if request.competitorUrl else ""
-        )
 
-        
+        # PAMETNI PROMPT SA URL-om
         prompt = f"""
-        Act as a ruthless expert business strategist and competitive intelligence analyst. You MUST analyze the companies based on their business model and market strategy, not just their name.
-
+        Act as a ruthless expert business strategist.
+        
         Compare these two companies:
-        1. MY COMPANY: "{request.companyName}"
-        2. COMPETITOR: "{request.competitorName}"
-
-        {url_context}
+        1. MY COMPANY: "{company_name}"
+        2. COMPETITOR: "{competitor_name}"
+        {f'3. COMPETITOR WEBSITE: "{competitor_url}" (Use this to identify their exact industry)' if competitor_url else ''}
 
         TASK:
-        Analyze the strategic battle. If specific details are unknown, infer the business model from the names/website and assume they compete in the same industry. Focus on concrete strategic moves.
+        Analyze the strategic battle. If you don't know the specific companies, infer their business model based on their names/website and assume they operate in the same industry.
         
-        Output strictly valid JSON only:
+        Output valid JSON only:
         {{
             "score": number (0-100, higher is better for My Company),
-
             "winner": "string",
-            "summary": "string (A concise, 2-sentence executive summary of the situation)",
-            "strengths": ["string", "string", "string"] (3 key advantages of My Company, e.g., 'Superior customer retention due to dedicated community support'),
-            "weaknesses": ["string", "string", "string"] (3 vulnerabilities of the Competitor we can exploit, e.g., 'Weak pricing strategy leading to low profit margins'),
-            "verdict": "string (A final, brutally honest advice, 1-2 sentences)"
+            "summary": "string (2 sentences executive summary)",
+            "strengths": ["string", "string", "string"] (3 advantages of My Company),
+            "weaknesses": ["string", "string", "string"] (3 vulnerabilities of Competitor),
+            "verdict": "string (Brutally honest advice)"
         }}
         """
 
         response = model.generate_content(prompt)
         
-        # Čišćenje JSON-a (važno za stabilnost)
-        text_response = response.text
-        if "```" in text_response:
-            text_response = text_response.replace('```json', '').replace('```', '').strip()
-
+        # Čišćenje JSON-a (za svaki slučaj)
+        text_response = response.text.replace('```json', '').replace('```', '').strip()
         
-        return json.loads(text_response)
+        return jsonify(json.loads(text_response))
 
     except Exception as e:
-        print(f"Error during analysis: {e}")
-        # Vraćamo grešku u slučaju problema sa AI
-        raise HTTPException(status_code=500, detail="Analysis failed. AI could not process the request.")
+        print(f"Error: {str(e)}")
+        return jsonify({"error": "Analysis failed"}), 500
+
+# Ovo je potrebno za Vercel
+if __name__ == '__main__':
+
+    app.run(debug=True)
