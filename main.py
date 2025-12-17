@@ -7,7 +7,6 @@ from pydantic import BaseModel
 import google.generativeai as genai
 from supabase import create_client, Client
 from typing import Any, Optional
-import { Analytics } from "@vercel/analytics/next"
 # --- KONFIGURACIJA ---
 
 
@@ -186,5 +185,6 @@ def test_gemini():
         }
     except Exception as e:
         return {"GRESKA": str(e)}
+
 
 
