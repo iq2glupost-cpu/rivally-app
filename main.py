@@ -13,7 +13,6 @@ from typing import Any, Optional
 
 app = FastAPI()
 
-# Omogućavanje CORS-a kako bi frontend mogao nesmetano da komunicira sa backendom
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -21,31 +20,29 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- KONFIGURACIJA (Preuzima se iz Vercel Environment Variables) ---
+# --- ENVIRONMENT VARIABLES ---
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 
-# SMTP PODACI ZA SLANJE MEJLOVA
+# SMTP SETUP (Moraš uneti ovo u Vercel Environment Variables)
 SMTP_SERVER = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
 SMTP_PORT = 587
-SMTP_USER = os.environ.get("SMTP_USER")  # Vaš email (npr. office@sakorp.com)
-SMTP_PASS = os.environ.get("SMTP_PASS")  # App Password za email
+SMTP_USER = os.environ.get("SMTP_USER")
+SMTP_PASS = os.environ.get("SMTP_PASS")
 
-# Inicijalizacija Supabase klijenta
+# --- CONNECTIONS ---
 supabase: Optional[Client] = None
 if SUPABASE_URL and SUPABASE_KEY:
     try:
         supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-        print("✅ Supabase povezan.")
     except Exception as e:
-        print(f"⚠️ Supabase greška: {e}")
+        print(f"Supabase Init Error: {e}")
 
-# Inicijalizacija Gemini AI
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
 
-# --- MODELI PODATAKA ---
+# --- MODELS ---
 class ProductData(BaseModel):
     name: str
     price: str
@@ -65,65 +62,50 @@ class LeadRequest(BaseModel):
     competitor_name: str
     report_html: Optional[str] = ""
 
-# --- AI KONFIGURACIJA ---
+# --- AI MODEL ---
 SYSTEM_INSTRUCTION = """
-You are RIVALLY - An elite competitive marketing strategist by SAKORP.
-Your goal is to help the user dominate their market.
-Generate a JSON response with:
-1. "dominance_score" (0-100)
-2. "score_explanation" (String)
-3. "reality_check" (Object: competitor_wins, improvements_needed)
-4. "fatherly_advice" (String)
-5. "html_content" (String with <h3>, <p>, <ul>)
-6. "instagram_caption" (String)
-ONLY return valid JSON.
+You are RIVALLY - An elite competitive marketing strategist.
+Output valid JSON only.
+Structure: dominance_score (int), score_explanation (str), reality_check (obj), html_content (str).
 """
 
 model = genai.GenerativeModel(
     model_name="gemini-2.5-pro",
     system_instruction=SYSTEM_INSTRUCTION,
-    generation_config=genai.GenerationConfig(
-        response_mime_type="application/json"
-    )
+    generation_config=genai.GenerationConfig(response_mime_type="application/json")
 )
 
-# --- POMOĆNA FUNKCIJA ZA SLANJE MEJLA ---
+# --- EMAIL FUNCTION ---
 def send_strategic_email(target_email, report_content, score, competitor):
     if not SMTP_USER or not SMTP_PASS:
-        print("⚠️ Email Warning: SMTP_USER ili SMTP_PASS nisu podešeni.")
-        return False
+        return print("⚠️ Email skipped: SMTP credentials missing.")
    
     msg = MIMEMultipart()
-    msg["Subject"] = f"RIVALLY AUDIT: {score}/100 Dominance vs {competitor}"
-    msg["From"] = f"SAKORP RIVALLY <{SMTP_USER}>"
+    msg["Subject"] = f"RIVALLY INTELLIGENCE: Score {score}/100 vs {competitor}"
+    msg["From"] = f"RIVALLY AI <{SMTP_USER}>"
     msg["To"] = target_email
 
-    # Kreiranje HTML tela mejla
-    email_body = f"""
-    <div style="font-family: sans-serif; background-color: #000; color: #fff; padding: 40px;">
-        <h1 style="color: #2563eb;">Strategic Intelligence Report</h1>
-        <p>Your Dominance Score against <strong>{competitor}</strong> is:</p>
-        <div style="font-size: 48px; font-weight: bold; color: #2563eb;">{score}/100</div>
-        <hr style="border: 0; border-top: 1px solid #333; margin: 20px 0;">
-        <div style="color: #ccc;">{report_content}</div>
-        <p style="font-size: 10px; color: #444; margin-top: 40px;">CONFIDENTIAL // SAKORP HOLDING SYSTEM</p>
+    body = f"""
+    <div style="background:#000; color:#fff; padding:30px; font-family:sans-serif;">
+        <h2 style="color:#3b82f6; letter-spacing:2px;">STRATEGIC AUDIT COMPLETE</h2>
+        <h1 style="font-size:40px; margin:10px 0;">{score}/100</h1>
+        <hr style="border-color:#333;">
+        <div style="color:#ccc; line-height:1.6;">{report_content}</div>
+        <p style="margin-top:30px; font-size:10px; color:#555;">POWERED BY SAKORP HOLDING</p>
     </div>
     """
-    msg.attach(MIMEText(email_body, "html"))
+    msg.attach(MIMEText(body, "html"))
 
     try:
         with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
             server.starttls()
             server.login(SMTP_USER, SMTP_PASS)
             server.send_message(msg)
-            print(f"✅ Email uspešno poslat na {target_email}")
-            return True
+            print(f"✅ Email sent to {target_email}")
     except Exception as e:
-        print(f"⚠️ SMTP Error: {e}")
-        return False
+        print(f"⚠️ Email Error: {e}")
 
-# --- ENDPOINTS ---
-
+# --- ROUTES ---
 @app.get("/", response_class=HTMLResponse)
 async def read_index():
     return FileResponse('index.html')
@@ -131,66 +113,39 @@ async def read_index():
 @app.post("/generate-rival-strategy")
 async def generate_strategy(request: ComparisonRequest):
     if not GEMINI_API_KEY:
-        raise HTTPException(status_code=500, detail="Nedostaje API Key.")
+        raise HTTPException(status_code=500, detail="API Key Missing")
 
-    my_features = str(request.my_product.features)
-    comp_features = str(request.competitor_product.features)
-    comp_url_text = f", URL: {request.competitor_product.url}" if request.competitor_product.url else ""
-
-    prompt = f"""
-    ANALYZE:
-    ME: {request.my_product.name}, {request.my_product.price}, {my_features}, Weakness: {request.my_product.weaknesses}
-    RIVAL: {request.competitor_product.name}, {request.competitor_product.price}, {comp_features}{comp_url_text}
-    AUDIENCE: {request.target_audience}
-    """
+    prompt = f"Battle: {request.my_product.name} vs {request.competitor_product.name} (URL: {request.competitor_product.url}). Strategy report JSON."
 
     try:
         response = model.generate_content(prompt)
-        ai_output_text = response.text.strip()
-        parsed_json = json.loads(ai_output_text)
-
-        # Čuvanje u Supabase bazu
+        ai_data = json.loads(response.text)
+       
         if supabase:
             try:
                 supabase.table("history").insert({
                     "business_name": request.my_product.name,
-                    "ai_response": ai_output_text
+                    "ai_response": response.text
                 }).execute()
-            except Exception as db_e:
-                print(f"⚠️ DB Error: {db_e}")
+            except: pass
 
-        return parsed_json
+        return ai_data
     except Exception as e:
-        print(f"AI Error: {e}")
-        raise HTTPException(status_code=500, detail="Greška u AI analizi.")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/save-lead")
 async def save_lead(request: LeadRequest):
-    # 1. Čuvanje lead-a u bazu
+    # 1. DB Save
     if supabase:
         try:
             supabase.table("history").insert({
                 "business_name": request.product_name,
                 "email": request.email,               
-                "ai_response": f"Email unlocked report for competitor: {request.competitor_name}"              
+                "ai_response": f"Report sent for {request.competitor_name}"              
             }).execute()
-        except Exception as e:
-            print(f"DB Lead Error: {e}")
-   
-    # 2. Slanje rezultata na mejl korisnika
-    send_strategic_email(
-        target_email=request.email,
-        report_content=request.report_html,
-        score=request.score,
-        competitor=request.competitor_name
-    )
-   
-    return {"status": "success", "message": "Lead saved and email sent."}
+        except: pass
 
-@app.get("/test-gemini")
-def test_gemini():
-    try:
-        modeli = [m.name for m in genai.list_models() if 'generateContent' in m.supported_generation_methods]
-        return {"STATUS": "Uspesno povezan", "DOSTUPNI_MODELI": modeli}
-    except Exception as e:
-        return {"GRESKA": str(e)}
+    # 2. Send Email
+    send_strategic_email(request.email, request.report_html, request.score, request.competitor_name)
+   
+    return {"status": "success"}
