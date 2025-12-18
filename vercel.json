@@ -1,14 +1,23 @@
 {
-    "builds": [
-        {
-            "src": "main.py",
-            "use": "@vercel/python"
-        }
-    ],
-    "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "main.py"
-        }
-    ]
+  "builds": [
+    {
+      "src": "main.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/generate-rival-strategy",
+      "dest": "main.py"
+    },
+    {
+      "src": "/save-lead",
+      "dest": "main.py"
+
+    },
+    {
+      "src": "/(.*)",
+      "dest": "index.html"
+    }
+  ]
 }
