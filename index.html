@@ -6,240 +6,147 @@
     <title>RIVALLY | SAKORP INTELLIGENCE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Syncopate:wght@700&family=Inter:wght@300;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
        
         body {
-            background-color: #010204;
-            color: #e2e8f0;
+            background-color: #000;
+            color: #fff;
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
         }
 
-        /* --- THE REACTOR CIRCUIT (Ovo je okvir koji se uliva u dugme) --- */
-        .circuit-container {
+        /* ELEGANTNI OKVIR I NITI */
+        .main-container {
             position: relative;
-            padding: 3px; /* Prostor za SVG liniju */
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 24px;
+            border: 1px solid rgba(37, 99, 235, 0.1);
         }
-       
-        .reactor-path {
+
+        .flow-line {
             fill: none;
-            stroke: #2563eb; /* Jaka plava */
-            stroke-width: 2;
-            filter: drop-shadow(0 0 5px rgba(37, 99, 235, 0.8));
-            stroke-dasharray: 2000;
-            stroke-dashoffset: 0;
-            animation: pulse-line 3s infinite alternate;
+            stroke: #2563eb;
+            stroke-width: 1.5;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: flowAnim 4s infinite cubic-bezier(0.4, 0, 0.2, 1);
+            filter: drop-shadow(0 0 4px rgba(37, 99, 235, 0.5));
         }
 
-        @keyframes pulse-line {
-            0% { stroke-opacity: 0.4; stroke-width: 1.5; }
-            100% { stroke-opacity: 1; stroke-width: 2.5; filter: drop-shadow(0 0 15px #3b82f6); }
+        @keyframes flowAnim {
+            to { stroke-dashoffset: 0; }
         }
 
-        /* INPUT STIL (Hakerski terminal) */
-        .tech-input {
-            background: rgba(5, 10, 20, 0.8) !important;
-            border: 1px solid #1e293b !important;
+        .pulsing-glow {
+            animation: glowPulse 3s infinite ease-in-out;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { border-color: rgba(37, 99, 235, 0.1); box-shadow: 0 0 20px rgba(0,0,0,0); }
+            50% { border-color: rgba(37, 99, 235, 0.3); box-shadow: 0 0 30px rgba(37, 99, 235, 0.1); }
+        }
+
+        /* MODERNI INPUTI */
+        input, textarea {
+            background: #0a0a0a !important;
+            border: 1px solid #1a1a1a !important;
+            border-radius: 8px !important;
             color: #fff !important;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px !important;
-            letter-spacing: 0.5px;
             transition: all 0.3s ease;
         }
-        .tech-input::placeholder { color: #475569; text-transform: none; font-style: italic; opacity: 0.6; }
-        .tech-input:focus {
-            border-color: #3b82f6 !important;
-            background: rgba(10, 15, 30, 1) !important;
-            box-shadow: inset 0 0 20px rgba(59, 130, 246, 0.1);
-            outline: none;
-        }
+        input::placeholder, textarea::placeholder { color: #444; font-size: 13px; }
+        input:focus { border-color: #2563eb !important; background: #0c0c0c !important; outline: none; }
 
-        /* GLAVNO DUGME */
-        .scan-btn {
-            background: linear-gradient(180deg, #1e3a8a 0%, #172554 100%);
-            border: 1px solid #3b82f6;
-            box-shadow: 0 0 40px rgba(37, 99, 235, 0.3);
-            position: relative;
-            z-index: 20;
-            clip-path: polygon(10% 0, 90% 0, 100% 100%, 0% 100%); /* Trapez oblik */
+        .btn-modern {
+            background: linear-gradient(180deg, #2563eb 0%, #1e40af 100%);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+            transition: all 0.3s;
         }
-        .scan-btn:hover {
-            box-shadow: 0 0 60px rgba(37, 99, 235, 0.6);
-            border-color: #60a5fa;
-        }
+        .btn-modern:hover { transform: translateY(-1px); box-shadow: 0 8px 25px rgba(37, 99, 235, 0.5); }
 
-        .blur-lock { filter: blur(25px); pointer-events: none; user-select: none; }
+        .blur-lock { filter: blur(20px); pointer-events: none; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col justify-between py-12">
 
-    <header class="pt-12 pb-8 text-center">
-        <h1 class="text-6xl md:text-8xl font-black uppercase tracking-tighter" style="font-family: 'Syncopate', sans-serif;">
-            <span class="text-white">RIVALLY</span>
-        </h1>
-        <div class="h-1 w-24 bg-blue-600 mx-auto mt-4 mb-2 shadow-[0_0_15px_#2563eb]"></div>
-        <p class="text-zinc-500 text-[10px] tracking-[0.6em] uppercase">Tactical Market Supremacy</p>
+    <header class="text-center mb-12">
+        <h1 class="text-5xl font-extrabold tracking-tighter mb-2">RIVALLY</h1>
+        <p class="text-zinc-500 text-xs tracking-[0.4em] uppercase font-light">Advanced Market Analysis</p>
     </header>
 
-    <main class="flex-grow w-full max-w-5xl mx-auto px-4 mb-20 relative">
-
-        <div class="relative pt-10 px-6 pb-0">
+    <main class="max-w-5xl mx-auto w-full px-6 relative">
+       
+        <div class="main-container pulsing-glow p-8 md:p-14 relative overflow-hidden">
            
-            <svg class="absolute inset-0 w-full h-full pointer-events-none z-0" preserveAspectRatio="none">
-                <path class="reactor-path" d="
-                    M 35% 100%
-                    L 20 100%
-                    L 0 100%
-                    L 0 20
-                    L 20 0
-                    L calc(100% - 20) 0
-                    L 100% 20
-                    L 100% 100%
-                    L 65% 100%
-                " />
-                <line x1="35%" y1="100%" x2="37%" y2="108%" stroke="#2563eb" stroke-width="2" />
-                <line x1="65%" y1="100%" x2="63%" y2="108%" stroke="#2563eb" stroke-width="2" />
+            <svg class="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
+                <path class="flow-line" d="M 50% 0 L 40 0 Q 0 0 0 40 L 0 500 Q 0 560 40 560 L 50% 560" />
+                <path class="flow-line" d="M 50% 0 L calc(100% - 40) 0 Q 100% 0 100% 40 L 100% 500 Q 100% 560 calc(100% - 40) 560 L 50% 560" />
             </svg>
 
-            <div class="bg-[#03050a]/80 backdrop-blur-md p-8 md:p-12 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 border-t border-blue-900/20">
-               
-                <div class="space-y-5">
-                    <div class="flex items-center justify-between border-b border-blue-900/30 pb-2 mb-4">
-                        <span class="text-blue-400 font-bold text-xs uppercase tracking-widest">Target Alpha // You</span>
-                        <div class="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                    </div>
-                   
-                    <div class="group">
-                        <label class="text-[9px] text-zinc-500 uppercase tracking-widest mb-1 block">Project Name</label>
-                        <input type="text" id="myName" placeholder="e.g. TaskFlow App" class="tech-input w-full p-4 rounded-sm">
-                    </div>
-                   
-                    <div class="group">
-                        <label class="text-[9px] text-zinc-500 uppercase tracking-widest mb-1 block">Web Address</label>
-                        <input type="text" id="myUrl" placeholder="https://your-site.com" class="tech-input w-full p-4 rounded-sm text-blue-300">
-                    </div>
-
+            <div class="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="space-y-6">
+                    <h3 class="text-blue-500 font-semibold text-[10px] uppercase tracking-widest mb-6">Internal Designation</h3>
+                    <input type="text" id="myName" placeholder="e.g. Project X - Fintech App" class="w-full p-4 text-sm">
+                    <input type="text" id="myUrl" placeholder="https://yourcompany.com" class="w-full p-4 text-sm text-blue-400">
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="group">
-                            <label class="text-[9px] text-zinc-500 uppercase tracking-widest mb-1 block">Pricing</label>
-                            <input type="text" id="myPrice" placeholder="e.g. Freemium, $15/mo" class="tech-input w-full p-4 rounded-sm">
-                        </div>
-                        <div class="group">
-                            <label class="text-[9px] text-zinc-500 uppercase tracking-widest mb-1 block">Audience</label>
-                            <input type="text" id="targetAudience" placeholder="e.g. Remote Agencies" class="tech-input w-full p-4 rounded-sm">
-                        </div>
+                        <input type="text" id="myPrice" placeholder="e.g. $49 / month" class="p-4 text-sm">
+                        <input type="text" id="targetAudience" placeholder="e.g. B2B Enterprise" class="p-4 text-sm">
                     </div>
-
-                    <div class="group">
-                        <label class="text-[9px] text-zinc-500 uppercase tracking-widest mb-1 block">Strengths & Assets</label>
-                        <textarea id="myFeatures" placeholder="e.g. Fast UI, AI integration, 24/7 Support..." class="tech-input w-full p-4 h-28 rounded-sm"></textarea>
-                    </div>
+                    <textarea id="myFeatures" placeholder="Describe your unique value propositions..." class="w-full p-4 h-32 text-sm"></textarea>
                 </div>
 
-                <div class="space-y-5">
-                    <div class="flex items-center justify-between border-b border-red-900/30 pb-2 mb-4">
-                        <span class="text-red-400 font-bold text-xs uppercase tracking-widest">Target Beta // Rival</span>
-                        <div class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                    </div>
-                   
-                    <div class="group">
-                        <label class="text-[9px] text-zinc-500 uppercase tracking-widest mb-1 block">Rival Name</label>
-                        <input type="text" id="compName" placeholder="e.g. Asana" class="tech-input w-full p-4 rounded-sm border-red-900/20">
-                    </div>
-                   
-                    <div class="group">
-                        <label class="text-[9px] text-zinc-500 uppercase tracking-widest mb-1 block">Rival URL</label>
-                        <input type="text" id="compUrl" placeholder="https://competitor.com" class="tech-input w-full p-4 rounded-sm text-red-300 border-red-900/20">
-                    </div>
-
-                    <div class="group">
-                        <label class="text-[9px] text-zinc-500 uppercase tracking-widest mb-1 block">Rival Pricing</label>
-                        <input type="text" id="compPrice" placeholder="e.g. Enterprise, starts at $99" class="tech-input w-full p-4 rounded-sm border-red-900/20">
-                    </div>
-
-                    <div class="group">
-                        <label class="text-[9px] text-zinc-500 uppercase tracking-widest mb-1 block">Rival Strategy</label>
-                        <textarea id="compFeatures" placeholder="e.g. Heavy sales focus, complex UI, slow load..." class="tech-input w-full p-4 h-28 rounded-sm border-red-900/20"></textarea>
-                    </div>
+                <div class="space-y-6 border-l border-white/5 pl-0 md:pl-12">
+                    <h3 class="text-zinc-500 font-semibold text-[10px] uppercase tracking-widest mb-6">Competitor Analysis</h3>
+                    <input type="text" id="compName" placeholder="e.g. Competitor Brand Name" class="w-full p-4 text-sm">
+                    <input type="text" id="compUrl" placeholder="https://rivalapp.io" class="w-full p-4 text-sm text-zinc-400">
+                    <input type="text" id="compPrice" placeholder="e.g. Tiered Pricing" class="p-4 text-sm">
+                    <textarea id="compFeatures" placeholder="Describe their market position and features..." class="w-full p-4 h-52 text-sm"></textarea>
                 </div>
             </div>
+
+            <div class="mt-16 flex justify-center">
+                <button onclick="generateStrategy()" id="mainBtn" class="btn-modern px-12 py-5 rounded-full font-bold uppercase tracking-widest text-xs">
+                    Initiate Neural Scan
+                </button>
+            </div>
+            <div id="loader" class="hidden text-center mt-6 text-blue-600 text-[10px] tracking-widest animate-pulse">ESTABLISHING CONNECTION...</div>
         </div>
 
-        <div class="relative -mt-1 flex justify-center z-30">
-            <button onclick="generateStrategy()" id="mainBtn" class="scan-btn w-[40%] min-w-[300px] py-6 text-white font-black tracking-[0.3em] text-xs uppercase hover:text-blue-200 transition-colors">
-                Initiate Neural Extraction
-            </button>
-        </div>
-
-        <div id="loader" class="hidden text-center mt-8 font-mono text-[9px] text-blue-500 tracking-[0.5em] animate-pulse">
-            // ESTABLISHING UPLINK TO SAKORP MAINFRAME...
-        </div>
-
-        <div id="results" class="hidden w-full mt-24 animate-in fade-in slide-in-from-bottom-10 duration-1000">
-            <div id="lockedContent" class="blur-lock bg-[#050810] border border-blue-900/30 p-8 md:p-12 rounded relative shadow-2xl">
-                <div class="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-blue-600"></div>
-                <div class="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-blue-600"></div>
-                <div class="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-blue-600"></div>
-                <div class="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-blue-600"></div>
-
-                <div class="flex flex-col md:flex-row justify-between items-end border-b border-white/5 pb-8 mb-8">
+        <div id="results" class="hidden mt-24">
+            <div id="lockedContent" class="blur-lock bg-zinc-950/30 p-10 rounded-3xl border border-white/5 relative">
+                <div class="flex justify-between items-end border-b border-white/5 pb-8 mb-10">
                     <div>
-                        <div class="text-[10px] font-mono text-blue-500 uppercase tracking-widest mb-2">Operation Status: Complete</div>
-                        <h2 class="text-4xl font-bold uppercase tracking-tight text-white">Strategy <span class="text-zinc-600">Decrypted</span></h2>
+                        <span class="text-zinc-600 text-[10px] uppercase tracking-widest">Decrypted Analysis</span>
+                        <h2 class="text-3xl font-bold mt-2">Strategy Report</h2>
                     </div>
                     <div class="text-right">
-                        <div id="scoreValue" class="text-8xl font-black text-white tracking-tighter" style="text-shadow: 0 0 30px rgba(37,99,235,0.5);">--</div>
-                        <div class="text-[9px] uppercase tracking-[0.4em] text-zinc-500 mt-2">Win Probability</div>
+                        <div id="scoreValue" class="text-6xl font-black text-blue-600 tracking-tighter">00</div>
+                        <p class="text-[9px] uppercase text-zinc-500 tracking-widest">Dominance Index</p>
                     </div>
                 </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 text-sm leading-relaxed text-zinc-400">
-                    <div class="lg:col-span-2">
-                        <p id="scoreExplanation" class="text-white text-xl mb-8 border-l-4 border-blue-600 pl-6 italic font-light"></p>
-                        <div id="strategyText" class="prose prose-invert prose-p:font-light prose-strong:text-white prose-headings:text-blue-400"></div>
-                    </div>
-                    <div class="space-y-8 border-l border-white/5 pl-8">
-                        <div>
-                            <h4 class="text-[9px] font-bold text-red-500 uppercase tracking-widest mb-4">Detected Threats</h4>
-                            <ul id="compWinsList" class="space-y-3 list-none text-xs"></ul>
-                        </div>
-                        <div>
-                            <h4 class="text-[9px] font-bold text-blue-500 uppercase tracking-widest mb-4">Recommended Protocol</h4>
-                            <ul id="improvementsList" class="space-y-3 list-none text-xs"></ul>
-                        </div>
-                    </div>
-                </div>
+                <div id="strategyText" class="prose prose-invert prose-blue max-w-none text-zinc-400"></div>
             </div>
 
-            <div id="unlockOverlay" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-xl p-4">
-                <div class="bg-[#0a0f1e] border border-blue-500/30 p-12 max-w-md w-full text-center shadow-[0_0_100px_rgba(37,99,235,0.15)] relative overflow-hidden">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-600 to-transparent animate-pulse"></div>
-                   
-                    <h3 class="text-2xl font-black uppercase tracking-widest mb-2 text-white italic">Intelligence Secured</h3>
-                    <p class="text-zinc-500 text-[10px] uppercase tracking-widest mb-10">Confidential data ready for transfer.</p>
-                   
-                    <div class="relative">
-                        <input type="email" id="unlockEmail" placeholder="ENTER PRIORITY EMAIL" class="tech-input w-full p-5 mb-4 text-center text-xs tracking-widest uppercase border-blue-900/50 focus:border-blue-500">
-                    </div>
-                   
-                    <button onclick="unlockContent()" class="w-full bg-blue-700 hover:bg-blue-600 text-white font-bold py-5 text-xs uppercase tracking-[0.3em] transition-all shadow-lg shadow-blue-900/50">
-                        Decrypt & Send Report
-                    </button>
-                    <p class="text-[8px] text-zinc-700 mt-8 uppercase tracking-widest">Sakorp Encryption Protocol &copy; 2025</p>
+            <div id="unlockOverlay" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-2xl p-6">
+                <div class="bg-zinc-900/50 border border-white/5 p-12 rounded-3xl max-w-md w-full text-center">
+                    <h3 class="text-2xl font-bold mb-2">Analysis Complete</h3>
+                    <p class="text-zinc-500 text-xs mb-10 uppercase tracking-widest leading-loose">Enter email to receive the full strategic packet.</p>
+                    <input type="email" id="unlockEmail" placeholder="ENTER WORK EMAIL" class="w-full p-4 mb-6 text-center text-xs tracking-widest">
+                    <button onclick="unlockContent()" class="w-full bg-blue-600 text-white font-bold py-5 rounded-xl uppercase tracking-widest text-xs hover:bg-blue-500 transition">Unlock & Send Report</button>
                 </div>
             </div>
         </div>
 
     </main>
 
-    <footer class="pb-6 text-center">
-        <div class="inline-flex flex-col items-center gap-2 opacity-30 hover:opacity-100 transition-opacity duration-500 cursor-default">
-            <svg width="15" height="15" viewBox="0 0 60 60" fill="none">
+    <footer class="text-center opacity-30 hover:opacity-100 transition duration-500 cursor-default">
+        <div class="flex flex-col items-center gap-3">
+            <svg width="25" height="25" viewBox="0 0 60 60" fill="none">
                 <path d="M5 5H35V20H20V35H5V5Z" fill="white"/>
-                <rect x="20" y="20" width="30" height="15" fill="#3b82f6"/>
+                <rect x="20" y="20" width="30" height="15" fill="#2563eb"/>
                 <path d="M20 35H50V50H5V35H20Z" fill="white"/>
             </svg>
-            <span class="text-[8px] font-mono uppercase tracking-[0.5em] text-zinc-400">Sakorp Holding</span>
+            <span class="text-[8px] tracking-[0.6em] text-zinc-500 uppercase">Sakorp Systems &copy; 2025</span>
         </div>
     </footer>
 
@@ -251,10 +158,7 @@
         const compName = document.getElementById('compName').value;
         const compUrl = document.getElementById('compUrl').value;
        
-        if(!myName || !compName) {
-            alert("SYSTEM ALERT: Target identification incomplete.");
-            return;
-        }
+        if(!myName || !compName) return alert("Please fill in required fields.");
 
         const data = {
             my_product: { name: myName, price: document.getElementById('myPrice').value, features: document.getElementById('myFeatures').value },
@@ -262,11 +166,6 @@
             target_audience: document.getElementById('targetAudience').value
         };
 
-        const btn = document.getElementById('mainBtn');
-        const originalText = btn.innerText;
-        btn.innerText = "EXTRACTING DATA...";
-        btn.classList.add('opacity-75', 'cursor-not-allowed');
-       
         document.getElementById('loader').classList.remove('hidden');
         document.getElementById('results').classList.add('hidden');
         document.getElementById('lockedContent').classList.add('blur-lock');
@@ -278,37 +177,20 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
-
             globalResult = await response.json();
-
             document.getElementById('scoreValue').innerText = globalResult.dominance_score;
-            document.getElementById('scoreExplanation').innerText = globalResult.score_explanation;
             document.getElementById('strategyText').innerHTML = globalResult.html_content;
-            document.getElementById('compWinsList').innerHTML = globalResult.reality_check.competitor_wins.map(i => `<li class="pl-2 border-l border-red-500/50">${i}</li>`).join('');
-            document.getElementById('improvementsList').innerHTML = globalResult.reality_check.improvements_needed.map(i => `<li class="pl-2 border-l border-blue-500/50">${i}</li>`).join('');
-
             document.getElementById('results').classList.remove('hidden');
             document.getElementById('loader').classList.add('hidden');
-           
-            setTimeout(() => {
-                document.getElementById('results').scrollIntoView({behavior: "smooth", block: "start"});
-            }, 500);
-
         } catch (error) {
             document.getElementById('loader').classList.add('hidden');
-            btn.innerText = originalText;
-            btn.classList.remove('opacity-75', 'cursor-not-allowed');
-            alert("NETWORK FAILURE: Uplink interrupted.");
+            alert("Uplink Error.");
         }
     }
 
     async function unlockContent() {
         const email = document.getElementById('unlockEmail').value.trim();
-        if (!email.includes('@')) return alert("ACCESS DENIED: Invalid email protocol.");
-
-        const btn = document.querySelector('#unlockOverlay button');
-        const originalText = btn.innerText;
-        btn.innerText = "TRANSMITTING...";
+        if (!email.includes('@')) return alert("Valid email required.");
 
         try {
             await fetch('/save-lead', {
@@ -326,7 +208,6 @@
 
         document.getElementById('lockedContent').classList.remove('blur-lock');
         document.getElementById('unlockOverlay').classList.add('hidden');
-        btn.innerText = originalText;
     }
     </script>
 </body>
