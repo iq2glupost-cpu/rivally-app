@@ -1,23 +1,19 @@
 {
+  "version": 2,
   "builds": [
     {
       "src": "main.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": {
+        "runtime": "python3.9"
+      }
     }
   ],
   "routes": [
     {
-      "src": "/generate-rival-strategy",
-      "dest": "main.py"
-    },
-    {
-      "src": "/save-lead",
-      "dest": "main.py"
-
-    },
-    {
       "src": "/(.*)",
-      "dest": "index.html"
+      "dest": "main.py"
     }
+
   ]
 }
