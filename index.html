@@ -3,368 +3,355 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rivally - Crush Your Competition</title>
+    <title>RIVALLY | Market Intelligence</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-
-
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: #f8fafc; 
-            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
-            background-size: 24px 24px;
+        body { font-family: 'Inter', sans-serif; background-color: #050505; color: #e5e5e5; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        
+        /* SKENER ANIMACIJA */
+        @keyframes scan-line {
+            0% { top: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+        .scanner-beam {
+
+            position: absolute; width: 100%; height: 2px; background: #2563eb;
+            box-shadow: 0 0 20px #2563eb, 0 0 10px #2563eb;
+            animation: scan-line 2s infinite linear; pointer-events: none;
         }
         
-        /* Modern Input Styling */
-        .modern-input {
-
-            transition: all 0.2s ease-in-out;
-            border: 1px solid #e2e8f0;
-            background-color: #f8fafc;
-        }
-        .modern-input:focus {
-            border-color: #2563EB;
-            background-color: #ffffff;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-            outline: none;
+        /* MATRIX POZADINA */
+        .matrix-grid {
+            background-image: linear-gradient(rgba(37, 99, 235, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(37, 99, 235, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
 
-        /* Buttons */
-        .gradient-btn { 
-            background: linear-gradient(135deg, #111827 0%, #374151 100%); 
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .gradient-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Unlock Overlay */
-        .blur-lock { 
-            filter: blur(10px); 
-            user-select: none; 
-
-            pointer-events: none; 
-            opacity: 0.7;
-        }
+        /* BLUR LOCK ZA EMAIL */
+        .blur-lock { filter: blur(12px); pointer-events: none; user-select: none; }
         
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-        }
-
-        .loader { border: 3px solid #f3f3f3; border-top: 3px solid #2563EB; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: none; margin: 0 auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        /* GLOW EFEKTI */
+        .glow-text { text-shadow: 0 0 10px rgba(37,99,235, 0.5); }
+        .glow-border:focus-within { box-shadow: 0 0 15px rgba(37,99,235, 0.3); border-color: #2563eb; }
     </style>
 </head>
-<body class="text-gray-800 antialiased min-h-screen flex flex-col">
+<body class="overflow-x-hidden selection:bg-blue-600 selection:text-white">
 
-<div class="w-full bg-white/80 backdrop-blur-md border-b border-gray-100 py-4 fixed top-0 z-50">
-    <div class="max-w-5xl mx-auto px-4 flex items-center justify-between">
+    <nav class="fixed top-0 w-full p-6 flex justify-between items-center border-b border-white/5 bg-black/80 backdrop-blur-md z-50">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-blue-600 flex items-center justify-center rounded-sm shadow-[0_0_15px_#2563eb]">
+                <span class="font-bold text-black text-xl italic font-mono">R</span>
+            </div>
+            <span class="font-bold tracking-[0.2em] text-lg italic">RIVALLY</span>
+        </div>
+        <div class="hidden md:flex gap-6 text-[10px] font-mono uppercase tracking-widest text-zinc-600">
+            <span class="text-green-500">● System: Online</span>
+            <span>v.2.4.0</span>
+        </div>
+    </nav>
+
+    <section id="hero-interface" class="min-h-screen flex flex-col justify-center items-center px-6 relative matrix-grid pt-20">
         
-        <a href="/" class="flex items-center gap-2 hover:opacity-75 transition-opacity cursor-pointer group">
-            <h1 class="text-2xl font-black tracking-tighter text-gray-900">Rivally<span class="text-blue-600">.</span></h1>
-            <span class="bg-blue-50 text-blue-600 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide group-hover:bg-blue-100 transition-colors">Beta</span>
-        </a>
+        <div class="mb-8 text-center animate-pulse">
+            <span class="text-red-500 font-mono text-[10px] md:text-xs tracking-[0.2em] uppercase border border-red-900/40 bg-red-900/10 px-3 py-1 rounded">
+                ⚠ Alert: Unmonitored Assets Bleed ~40% Revenue
+            </span>
+        </div>
 
-    </div>
-</div>
-
-<div class="max-w-4xl mx-auto p-4 md:p-0 flex-grow mt-24">
-    
-    <div class="text-center mb-12">
-        <h2 class="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tight mb-4">
-            Stop Guessing. Start 
-
-<span class="text-blue-600">Winning.</span>
-        </h2>
-        <p class="text-gray-500 max-w-lg mx-auto text-lg">
-            Compare your product against your biggest rival and get an AI strategy to steal their customers.
+        <h1 class="text-5xl md:text-7xl font-black text-center mb-6 tracking-tighter leading-none">
+            INTELLIGENCE<br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-white glow-text">SUPERIORITY.</span>
+        </h1>
+        <p class="text-zinc-500 text-center max-w-xl mb-12 text-sm md:text-lg font-light tracking-wide">
+            The AI engine that exposes exactly how competitors are stealing your traffic. Enter URLs to initiate deep scan.
         </p>
-    </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-        
-        <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-blue-600">
-            <div class="flex items-center gap-2 mb-6">
-                <h2 class="text-xl font-bold text-gray-900">Your Business</h2>
+        <div class="w-full max-w-3xl bg-zinc-950 border border-zinc-800 p-1 rounded-xl shadow-[0_0_50px_rgba(37,99,235,0.05)] relative overflow-hidden group">
+            <div class="scanner-beam hidden group-hover:block"></div>
+            
+            <div class="p-8 space-y-6 bg-black/50 backdrop-blur-sm rounded-lg">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="group/input">
+                        <label class="block text-[10px] font-mono text-blue-500 uppercase tracking-widest mb-2">Target A (You)</label>
+                        <div class="flex items-center bg-zinc-900/50 border border-zinc-800 rounded p-3 glow-border transition duration-300">
+                            <svg class="w-4 h-4 text-zinc-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                            <input type="text" id="myUrl" placeholder="yourwebsite.com" class="bg-transparent border-none outline-none text-white w-full placeholder-zinc-700 font-mono text-sm">
+                        </div>
+                    </div>
+
+                    <div class="group/input">
+                        <label class="block text-[10px] font-mono text-red-500 uppercase tracking-widest mb-2">Target B (Rival)</label>
+                        <div class="flex items-center bg-zinc-900/50 border border-zinc-800 rounded p-3 glow-border transition duration-300">
+                            <svg class="w-4 h-4 text-zinc-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+
+                            <input type="text" id="compUrl" placeholder="competitor.com" class="bg-transparent border-none outline-none text-white w-full placeholder-zinc-700 font-mono text-sm">
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="startProcessing()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded uppercase tracking-[0.2em] transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_30px_rgba(37,99,235,0.6)] relative overflow-hidden">
+                    <span class="relative z-10">INITIATE SCAN SEQUENCE</span>
+                </button>
             </div>
+        </div>
+        
+        <p class="mt-6 text-[9px] text-zinc-700 uppercase tracking-[0.3em]">Powered by SAKORP Neural Engine</p>
+    </section>
+
+    <section id="terminal-screen" class="hidden min-h-screen flex-col justify-center items-center px-6 relative bg-black">
+        <div class="w-full max-w-2xl font-mono text-xs">
+            <div id="terminal-logs" class="space-y-2 mb-4 h-48 overflow-hidden border-l-2 border-blue-600 pl-4 text-blue-400/80">
+                </div>
+            <div class="w-full bg-zinc-900 h-1 rounded overflow-hidden">
+                <div id="progress-bar" class="bg-blue-600 h-full w-0 transition-all duration-300"></div>
+            </div>
+            <p class="text-center text-zinc-500 mt-2 animate-pulse">DECRYPTING MARKET DATA...</p>
+        </div>
+    </section>
+
+    <div id="email-gate" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex justify-center items-center px-6">
+        <div class="w-full max-w-md bg-zinc-950 border border-zinc-800 p-8 rounded-xl shadow-[0_0_50px_rgba(37,99,235,0.2)] text-center">
+            <div class="w-16 h-16 bg-blue-600/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-blue-600">
+                <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            </div>
+            <h2 class="text-2xl font-bold text-white mb-2 italic">ANALYSIS SECURED</h2>
+            <p class="text-zinc-500 text-sm mb-6">Strategic data packet compiled. Enter corporate email to decrypt the report.</p>
             
             <div class="space-y-4">
-                <div>
-                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Product Name</label>
-                    <input id="myName" type="text" placeholder="e.g. Acme CRM" class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400 font-medium">
-                </div>
-                
-                <div>
-                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Price</label>
-                    <input id="myPrice" type="text" placeholder="e.g. $49/mo" class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400">
-
-                </div>
-
-                <div>
-                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Key Features</label>
-                    <textarea id="myFeatures" rows="3" placeholder="e.g. 24/7 Support, Free Shipping..." class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400"></textarea>
-
-                </div>
-
-                <div>
-                    <label class="text-xs font-bold text-red-400 uppercase tracking-wider ml-1">Weakness (Optional)</label>
-                    <textarea id="myWeaknesses" rows="2" placeholder="e.g. No mobile app yet..." class="modern-input w-full p-3 rounded-lg bg-red-50/50 border-red-100 text-gray-900 placeholder-red-300"></textarea>
-                </div>
+                <input type="email" id="userEmail" placeholder="Enter your email" class="w-full bg-black border border-zinc-800 p-4 text-white text-center rounded focus:border-blue-600 outline-none transition">
+                <button onclick="unlockResults()" id="unlockBtn" class="w-full bg-white text-black font-bold py-4 rounded hover:bg-gray-200 uppercase tracking-widest transition">
+                    UNLOCK DATA
+                </button>
             </div>
-
-        </div>
-
-        <div class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-gray-800">
-            <div class="flex items-center gap-2 mb-6">
-                <h2 class="text-xl font-bold text-gray-900">The Rival</h2>
-            </div>
-
-            <div class="space-y-4">
-                <div>
-                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Competitor Name</label>
-                    <input id="compName" type="text" placeholder="e.g. Salesforce" class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400 font-medium">
-                </div>
-
-                <div>
-                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Competitor Website (Optional)</label>
-                    <input id="compUrl" type="text" placeholder="e.g. www.salesforce.com" class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400">
-                </div>
-                
-                <div>
-                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Their Price</label>
-                    <input id="compPrice" type="text" placeholder="e.g. $300/mo" class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400">
-                </div>
-
-                <div>
-                    <label class="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Their Features</label>
-                    <textarea id="compFeatures" rows="3" placeholder="e.g. Huge ecosystem, complex..." class="modern-input w-full p-3 rounded-lg text-gray-900 placeholder-gray-400"></textarea>
-                </div>
-            </div>
+            <p class="text-[9px] text-zinc-700 mt-4 uppercase">We hate spam. Your data is encrypted.</p>
         </div>
     </div>
 
-    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-10 max-w-2xl mx-auto">
-        <label class="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 ml-1">Who is the Target Audience?</label>
-        <input id="targetAudience" type="text" placeholder="e.g. Small business owners in New York..." class="modern-input w-full p-3 rounded-lg">
-    </div>
+    <section id="results-dashboard" class="hidden min-h-screen py-24 px-6 relative bg-black">
+        <div class="max-w-5xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-end border-b border-zinc-800 pb-8 mb-12">
+                <div>
+                    <span class="text-blue-500 font-mono text-xs tracking-widest uppercase">Analysis Complete</span>
+                    <h2 class="text-4xl md:text-6xl font-black italic mt-2 text-white">STRATEGY<br>REPORT</h2>
 
-    <div class="text-center mb-20">
-        <button onclick="generateStrategy()" class="gradient-btn text-white font-bold py-4 px-12 rounded-full shadow-xl text-lg w-full md:w-auto hover:scale-105 transition-transform">
-            🚀 Analyze Strategy (Free)
-        </button>
-
-        <div id="loader" class="loader mt-6"></div>
-        <p id="errorBox" class="hidden mt-4 text-red-600 font-bold bg-red-50 inline-block px-4 py-2 rounded-lg text-sm"></p>
-    </div>
-
-
-    <div id="results" class="hidden pb-20">
-
-
-        
-        <div class="bg-white p-10 rounded-3xl shadow-xl border-b-4 border-blue-600 text-center mb-10">
-            <h3 class="text-gray-400 uppercase tracking-widest text-xs font-bold mb-4">YOUR WIN PROBABILITY</h3>
-            <div class="relative inline-block">
-                <div id="scoreValue" class="text-8xl font-black text-gray-900 tracking-tighter"></div>
+                </div>
+                <div class="text-right mt-6 md:mt-0">
+                    <div class="text-6xl font-black text-blue-600" id="scoreValue">0/100</div>
+                    <span class="text-zinc-500 text-xs uppercase tracking-widest">Dominance Score</span>
+                </div>
             </div>
 
-            <p id="scoreExplanation" class="text-xl text-blue-600 font-medium mt-4 max-w-2xl mx-auto leading-relaxed"></p>
-        </div>
-
-        <div class="relative">
-            
-            <div id="lockedContent" class="blur-lock transition duration-1000">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-red-500">
-
-                        <h3 class="font-bold text-gray-900 text-lg mb-4 flex items-center gap-2">
-                            ⚠️ Why They Might Win
-                        </h3>
-                        <ul id="compWinsList" class="space-y-2 text-gray-600 text-sm list-disc list-inside"></ul>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <div class="lg:col-span-2 space-y-8">
+                    <div class="bg-zinc-900/30 p-8 rounded-lg border border-zinc-800">
+                        <h3 class="text-xl font-bold text-white mb-4 italic">EXECUTIVE SUMMARY</h3>
+                        <p id="scoreExplanation" class="text-zinc-400 leading-relaxed text-lg"></p>
                     </div>
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border-l-4 border-green-500">
-
-                        <h3 class="font-bold text-gray-900 text-lg mb-4 flex items-center gap-2">
-                             🛠️ Fix This Immediately
-                        </h3>
-                        <ul id="improvementsList" class="space-y-2 text-gray-600 text-sm list-disc list-inside"></ul>
-                    </div>
-                </div>
-
-                <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-
-                    <h3 class="text-gray-900 font-black text-2xl mb-6">⚔️ The Battle Plan</h3>
-                    <div id="strategyText" class="prose prose-blue max-w-none text-gray-700"></div>
-                </div>
-            </div>
-
-            <div id="unlockOverlay" class="absolute inset-0 z-10 flex flex-col items-center justify-center pt-20">
-                <div class="glass-panel p-8 rounded-3xl shadow-2xl text-center max-w-md mx-4 transform transition-all hover:scale-105">
-
-                    <div class="text-5xl mb-4">🔒</div>
-
-                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Unlock Full Report</h3>
-                    <p class="text-gray-600 mb-6 text-sm leading-relaxed">
-                        Get the complete breakdown, mentorship advice, and viral marketing hooks.
-                    </p>
-
                     
-                    <div class="relative">
-                        <input id="unlockEmail" type="email" placeholder="name@company.com" class="modern-input w-full p-4 border rounded-xl mb-4 text-center font-medium">
+                    <div id="strategyText" class="prose prose-invert prose-blue max-w-none text-zinc-300">
+                        </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="bg-red-900/10 border border-red-900/30 p-6 rounded-lg">
+                        <h4 class="text-red-500 font-bold mb-4 uppercase text-xs tracking-widest">Weakness Detected</h4>
+                        <ul id="improvementsList" class="space-y-2 text-sm text-zinc-400 font-mono list-disc list-inside"></ul>
                     </div>
 
-                    <button onclick="unlockContent()" class="w-full bg-gray-900 hover:bg-black text-white font-bold py-4 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
-                        <span>Reveal Everything</span>
+                    <div class="bg-blue-900/10 border border-blue-900/30 p-6 rounded-lg">
+                        <h4 class="text-blue-500 font-bold mb-4 uppercase text-xs tracking-widest">Rival Advantages</h4>
+                        <ul id="compWinsList" class="space-y-2 text-sm text-zinc-400 font-mono list-disc list-inside"></ul>
+                    </div>
 
-                    </button>
-                    
-                    <p class="text-xs text-gray-400 mt-4">We hate spam too. Your email is safe.</p>
                 </div>
+            </div>
+            
+            <div class="mt-20 text-center">
+                <a href="https://sakorp.com" class="inline-block bg-zinc-900 border border-zinc-700 text-white px-8 py-4 rounded hover:bg-zinc-800 uppercase tracking-widest text-xs transition">
+                    Book SAKORP Consultation
+                </a>
             </div>
 
         </div>
-    </div>
+    </section>
 
-</div>
+    <footer class="py-12 text-center border-t border-zinc-900 bg-black mt-12">
+        <p class="text-zinc-700 text-[10px] uppercase tracking-[0.3em]">
+            System Architecture by <a href="#" class="text-zinc-500 hover:text-white transition">SAKORP STUDIO</a>
+        </p>
+    </footer>
+
+    <script>
+        let globalData = {};
+
+        // 1. POKRETANJE SKENIRANJA
+        function startProcessing() {
+            const myUrl = document.getElementById('myUrl').value;
+            const compUrl = document.getElementById('compUrl').value;
+
+            if(!myUrl || !compUrl) {
+                alert("SYSTEM ERROR: Please enter both URLs.");
+
+                return;
+            }
+
+            // Sakrij Hero, Prikazi Terminal
+            document.getElementById('hero-interface').classList.add('hidden');
+            document.getElementById('terminal-screen').classList.remove('hidden');
+            document.getElementById('terminal-screen').classList.add('flex');
 
 
-<div class="text-center py-8 text-gray-400 text-xs">
-    &copy; 2025 Rivally AI.
-
-</div>
-
-<script>
-    let globalResult = null; 
-
-    async function generateStrategy() {
-        const myName = document.getElementById('myName').value;
-        const compName = document.getElementById('compName').value;
-        const compUrl = document.getElementById('compUrl').value; // <--- NOVO: Učitavanje URL-a
-        
-        if(!myName || !compName) {
-            alert("Please enter at least your product name and the competitor's name.");
-            return;
+            runTerminalLogs();
         }
 
-        const data = {
-            my_product: {
-
-                name: myName,
-                price: document.getElementById('myPrice').value,
-                features: document.getElementById('myFeatures').value,
-                weaknesses: document.getElementById('myWeaknesses').value
-            },
-            competitor_product: {
-                name: compName,
-                price: document.getElementById('compPrice').value,
-
-                features: document.getElementById('compFeatures').value,
-                url: compUrl // <--- NOVO: Slanje URL-a
-            },
-            target_audience: document.getElementById('targetAudience').value
-        };
-
-        document.getElementById('loader').style.display = 'block';
-        document.getElementById('errorBox').classList.add('hidden');
-        document.getElementById('results').classList.add('hidden');
-        
-        // Reset overlay
-        document.getElementById('lockedContent').classList.add('blur-lock');
-        document.getElementById('unlockOverlay').classList.remove('hidden');
-
-        try {
-
-            const response = await fetch('/generate-rival-strategy', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-
-            if (!response.ok) throw new Error("Server communication error.");
+        // 2. FAKE TERMINAL ANIMACIJA
+        function runTerminalLogs() {
+            const logs = document.getElementById('terminal-logs');
+            const messages = [
+                "> Initializing connection...",
+                "> Resolving DNS assets...",
+                "> Pinging target servers... [OK]",
+                "> Scraping metadata...",
+                "> Analyzing keyword overlap...",
+                "> Detecting traffic leaks...",
+                "> THREAT DETECTED: Revenue Loss Probability High",
+                "> Compiling strategic report..."
+            ];
             
-            globalResult = await response.json(); 
+            let i = 0;
+            const bar = document.getElementById('progress-bar');
 
-            document.getElementById('scoreValue').innerText = globalResult.dominance_score + "/100";
-            document.getElementById('scoreExplanation').innerText = globalResult.score_explanation;
-            document.getElementById('strategyText').innerHTML = globalResult.html_content;
             
-            document.getElementById('compWinsList').innerHTML = globalResult.reality_check.competitor_wins.map(i => `<li>${i}</li>`).join('');
-            document.getElementById('improvementsList').innerHTML = globalResult.reality_check.improvements_needed.map(i => `<li>${i}</li>`).join('');
+            const interval = setInterval(() => {
+                if (i < messages.length) {
+                    const p = document.createElement('div');
+                    p.innerText = messages[i];
+                    if(messages[i].includes('THREAT')) p.className = "text-red-500 font-bold glow-text";
+                    else p.className = "text-blue-400";
+                    logs.appendChild(p);
 
-            document.getElementById('results').classList.remove('hidden');
-            document.getElementById('loader').style.display = 'none';
-            
-            setTimeout(() => {
-                document.getElementById('results').scrollIntoView({behavior: "smooth", block: "start"});
-            }, 100);
-
-        } catch (error) {
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('errorBox').innerText = "AI is busy. Please try again in 10 seconds.";
-            document.getElementById('errorBox').classList.remove('hidden');
-        }
-    }
-
-    // --- PAMETNO OTKLJUČAVANJE ---
-    async function unlockContent() {
-
-        const emailInput = document.getElementById('unlockEmail');
-        const email = emailInput.value.trim();
-        const btn = document.querySelector('#unlockOverlay button');
-
-        // 1. REGEX PROVERA
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!emailPattern.test(email)) {
-
-            alert("Please enter a valid email address (e.g. name@company.com).");
-            emailInput.focus(); 
-
-            return;
+                    logs.scrollTop = logs.scrollHeight;
+                    
+                    // Update progress bar
+                    bar.style.width = ((i + 1) / messages.length * 100) + "%";
+                    i++;
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        // Prikazi Email Gate
+                        document.getElementById('email-gate').classList.remove('hidden');
+                        // Ovde već možemo tajno da šaljemo zahtev AI-u da uštedimo vreme
+                        fetchStrategy(true); 
+                    }, 800);
+                }
+            }, 600);
         }
 
-        // 2. Vizuelni efekat
-        const originalText = btn.innerHTML;
-        btn.innerHTML = "Unlocking...";
-        btn.disabled = true;
+        // 3. KOMUNIKACIJA SA BACKENDOM (AI)
+        async function fetchStrategy(silent = false) {
+            const myUrl = document.getElementById('myUrl').value;
+            const compUrl = document.getElementById('compUrl').value;
+            
+            // Vadimo ime iz domena (npr. google.com -> google)
+            const getName = (url) => url.replace(/(^\w+:|^)\/\//, '').split('.')[0];
 
-        try {
-            // 3. Slanje u bazu
+            const payload = {
+                my_product: { 
+                    name: getName(myUrl), 
+                    price: "Analyzing...", 
 
-            await fetch('/save-lead', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    email: email,
-                    score: globalResult.dominance_score || 0,
-                    product_name: document.getElementById('myName').value,
-                    competitor_name: document.getElementById('compName').value
-                })
+                    features: "Web Asset", 
+                    url: myUrl, // Dodato da backend zna
+                    weaknesses: "Unknown"
+                },
+                competitor_product: { 
+                    name: getName(compUrl), 
+                    price: "Analyzing...", 
+                    features: "Web Asset", 
+                    url: compUrl 
+                },
+                target_audience: "General Market"
+            };
 
-            });
-            console.log("Lead captured.");
-
-        } catch (e) {
-            console.log("Error saving lead (non-fatal).");
+            try {
+                const response = await fetch('/generate-rival-strategy', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                if(!response.ok) throw new Error("AI Error");
+                globalData = await response.json();
+                console.log("AI Data Ready");
+            } catch (e) {
+                console.error(e);
+                if(!silent) alert("Connection Error. Try again.");
+            }
         }
 
-        // 4. Otključavanje sa malom zadrškom
-        setTimeout(() => {
-            document.getElementById('lockedContent').classList.remove('blur-lock');
-
-            document.getElementById('unlockOverlay').classList.add('hidden');
+        // 4. OTKLJUČAVANJE REZULTATA
+        async function unlockResults() {
+            const email = document.getElementById('userEmail').value;
+            const btn = document.getElementById('unlockBtn');
             
-            // Resetujemo dugme za sledeci put
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-        }, 800); 
-    }
-</script>
+            if(!email.includes('@')) {
+                alert("Please enter a valid email.");
+                return;
+            }
 
+            btn.innerText = "DECRYPTING...";
+            btn.disabled = true;
+
+            // Save Lead
+            try {
+                await fetch('/save-lead', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: email,
+                        score: globalData.dominance_score || 0,
+                        product_name: document.getElementById('myUrl').value,
+                        competitor_name: document.getElementById('compUrl').value
+                    })
+                });
+            } catch(e) { console.log("Lead save error"); }
+
+            // Čekamo ako AI još nije gotov (za svaki slučaj)
+            if(!globalData.dominance_score) {
+                await fetchStrategy();
+            }
+
+            // Prikaz
+            renderDashboard();
+        }
+
+
+        function renderDashboard() {
+            document.getElementById('email-gate').classList.add('hidden');
+            document.getElementById('terminal-screen').classList.add('hidden');
+            document.getElementById('results-dashboard').classList.remove('hidden');
+
+            // Popunjavanje podataka
+
+            document.getElementById('scoreValue').innerText = globalData.dominance_score + "/100";
+            document.getElementById('scoreExplanation').innerText = globalData.score_explanation;
+            document.getElementById('strategyText').innerHTML = globalData.html_content;
+
+            const winsList = document.getElementById('compWinsList');
+            winsList.innerHTML = globalData.reality_check.competitor_wins.map(i => `<li>${i}</li>`).join('');
+
+            const impList = document.getElementById('improvementsList');
+            impList.innerHTML = globalData.reality_check.improvements_needed.map(i => `<li>${i}</li>`).join('');
+            
+            // Scroll to top
+            window.scrollTo(0,0);
+
+        }
+    </script>
 </body>
 </html>
