@@ -70,7 +70,7 @@ Structure: dominance_score (int), score_explanation (str), reality_check (obj), 
 """
 
 model = genai.GenerativeModel(
-    model_name="gemini-2.5-pro",
+    model_name="gemini-2.5-flash",
     system_instruction=SYSTEM_INSTRUCTION,
     generation_config=genai.GenerationConfig(response_mime_type="application/json")
 )
@@ -149,3 +149,4 @@ async def save_lead(request: LeadRequest):
     send_strategic_email(request.email, request.report_html, request.score, request.competitor_name)
    
     return {"status": "success"}
+
