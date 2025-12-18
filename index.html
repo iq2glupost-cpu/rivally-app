@@ -3,115 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RIVALLY | SAKORP INTELLIGENCE</title>
+    <title>RIVALLY | MARKET INTELLIGENCE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Space+Grotesk:wght@300;900&display=swap');
-        body { font-family: 'Space Grotesk', sans-serif; background-color: #000; color: #fff; }
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Syncopate:wght@700&family=Inter:wght@300;600&display=swap');
        
-        .deep-blue-glow { box-shadow: 0 0 30px rgba(29, 78, 216, 0.15); border: 1px solid #1e3a8a; }
-       
-        /* PULSIRAJUĆE NITI */
-        .circuit-line {
-            fill: none;
-            stroke: #1e40af; /* Tamno plava */
-            stroke-width: 2;
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-            animation: flow 3s infinite linear;
+        body {
+            background-color: #020408;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            background-image:
+                linear-gradient(rgba(30, 58, 138, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(30, 58, 138, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
-        @keyframes flow { to { stroke-dashoffset: 0; } }
 
+        /* ENERGETSKE NITI (SVG ANIMACIJA) */
+        .energy-path {
+            fill: none;
+            stroke: #1d4ed8; /* Electric Blue */
+            stroke-width: 2;
+            filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.6));
+            stroke-dasharray: 2000;
+            stroke-dashoffset: 2000;
+            animation: circuit-flow 3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes circuit-flow {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* GLAVNI NASLOV */
+        .hero-title {
+            font-family: 'Syncopate', sans-serif;
+            letter-spacing: -2px;
+            background: linear-gradient(to bottom, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* INPUT POLJA - TECH STIL */
         input, textarea {
-            background: #050505 !important;
-            border: 1px solid #111 !important;
+            background: rgba(10, 15, 30, 0.6) !important;
+            border: 1px solid #1e293b !important;
             color: #fff !important;
             font-family: 'JetBrains Mono', monospace;
             font-size: 11px !important;
+            letter-spacing: 1px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
         }
-        input:focus { border-color: #1e40af !important; outline: none; }
        
-        .scan-btn {
-            background: #1e3a8a; /* Tamno plava */
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid #1e40af;
+        input:focus, textarea:focus {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.1);
+            background: rgba(10, 15, 30, 0.9) !important;
+            outline: none;
         }
-        .scan-btn:hover { background: #1d4ed8; box-shadow: 0 0 40px rgba(29, 78, 216, 0.4); }
-        .blur-lock { filter: blur(20px); pointer-events: none; }
+
+        /* DUGME - REAKTOR */
+        .neural-btn {
+            background: linear-gradient(180deg, #1e3a8a 0%, #0f172a 100%);
+            border: 1px solid #3b82f6;
+            box-shadow: 0 0 30px rgba(37, 99, 235, 0.2);
+            position: relative;
+            overflow: hidden;
+            z-index: 20;
+        }
+       
+        .neural-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer { 100% { left: 100%; } }
+
+        .blur-lock { filter: blur(25px); pointer-events: none; user-select: none; }
     </style>
 </head>
-<body class="p-4 md:p-10">
+<body class="min-h-screen flex flex-col justify-between">
 
-    <div class="flex flex-col items-center mb-16">
-        <svg width="50" height="50" viewBox="0 0 60 60" fill="none">
-            <path d="M5 5H35V20H20V35H5V5Z" fill="white"/>
-            <rect x="20" y="20" width="30" height="15" fill="#1e40af"/>
-            <path d="M20 35H50V50H5V35H20Z" fill="white"/>
-        </svg>
-        <h2 class="font-black tracking-[0.6em] text-xs mt-4 opacity-50 uppercase text-blue-800">Sakorp Rivally Unit</h2>
-    </div>
+    <header class="pt-16 pb-8 text-center relative z-10">
+        <h1 class="hero-title text-6xl md:text-8xl font-bold uppercase mb-2">RIVALLY</h1>
+        <p class="text-blue-500 font-mono text-[10px] tracking-[0.8em] uppercase">Market Intelligence Warfare</p>
+    </header>
 
-    <main class="max-w-5xl mx-auto relative">
+    <main class="flex-grow flex items-center justify-center px-4 relative w-full max-w-6xl mx-auto mb-20">
        
-        <div class="relative p-[2px] rounded-2xl overflow-hidden">
-            <svg class="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
-                <rect x="1" y="1" width="calc(100% - 2)" height="calc(100% - 2)" rx="16" fill="none" stroke="#0a192f" stroke-width="2" />
+        <div class="relative w-full">
+           
+            <svg class="absolute -inset-[2px] w-[calc(100%+4px)] h-[calc(100%+60px)] pointer-events-none z-0" preserveAspectRatio="none">
+                <defs>
+                    <linearGradient id="lineGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#1e3a8a" stop-opacity="0" />
+                        <stop offset="50%" stop-color="#3b82f6" />
+                        <stop offset="100%" stop-color="#60a5fa" />
+                    </linearGradient>
+                </defs>
                
-                <path class="circuit-line" d="M 50% 0 L 30 0 Q 0 0 0 30 L 0 500 Q 0 550 30 550 L 50% 550" />
-                <path class="circuit-line" d="M 50% 0 L calc(100% - 30) 0 Q 100% 0 100% 30 L 100% 500 Q 100% 550 calc(100% - 30) 550 L 50% 550" />
+                <path class="energy-path" d="M 50% 0 L 2% 0 L 2% 100% L 35% 100%" />
+               
+                <path class="energy-path" d="M 50% 0 L 98% 0 L 98% 100% L 65% 100%" />
             </svg>
 
-            <div class="bg-[#030303] rounded-2xl p-8 md:p-12 deep-blue-glow relative z-10">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
-                    <div class="space-y-4">
-                        <label class="text-[9px] uppercase tracking-[0.4em] text-zinc-600 block mb-4 italic font-bold">// Target_Asset_YourSite</label>
-                        <input type="text" id="myName" placeholder="PROJECT NAME" class="w-full p-4 uppercase tracking-widest">
-                        <input type="text" id="myUrl" placeholder="WEB ADDRESS (yoursite.com)" class="w-full p-4 text-blue-900 font-bold">
-                        <div class="grid grid-cols-2 gap-4">
-                            <input type="text" id="myPrice" placeholder="PRICE POINT" class="p-4 uppercase">
-                            <input type="text" id="targetAudience" placeholder="AUDIENCE" class="p-4 uppercase">
+            <div class="bg-[#03050a]/90 border-t border-blue-900/30 backdrop-blur-sm p-6 md:p-12 rounded-t-sm relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-20">
+                   
+                    <div class="space-y-5">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-2 h-2 bg-blue-500 rounded-full shadow-[0_0_10px_#3b82f6]"></div>
+                            <span class="text-xs font-mono text-blue-400 tracking-widest uppercase">Target Alpha (You)</span>
                         </div>
-                        <textarea id="myFeatures" placeholder="CORE CAPABILITIES" class="w-full p-4 h-32"></textarea>
+                        <input type="text" id="myName" placeholder="ENTER PROJECT DESIGNATION" class="w-full p-4 uppercase">
+                        <input type="text" id="myUrl" placeholder="HTTPS://YOUR-DOMAIN.COM" class="w-full p-4 text-blue-300">
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="text" id="myPrice" placeholder="PRICING MODEL" class="p-4 uppercase">
+                            <input type="text" id="targetAudience" placeholder="TARGET SECTOR" class="p-4 uppercase">
+                        </div>
+                        <textarea id="myFeatures" placeholder="LIST KEY CAPABILITIES & ASSETS" class="w-full p-4 h-32 uppercase"></textarea>
                     </div>
 
-                    <div class="space-y-4">
-                        <label class="text-[9px] uppercase tracking-[0.4em] text-zinc-600 block mb-4 italic font-bold">// Target_Asset_Competitor</label>
-                        <input type="text" id="compName" placeholder="RIVAL NAME" class="w-full p-4 uppercase tracking-widest border-red-900/10">
-                        <input type="text" id="compUrl" placeholder="RIVAL WEB ADDRESS (rival.com)" class="w-full p-4 text-red-900 font-bold">
-                        <input type="text" id="compPrice" placeholder="RIVAL PRICING" class="w-full p-4 uppercase">
-                        <textarea id="compFeatures" placeholder="RIVAL REVENUE CHANNELS & FEATURES" class="w-full p-4 h-52"></textarea>
+                    <div class="space-y-5">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-2 h-2 bg-red-500 rounded-full shadow-[0_0_10px_#ef4444]"></div>
+                            <span class="text-xs font-mono text-red-400 tracking-widest uppercase">Target Beta (Rival)</span>
+                        </div>
+                        <input type="text" id="compName" placeholder="ENTER RIVAL DESIGNATION" class="w-full p-4 uppercase border-red-900/30">
+                        <input type="text" id="compUrl" placeholder="HTTPS://RIVAL-DOMAIN.COM" class="w-full p-4 text-red-300">
+                        <input type="text" id="compPrice" placeholder="RIVAL PRICING STRATEGY" class="w-full p-4 uppercase">
+                        <textarea id="compFeatures" placeholder="RIVAL FEATURES & VULNERABILITIES" class="w-full p-4 h-52 uppercase"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative z-20 -mt-[1px] flex justify-center">
+                <button onclick="generateStrategy()" id="mainBtn" class="neural-btn w-[30%] min-w-[280px] py-6 text-white font-bold tracking-[0.3em] text-xs uppercase hover:bg-blue-900/50 transition-all group">
+                    <span class="group-hover:text-blue-200 transition-colors">Initiate Neural Extraction</span>
+                </button>
+            </div>
+           
+            <div id="loader" class="hidden text-center mt-8 font-mono text-[10px] text-blue-500 tracking-[0.5em] animate-pulse">
+                // ACCESSING GLOBAL DATA NODES...
+            </div>
+
+        </div>
+
+        <div id="results" class="hidden w-full mt-24">
+            <div id="lockedContent" class="blur-lock bg-[#050810] border border-blue-900/20 p-8 md:p-12 rounded relative">
+                <div class="flex flex-col md:flex-row justify-between items-end border-b border-white/5 pb-8 mb-8">
+                    <div>
+                        <div class="text-[10px] font-mono text-blue-500 uppercase tracking-widest mb-2">Status: Decrypted</div>
+                        <h2 class="text-4xl font-bold uppercase tracking-tight text-white">Strategy <span class="text-zinc-600">Report</span></h2>
+                    </div>
+                    <div class="text-right">
+                        <div id="scoreValue" class="text-7xl font-mono font-bold text-white tracking-tighter">00</div>
+                        <div class="text-[9px] uppercase tracking-[0.4em] text-zinc-500 mt-2">Win Probability</div>
                     </div>
                 </div>
 
-                <div class="flex justify-center mt-8">
-                    <button id="mainBtn" onclick="generateStrategy()" class="scan-btn w-full max-w-2xl text-white font-black py-6 uppercase tracking-[0.5em] text-xs rounded-sm relative overflow-hidden group">
-                        <span class="relative z-10">Initiate Neural Extraction</span>
-                        <div class="absolute inset-0 bg-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 text-sm leading-relaxed text-zinc-400">
+                    <div class="lg:col-span-2">
+                        <p id="scoreExplanation" class="text-white text-lg mb-8 border-l-2 border-blue-500 pl-4"></p>
+                        <div id="strategyText" class="prose prose-invert prose-p:font-light prose-strong:text-white"></div>
+                    </div>
+                    <div class="space-y-8">
+                        <div>
+                            <h4 class="text-[9px] font-bold text-red-500 uppercase tracking-widest mb-4">Threat Analysis</h4>
+                            <ul id="compWinsList" class="space-y-3 list-none"></ul>
+                        </div>
+                        <div>
+                            <h4 class="text-[9px] font-bold text-blue-500 uppercase tracking-widest mb-4">Required Action</h4>
+                            <ul id="improvementsList" class="space-y-3 list-none"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="unlockOverlay" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-xl p-4">
+                <div class="bg-[#0a0f1e] border border-blue-500/30 p-10 max-w-md w-full text-center shadow-[0_0_100px_rgba(37,99,235,0.2)]">
+                    <h3 class="text-xl font-bold uppercase tracking-widest mb-2 text-white">Data Encrypted</h3>
+                    <p class="text-zinc-500 text-[10px] uppercase tracking-widest mb-8">Secure channel required for transfer.</p>
+                   
+                    <input type="email" id="unlockEmail" placeholder="ENTER CORPORATE EMAIL" class="w-full p-4 mb-4 text-center text-xs tracking-widest uppercase">
+                   
+                    <button onclick="unlockContent()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 text-xs uppercase tracking-[0.3em] transition-all">
+                        Unlock & Send Report
                     </button>
-                </div>
-                <div id="loader" class="hidden mt-6 text-center text-blue-900 font-mono text-[10px] uppercase tracking-widest animate-pulse italic">Connecting to Sakorp Mainframe...</div>
-            </div>
-        </div>
-
-        <div id="results" class="hidden mt-32">
-            <div id="lockedContent" class="blur-lock bg-zinc-950/20 p-10 rounded-2xl border border-white/5">
-                <div class="flex flex-col md:flex-row justify-between items-end border-b border-white/5 pb-10 mb-10">
-                    <h2 class="text-4xl font-black italic uppercase tracking-tighter">Strategic Audit</h2>
-                    <div id="scoreValue" class="text-7xl font-black text-blue-900">--</div>
-                </div>
-                <div id="strategyText" class="prose prose-invert max-w-none text-zinc-500 text-sm"></div>
-            </div>
-
-            <div id="unlockOverlay" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-3xl p-6">
-                <div class="bg-black border border-blue-900/30 p-12 rounded-2xl max-w-md w-full text-center">
-                    <h3 class="text-xl font-black italic uppercase tracking-widest mb-6">Packet Compiled</h3>
-                    <p class="text-zinc-600 text-[10px] mb-8 uppercase tracking-[0.3em] leading-relaxed">Enter priority email to decrypt and receive full report.</p>
-                    <input type="email" id="unlockEmail" placeholder="ENTER EMAIL" class="w-full p-4 mb-4 text-center text-[10px] tracking-[0.4em] uppercase">
-                    <button onclick="unlockContent()" class="w-full bg-white text-black font-black py-5 uppercase tracking-[0.4em] text-[10px]">Send & Unlock Report</button>
+                    <p class="text-[8px] text-zinc-700 mt-6 uppercase tracking-widest">Encryption: AES-256 // Sakorp Systems</p>
                 </div>
             </div>
         </div>
+
     </main>
+
+    <footer class="pb-8 text-center opacity-40 hover:opacity-100 transition-opacity duration-500">
+        <div class="flex flex-col items-center gap-3">
+            <svg width="20" height="20" viewBox="0 0 60 60" fill="none">
+                <path d="M5 5H35V20H20V35H5V5Z" fill="white"/>
+                <rect x="20" y="20" width="30" height="15" fill="#3b82f6"/>
+                <path d="M20 35H50V50H5V35H20Z" fill="white"/>
+            </svg>
+            <span class="text-[9px] font-mono uppercase tracking-[0.6em] text-zinc-500">Sakorp Holding &copy; 2025</span>
+        </div>
+    </footer>
 
     <script>
     let globalResult = null;
@@ -121,7 +219,7 @@
         const compName = document.getElementById('compName').value;
         const compUrl = document.getElementById('compUrl').value;
        
-        if(!myName || !compName) return alert("System requires target identification.");
+        if(!myName || !compName) return alert("INPUT ERROR: TARGET IDENTIFICATION REQUIRED.");
 
         const data = {
             my_product: { name: myName, price: document.getElementById('myPrice').value, features: document.getElementById('myFeatures').value },
@@ -129,7 +227,12 @@
             target_audience: document.getElementById('targetAudience').value
         };
 
-        document.getElementById('loader').style.display = 'block';
+        const btn = document.getElementById('mainBtn');
+        const originalText = btn.innerText;
+        btn.innerText = "PROCESSING...";
+        btn.disabled = true;
+
+        document.getElementById('loader').classList.remove('hidden');
         document.getElementById('results').classList.add('hidden');
         document.getElementById('lockedContent').classList.add('blur-lock');
         document.getElementById('unlockOverlay').classList.remove('hidden');
@@ -140,17 +243,37 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
+
             globalResult = await response.json();
-            document.getElementById('scoreValue').innerText = globalResult.dominance_score + "/100";
+
+            document.getElementById('scoreValue').innerText = globalResult.dominance_score;
+            document.getElementById('scoreExplanation').innerText = globalResult.score_explanation;
             document.getElementById('strategyText').innerHTML = globalResult.html_content;
+            document.getElementById('compWinsList').innerHTML = globalResult.reality_check.competitor_wins.map(i => `<li class="border-b border-white/5 pb-2">${i}</li>`).join('');
+            document.getElementById('improvementsList').innerHTML = globalResult.reality_check.improvements_needed.map(i => `<li class="border-b border-white/5 pb-2">${i}</li>`).join('');
+
             document.getElementById('results').classList.remove('hidden');
-            document.getElementById('loader').style.display = 'none';
-        } catch (error) { document.getElementById('loader').style.display = 'none'; }
+            document.getElementById('loader').classList.add('hidden');
+           
+            // Scroll do rezultata
+            setTimeout(() => {
+                document.getElementById('results').scrollIntoView({behavior: "smooth", block: "start"});
+            }, 500);
+
+        } catch (error) {
+            document.getElementById('loader').classList.add('hidden');
+            btn.innerText = originalText;
+            btn.disabled = false;
+            alert("SERVER ERROR: CONNECTION FAILED.");
+        }
     }
 
     async function unlockContent() {
         const email = document.getElementById('unlockEmail').value.trim();
-        if (!email.includes('@')) return alert("Enter valid corporate channel.");
+        if (!email.includes('@')) return alert("INVALID PROTOCOL: EMAIL REQUIRED.");
+
+        const btn = document.querySelector('#unlockOverlay button');
+        btn.innerText = "SENDING...";
 
         try {
             await fetch('/save-lead', {
@@ -161,14 +284,13 @@
                     score: globalResult.dominance_score || 0,
                     product_name: document.getElementById('myName').value,
                     competitor_name: document.getElementById('compName').value,
-                    report_html: globalResult.html_content // Šaljemo i sadržaj za mejl
+                    report_html: globalResult.html_content
                 })
             });
         } catch (e) {}
 
         document.getElementById('lockedContent').classList.remove('blur-lock');
         document.getElementById('unlockOverlay').classList.add('hidden');
-        window.scrollTo({ top: 1000, behavior: 'smooth' });
     }
     </script>
 </body>
