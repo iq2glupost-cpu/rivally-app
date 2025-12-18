@@ -7,10 +7,9 @@ from pydantic import BaseModel
 import google.generativeai as genai
 from supabase import create_client, Client
 from typing import Any, Optional
-# --- KONFIGURACIJA ---
-
 
 app = FastAPI()
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -19,67 +18,64 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Ključevi sa Rendera / Vercela
+# KONFIGURACIJA
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
-
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
+
 
 supabase: Optional[Client] = None
 
-# Povezivanje na Supabase
 if SUPABASE_URL and SUPABASE_KEY:
     try:
         supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
         print("✅ Supabase povezan.")
     except Exception as e:
-
         print(f"⚠️ Supabase greška: {e}")
 
-# Povezivanje na Gemini
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
 
-# --- MODELI ---
-
+# MODELI PODATAKA
 class ProductData(BaseModel):
     name: str
-    price: str
+    price: Optional[str] = "N/A"
     features: Any
     weaknesses: Optional[str] = None
-    url: Optional[str] = None  # <--- NOVO: URL POLJE
+    url: Optional[str] = None # Dodat URL i za tvoj proizvod
 
-class ComparisonRequest(BaseModel):
+class 
+
+ComparisonRequest(BaseModel):
     my_product: ProductData
     competitor_product: ProductData
-    target_audience: str
-    
+    target_audience: Optional[str] = "General Market" # Opcionalno
+
 class LeadRequest(BaseModel):
     email: str
     score: int
     product_name: str
-
     competitor_name: str
 
-# --- PROMPT I AI ---
-
+# SYSTEM PROMPT
 SYSTEM_INSTRUCTION = """
+
 You are RIVALLY - An elite competitive marketing strategist.
 Your goal is to help the user dominate their market.
 
 YOUR TASK:
-Generate a JSON response containing 6 specific parts based on the input data.
+Analyze the two URLs/Products provided. 
+If URLs are present, infer the business model, pricing strategy, and features from the domain context.
 
-JSON STRUCTURE:
+Generate a JSON response containing 6 specific parts:
+1. "dominance_score" (Integer 
 
-
-1. "dominance_score" (Integer 0-100): Calculated probability of winning.
+0-100): Probability of User winning against Rival.
 2. "score_explanation" (String): Short punchy sentence explaining the score.
 3. "reality_check" (Object): { "competitor_wins": [List of strings], "improvements_needed": [List of strings] }
 4. "fatherly_advice" (String): Direct mentorship advice.
-5. "html_content" (String): The detailed strategy (HTML format 
+5. "html_content" (String): The detailed strategy (HTML format with <p>, <strong>, <ul>). Make it look like a classified report.
 
-with <p>, <strong>, <ul>).
 6. "instagram_caption" (String): Viral social media caption.
 
 IMPORTANT: Respond ONLY in valid JSON format.
@@ -93,63 +89,57 @@ model = genai.GenerativeModel(
     )
 )
 
-# --- ENDPOINTS ---
+# RUTE
 
 @app.get("/", response_class=HTMLResponse)
 async def read_index():
     return FileResponse('index.html')
-
-# 1. GENERISANJE ANALIZE
 
 @app.post("/generate-rival-strategy")
 async def generate_strategy(request: ComparisonRequest):
     if not GEMINI_API_KEY:
         raise HTTPException(status_code=500, detail="Nedostaje API Key.")
 
-    my_features = str(request.my_product.features)
-    comp_features = str(request.competitor_product.features)
+    # Priprema podataka za AI
+    my_info = f"NAME: {request.my_product.name}"
+    if request.my_product.url:
+        my_info += f", URL: {request.my_product.url}"
     
-
-    # --- NOVO: Priprema URL-a za prompt ---
-    comp_url_text = f", URL: {request.competitor_product.url}" if request.competitor_product.url else ""
+    comp_info = f"NAME: {request.competitor_product.name}"
+    if request.competitor_product.url:
+        comp_info += f", URL: {request.competitor_product.url}"
 
     prompt = f"""
-    ANALYZE:
-    ME: {request.my_product.name}, {request.my_product.price}, {my_features}, Weakness: {request.my_product.weaknesses}
-
-
-    RIVAL: {request.competitor_product.name}, {request.competitor_product.price}, {comp_features}{comp_url_text}
-    AUDIENCE: {request.target_audience}
+    ANALYZE BATTLE:
+    [ME - THE USER]: {my_info}
+    [THE RIVAL]: {comp_info}
     
-    If the RIVAL URL is provided, use it to infer their specific business model and industry positioning accurately.
+    CONTEXT: The user wants to know how to beat this specific competitor. 
+    Use the URLs to deduce the industry and specific weaknesses.
     """
 
     try:
-        # Generisanje odgovora
         response = model.generate_content(prompt)
-        # Čišćenje i parsiranje JSON-a
         ai_output_text = response.text.strip()
         parsed_json = json.loads(ai_output_text)
 
-        # --- ČUVANJE U SUPABASE ---
+        # Logovanje u Supabase (ako je povezan)
         if supabase:
             try:
                 supabase.table("history").insert({
                     "business_name": request.my_product.name,
                     "ai_response": ai_output_text
                 }).execute()
-                print("✅ Analiza sačuvana u history tabelu.")
-            except Exception as db_e:
-                print(f"⚠️ Nije uspelo čuvanje u bazu: {db_e}")
+            except Exception:
+                pass
 
         return parsed_json
 
     except Exception as e:
         print(f"AI Error: {e}")
-
         raise HTTPException(status_code=500, detail="Greška u AI analizi.")
 
-# 2. ČUVANJE EMAILA
+
 @app.post("/save-lead")
 async def save_lead(request: LeadRequest):
     if not supabase:
@@ -157,34 +147,12 @@ async def save_lead(request: LeadRequest):
     
     try:
         info_text = f"Lead Captured! Score: {request.score}, Competitor: {request.competitor_name}"
-        
         supabase.table("history").insert({
+
             "business_name": request.product_name, 
             "email": request.email,                
             "ai_response": info_text               
         }).execute()
-        
-        return {"status": "success", "message": "Email sačuvan!"}
-
+        return {"status": "success"}
     except Exception as e:
-        print(f"DB Error: {e}")
         return {"status": "error", "message": str(e)}
-
-@app.get("/test-gemini")
-def test_gemini():
-    try:
-        modeli = []
-        for m in genai.list_models():
-            if 'generateContent' in m.supported_generation_methods:
-                modeli.append(m.name)
-        
-        return {
-
-            "STATUS": "Uspesno povezan",
-            "DOSTUPNI_MODELI": modeli
-        }
-    except Exception as e:
-        return {"GRESKA": str(e)}
-
-
-
