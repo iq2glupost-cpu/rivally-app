@@ -3,169 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RIVALLY | SAKORP STUDIO</title>
+    <title>RIVALLY | SAKORP INTELLIGENCE</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500&family=Space+Grotesk:wght@300;700;900&display=swap');
-        body { font-family: 'Space Grotesk', sans-serif; background-color: #000; color: #fff; overflow-x: hidden; }
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400&family=Space+Grotesk:wght@300;900&display=swap');
+        body { font-family: 'Space Grotesk', sans-serif; background-color: #000; color: #fff; }
        
-        /* ANIMACIJA NITI (CIRCUIT FLOW) */
-        .path-flow {
+        .deep-blue-glow { box-shadow: 0 0 30px rgba(29, 78, 216, 0.15); border: 1px solid #1e3a8a; }
+       
+        /* PULSIRAJUĆE NITI */
+        .circuit-line {
+            fill: none;
+            stroke: #1e40af; /* Tamno plava */
+            stroke-width: 2;
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
-            animation: flow 4s linear infinite;
+            animation: flow 3s infinite linear;
         }
-        @keyframes flow {
-            to { stroke-dashoffset: 0; }
-        }
+        @keyframes flow { to { stroke-dashoffset: 0; } }
 
-        .blur-lock { filter: blur(20px); pointer-events: none; user-select: none; }
-       
-        /* DIZAJN POLJA */
         input, textarea {
-            background: #080808 !important;
-            border: 1px solid #1a1a1a !important;
+            background: #050505 !important;
+            border: 1px solid #111 !important;
             color: #fff !important;
             font-family: 'JetBrains Mono', monospace;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 11px !important;
         }
-        input:focus { border-color: #2563eb !important; background: #0c0c0c !important; box-shadow: 0 0 15px rgba(37, 99, 235, 0.1); }
+        input:focus { border-color: #1e40af !important; outline: none; }
        
-        .glow-button {
-            box-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
-            transition: all 0.3s;
+        .scan-btn {
+            background: #1e3a8a; /* Tamno plava */
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid #1e40af;
         }
-        .glow-button:hover {
-            box-shadow: 0 0 40px rgba(37, 99, 235, 0.5);
-            transform: translateY(-2px);
-        }
+        .scan-btn:hover { background: #1d4ed8; box-shadow: 0 0 40px rgba(29, 78, 216, 0.4); }
+        .blur-lock { filter: blur(20px); pointer-events: none; }
     </style>
 </head>
-<body class="selection:bg-blue-600">
+<body class="p-4 md:p-10">
 
-    <nav class="p-8 flex justify-center items-center relative z-20">
-        <div class="flex items-center gap-4 group">
-            <svg width="40" height="40" viewBox="0 0 60 60" fill="none" class="transition-transform group-hover:rotate-90 duration-500">
-                <g transform="translate(5, 5)">
-                  <path d="M0 0H30V15H15V30H0V0Z" fill="white"/>
-                  <path d="M30 0H45V15H30V0Z" fill="white" opacity="0.6"/>
-                  <rect x="15" y="15" width="30" height="15" fill="#2563EB"/>
-                  <path d="M15 30H45V45H0V30H15Z" fill="white"/>
-                </g>
-            </svg>
-            <div class="flex flex-col">
-                <span class="font-black text-2xl tracking-tighter leading-none">SAKORP</span>
-                <span class="text-[9px] text-blue-600 font-bold uppercase tracking-[0.5em]">Rivally Intelligence</span>
-            </div>
-        </div>
-    </nav>
+    <div class="flex flex-col items-center mb-16">
+        <svg width="50" height="50" viewBox="0 0 60 60" fill="none">
+            <path d="M5 5H35V20H20V35H5V5Z" fill="white"/>
+            <rect x="20" y="20" width="30" height="15" fill="#1e40af"/>
+            <path d="M20 35H50V50H5V35H20Z" fill="white"/>
+        </svg>
+        <h2 class="font-black tracking-[0.6em] text-xs mt-4 opacity-50 uppercase text-blue-800">Sakorp Rivally Unit</h2>
+    </div>
 
-    <main class="max-w-5xl mx-auto py-12 px-6 relative">
+    <main class="max-w-5xl mx-auto relative">
        
-        <div class="text-center mb-16">
-            <h1 class="text-5xl md:text-7xl font-black italic tracking-tighter uppercase mb-4">Market <span class="text-blue-600">Decryption</span></h1>
-            <p class="text-zinc-600 text-[10px] uppercase tracking-[0.5em] font-light">Extracting competitor DNA in real-time</p>
-        </div>
-
-        <div class="relative p-1">
+        <div class="relative p-[2px] rounded-2xl overflow-hidden">
             <svg class="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
-                <path d="M 50% 0 L 20 0 Q 0 0 0 20 L 0 calc(100% - 20) Q 0 100% 20 100% L 50% 100%"
-                      fill="none" stroke="rgba(37,99,235,0.3)" stroke-width="1" />
-                <path class="path-flow" d="M 50% 0 L 20 0 Q 0 0 0 20 L 0 calc(100% - 20) Q 0 100% 20 100% L 50% 100%"
-                      fill="none" stroke="#2563eb" stroke-width="1.5" />
+                <rect x="1" y="1" width="calc(100% - 2)" height="calc(100% - 2)" rx="16" fill="none" stroke="#0a192f" stroke-width="2" />
                
-                <path d="M 50% 0 L calc(100% - 20) 0 Q 100% 0 100% 20 L 100% calc(100% - 20) Q 100% 100% calc(100% - 20) 100% L 50% 100%"
-                      fill="none" stroke="rgba(37,99,235,0.3)" stroke-width="1" />
-                <path class="path-flow" d="M 50% 0 L calc(100% - 20) 0 Q 100% 0 100% 20 L 100% calc(100% - 20) Q 100% 100% calc(100% - 20) 100% L 50% 100%"
-                      fill="none" stroke="#2563eb" stroke-width="1.5" />
+                <path class="circuit-line" d="M 50% 0 L 30 0 Q 0 0 0 30 L 0 500 Q 0 550 30 550 L 50% 550" />
+                <path class="circuit-line" d="M 50% 0 L calc(100% - 30) 0 Q 100% 0 100% 30 L 100% 500 Q 100% 550 calc(100% - 30) 550 L 50% 550" />
             </svg>
 
-            <div class="bg-[#030303] rounded-xl p-8 md:p-12 relative z-10">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                    <div class="space-y-6">
-                        <div class="flex items-center gap-2 mb-4">
-                            <div class="w-1 h-4 bg-blue-600"></div>
-                            <h3 class="text-zinc-500 font-bold text-[10px] uppercase tracking-widest">Target Asset (You)</h3>
-                        </div>
-                        <input type="text" id="myName" placeholder="PROJECT NAME" class="w-full p-4 text-xs uppercase tracking-[0.2em]">
-                        <input type="text" id="myUrl" placeholder="WEB ADDRESS (yoursite.com)" class="w-full p-4 text-xs text-blue-500">
+            <div class="bg-[#030303] rounded-2xl p-8 md:p-12 deep-blue-glow relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+                    <div class="space-y-4">
+                        <label class="text-[9px] uppercase tracking-[0.4em] text-zinc-600 block mb-4 italic font-bold">// Target_Asset_YourSite</label>
+                        <input type="text" id="myName" placeholder="PROJECT NAME" class="w-full p-4 uppercase tracking-widest">
+                        <input type="text" id="myUrl" placeholder="WEB ADDRESS (yoursite.com)" class="w-full p-4 text-blue-900 font-bold">
                         <div class="grid grid-cols-2 gap-4">
-                            <input type="text" id="myPrice" placeholder="PRICE POINT" class="p-4 text-xs">
-                            <input type="text" id="targetAudience" placeholder="TARGET AUDIENCE" class="p-4 text-xs">
+                            <input type="text" id="myPrice" placeholder="PRICE POINT" class="p-4 uppercase">
+                            <input type="text" id="targetAudience" placeholder="AUDIENCE" class="p-4 uppercase">
                         </div>
-                        <textarea id="myFeatures" placeholder="CORE STRENGTHS & FEATURES" class="w-full p-4 h-32 text-xs"></textarea>
+                        <textarea id="myFeatures" placeholder="CORE CAPABILITIES" class="w-full p-4 h-32"></textarea>
                     </div>
 
-                    <div class="space-y-6">
-                        <div class="flex items-center gap-2 mb-4">
-                            <div class="w-1 h-4 bg-red-600"></div>
-                            <h3 class="text-zinc-500 font-bold text-[10px] uppercase tracking-widest">Rival Asset (Competitor)</h3>
-                        </div>
-                        <input type="text" id="compName" placeholder="RIVAL NAME" class="w-full p-4 text-xs uppercase tracking-[0.2em]">
-                        <input type="text" id="compUrl" placeholder="RIVAL WEB ADDRESS (rival.com)" class="w-full p-4 text-xs text-red-500">
-                        <input type="text" id="compPrice" placeholder="RIVAL PRICING" class="w-full p-4 text-xs">
-                        <textarea id="compFeatures" placeholder="RIVAL STRATEGY & CAPABILITIES" class="w-full p-4 h-52 text-xs"></textarea>
+                    <div class="space-y-4">
+                        <label class="text-[9px] uppercase tracking-[0.4em] text-zinc-600 block mb-4 italic font-bold">// Target_Asset_Competitor</label>
+                        <input type="text" id="compName" placeholder="RIVAL NAME" class="w-full p-4 uppercase tracking-widest border-red-900/10">
+                        <input type="text" id="compUrl" placeholder="RIVAL WEB ADDRESS (rival.com)" class="w-full p-4 text-red-900 font-bold">
+                        <input type="text" id="compPrice" placeholder="RIVAL PRICING" class="w-full p-4 uppercase">
+                        <textarea id="compFeatures" placeholder="RIVAL REVENUE CHANNELS & FEATURES" class="w-full p-4 h-52"></textarea>
                     </div>
                 </div>
 
-                <div class="mt-16 flex flex-col items-center">
-                    <button id="mainBtn" onclick="generateStrategy()" class="glow-button w-full max-w-xl bg-blue-600 text-white font-black py-6 uppercase tracking-[0.5em] text-sm rounded-sm">
-                        DECRYPT MARKET VULNERABILITIES
+                <div class="flex justify-center mt-8">
+                    <button id="mainBtn" onclick="generateStrategy()" class="scan-btn w-full max-w-2xl text-white font-black py-6 uppercase tracking-[0.5em] text-xs rounded-sm relative overflow-hidden group">
+                        <span class="relative z-10">Initiate Neural Extraction</span>
+                        <div class="absolute inset-0 bg-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                     </button>
-                    <div id="loader" class="hidden mt-6 text-blue-500 font-mono text-[9px] uppercase tracking-[0.6em] animate-pulse italic">
-                        Accessing Neural Network...
-                    </div>
                 </div>
+                <div id="loader" class="hidden mt-6 text-center text-blue-900 font-mono text-[10px] uppercase tracking-widest animate-pulse italic">Connecting to Sakorp Mainframe...</div>
             </div>
         </div>
 
-        <div id="results" class="hidden mt-32 animate-in fade-in duration-1000">
-            <div id="lockedContent" class="blur-lock bg-zinc-950/40 p-10 rounded-2xl border border-white/5 relative">
-                <div class="flex flex-col md:flex-row justify-between items-end border-b border-white/5 pb-8 mb-10 gap-6">
-                    <div>
-                        <span class="text-blue-500 font-mono text-[10px] uppercase tracking-[0.5em]">Tactical Data Packet</span>
-                        <h2 class="text-5xl font-black italic mt-2 uppercase tracking-tighter">Strategic <span class="text-zinc-700">Audit</span></h2>
-                    </div>
-                    <div class="text-right">
-                        <div id="scoreValue" class="text-7xl font-black text-blue-600 tracking-tighter">--</div>
-                        <p class="text-[9px] uppercase text-zinc-600 tracking-widest">Dominance Probability</p>
-                    </div>
+        <div id="results" class="hidden mt-32">
+            <div id="lockedContent" class="blur-lock bg-zinc-950/20 p-10 rounded-2xl border border-white/5">
+                <div class="flex flex-col md:flex-row justify-between items-end border-b border-white/5 pb-10 mb-10">
+                    <h2 class="text-4xl font-black italic uppercase tracking-tighter">Strategic Audit</h2>
+                    <div id="scoreValue" class="text-7xl font-black text-blue-900">--</div>
                 </div>
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                    <div class="lg:col-span-2">
-                        <div class="text-blue-400 italic mb-8 text-xl leading-relaxed" id="scoreExplanation"></div>
-                        <div id="strategyText" class="prose prose-invert prose-blue max-w-none text-zinc-400 text-sm leading-loose"></div>
-                    </div>
-                    <div class="space-y-6">
-                        <div class="bg-white/5 p-6 rounded border border-white/5">
-                            <h4 class="text-red-500 font-bold uppercase text-[9px] tracking-widest mb-4">Competitor Advantage</h4>
-                            <ul id="compWinsList" class="text-[11px] space-y-3 text-zinc-500 list-disc list-inside italic"></ul>
-                        </div>
-                        <div class="bg-white/5 p-6 rounded border border-white/5">
-                            <h4 class="text-blue-500 font-bold uppercase text-[9px] tracking-widest mb-4">Tactical Adjustments</h4>
-                            <ul id="improvementsList" class="text-[11px] space-y-3 text-zinc-500 list-disc list-inside italic"></ul>
-                        </div>
-                    </div>
-                </div>
+                <div id="strategyText" class="prose prose-invert max-w-none text-zinc-500 text-sm"></div>
             </div>
 
             <div id="unlockOverlay" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-3xl p-6">
-                <div class="bg-black border border-blue-600/20 p-12 rounded-2xl max-w-md w-full text-center shadow-[0_0_60px_rgba(37,99,235,0.1)]">
-                    <h3 class="text-2xl font-black italic uppercase tracking-widest mb-4">Report Secured</h3>
-                    <p class="text-zinc-600 text-[10px] mb-8 uppercase tracking-[0.3em] leading-relaxed">Enter priority communication channel to decrypt strategy report.</p>
-                    <input type="email" id="unlockEmail" placeholder="EMAIL@CORPORATE.COM" class="w-full p-4 mb-4 text-center text-[10px] tracking-widest">
-                    <button onclick="unlockContent()" class="w-full bg-white text-black font-black py-5 uppercase tracking-[0.4em] text-[10px] hover:bg-zinc-200 transition-colors">
-                        Unlock Intelligence
-                    </button>
-                    <p class="text-[8px] text-zinc-800 mt-6 uppercase tracking-widest italic">Encrypted by Sakorp Defense Systems &copy; 2025</p>
+                <div class="bg-black border border-blue-900/30 p-12 rounded-2xl max-w-md w-full text-center">
+                    <h3 class="text-xl font-black italic uppercase tracking-widest mb-6">Packet Compiled</h3>
+                    <p class="text-zinc-600 text-[10px] mb-8 uppercase tracking-[0.3em] leading-relaxed">Enter priority email to decrypt and receive full report.</p>
+                    <input type="email" id="unlockEmail" placeholder="ENTER EMAIL" class="w-full p-4 mb-4 text-center text-[10px] tracking-[0.4em] uppercase">
+                    <button onclick="unlockContent()" class="w-full bg-white text-black font-black py-5 uppercase tracking-[0.4em] text-[10px]">Send & Unlock Report</button>
                 </div>
             </div>
         </div>
     </main>
-
-    <footer class="py-24 text-center border-t border-white/5">
-        <p class="text-zinc-800 text-[9px] uppercase tracking-[0.6em]">Powered by Sakorp Studio Division // All Rights Reserved</p>
-    </footer>
 
     <script>
     let globalResult = null;
@@ -175,24 +121,11 @@
         const compName = document.getElementById('compName').value;
         const compUrl = document.getElementById('compUrl').value;
        
-        if(!myName || !compName) {
-            alert("Identification Required.");
-            return;
-        }
+        if(!myName || !compName) return alert("System requires target identification.");
 
         const data = {
-            my_product: {
-                name: myName,
-                price: document.getElementById('myPrice').value,
-                features: document.getElementById('myFeatures').value,
-                weaknesses: "N/A"
-            },
-            competitor_product: {
-                name: compName,
-                price: document.getElementById('compPrice').value,
-                features: document.getElementById('compFeatures').value,
-                url: compUrl
-            },
+            my_product: { name: myName, price: document.getElementById('myPrice').value, features: document.getElementById('myFeatures').value },
+            competitor_product: { name: compName, price: document.getElementById('compPrice').value, features: document.getElementById('compFeatures').value, url: compUrl },
             target_audience: document.getElementById('targetAudience').value
         };
 
@@ -207,32 +140,17 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             });
-
             globalResult = await response.json();
-
             document.getElementById('scoreValue').innerText = globalResult.dominance_score + "/100";
-            document.getElementById('scoreExplanation').innerText = globalResult.score_explanation;
             document.getElementById('strategyText').innerHTML = globalResult.html_content;
-            document.getElementById('compWinsList').innerHTML = globalResult.reality_check.competitor_wins.map(i => `<li>${i}</li>`).join('');
-            document.getElementById('improvementsList').innerHTML = globalResult.reality_check.improvements_needed.map(i => `<li>${i}</li>`).join('');
-
             document.getElementById('results').classList.remove('hidden');
             document.getElementById('loader').style.display = 'none';
-        } catch (error) {
-            document.getElementById('loader').style.display = 'none';
-            alert("Tactical Connection Error.");
-        }
+        } catch (error) { document.getElementById('loader').style.display = 'none'; }
     }
 
     async function unlockContent() {
-        const emailInput = document.getElementById('unlockEmail');
-        const email = emailInput.value.trim();
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        if (!emailPattern.test(email)) {
-            alert("Valid communication channel required.");
-            return;
-        }
+        const email = document.getElementById('unlockEmail').value.trim();
+        if (!email.includes('@')) return alert("Enter valid corporate channel.");
 
         try {
             await fetch('/save-lead', {
@@ -242,14 +160,15 @@
                     email: email,
                     score: globalResult.dominance_score || 0,
                     product_name: document.getElementById('myName').value,
-                    competitor_name: document.getElementById('compName').value
+                    competitor_name: document.getElementById('compName').value,
+                    report_html: globalResult.html_content // Šaljemo i sadržaj za mejl
                 })
             });
         } catch (e) {}
 
         document.getElementById('lockedContent').classList.remove('blur-lock');
         document.getElementById('unlockOverlay').classList.add('hidden');
-        window.scrollTo({ top: document.getElementById('results').offsetTop - 100, behavior: 'smooth' });
+        window.scrollTo({ top: 1000, behavior: 'smooth' });
     }
     </script>
 </body>
