@@ -6,127 +6,168 @@
     <title>RIVALLY | SAKORP STUDIO</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
-        body { font-family: 'Space Grotesk', sans-serif; background-color: #000; color: #fff; }
-        .blur-lock { filter: blur(15px); pointer-events: none; user-select: none; }
-        .glass { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); }
-        .neon-blue { box-shadow: 0 0 20px rgba(37, 99, 235, 0.2); }
-        input, textarea { background: #0a0a0a !important; border: 1px solid #1a1a1a !important; border-radius: 4px !important; color: #fff !important; }
-        input:focus { border-color: #2563eb !important; outline: none; box-shadow: 0 0 10px rgba(37, 99, 235, 0.2); }
-        @keyframes scan { 0% {top: 0%} 100% {top: 100%} }
-        .scanner-line { position: absolute; width: 100%; height: 2px; background: #2563eb; animation: scan 3s infinite linear; opacity: 0.3; }
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500&family=Space+Grotesk:wght@300;700;900&display=swap');
+        body { font-family: 'Space Grotesk', sans-serif; background-color: #000; color: #fff; overflow-x: hidden; }
+       
+        /* ANIMACIJA NITI (CIRCUIT FLOW) */
+        .path-flow {
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: flow 4s linear infinite;
+        }
+        @keyframes flow {
+            to { stroke-dashoffset: 0; }
+        }
+
+        .blur-lock { filter: blur(20px); pointer-events: none; user-select: none; }
+       
+        /* DIZAJN POLJA */
+        input, textarea {
+            background: #080808 !important;
+            border: 1px solid #1a1a1a !important;
+            color: #fff !important;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        input:focus { border-color: #2563eb !important; background: #0c0c0c !important; box-shadow: 0 0 15px rgba(37, 99, 235, 0.1); }
+       
+        .glow-button {
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
+            transition: all 0.3s;
+        }
+        .glow-button:hover {
+            box-shadow: 0 0 40px rgba(37, 99, 235, 0.5);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
-<body class="selection:bg-blue-600 selection:text-white">
+<body class="selection:bg-blue-600">
 
-    <nav class="p-6 flex justify-between items-center border-b border-white/5 glass sticky top-0 z-50">
-        <div class="flex items-center gap-3">
-            <div class="w-8 h-8 bg-blue-600 flex items-center justify-center font-bold italic shadow-[0_0_15px_#2563eb]">R</div>
-            <span class="font-bold tracking-[0.3em] uppercase text-sm">RIVALLY <span class="text-blue-600">AI</span></span>
+    <nav class="p-8 flex justify-center items-center relative z-20">
+        <div class="flex items-center gap-4 group">
+            <svg width="40" height="40" viewBox="0 0 60 60" fill="none" class="transition-transform group-hover:rotate-90 duration-500">
+                <g transform="translate(5, 5)">
+                  <path d="M0 0H30V15H15V30H0V0Z" fill="white"/>
+                  <path d="M30 0H45V15H30V0Z" fill="white" opacity="0.6"/>
+                  <rect x="15" y="15" width="30" height="15" fill="#2563EB"/>
+                  <path d="M15 30H45V45H0V30H15Z" fill="white"/>
+                </g>
+            </svg>
+            <div class="flex flex-col">
+                <span class="font-black text-2xl tracking-tighter leading-none">SAKORP</span>
+                <span class="text-[9px] text-blue-600 font-bold uppercase tracking-[0.5em]">Rivally Intelligence</span>
+            </div>
         </div>
-        <div class="text-[9px] font-mono text-zinc-600 tracking-[0.4em] uppercase">Division_01 // Sakorp Studio</div>
     </nav>
 
-    <main class="max-w-6xl mx-auto py-20 px-6">
+    <main class="max-w-5xl mx-auto py-12 px-6 relative">
        
-        <div class="text-center mb-20">
-            <h1 class="text-6xl md:text-8xl font-black italic tracking-tighter uppercase leading-none mb-6">
-                Market <span class="text-blue-600 underline decoration-white/10">Warfare.</span>
-            </h1>
-            <p class="text-zinc-500 text-sm md:text-lg uppercase tracking-[0.5em] font-light italic">Automated Strategic Intelligence.</p>
+        <div class="text-center mb-16">
+            <h1 class="text-5xl md:text-7xl font-black italic tracking-tighter uppercase mb-4">Market <span class="text-blue-600">Decryption</span></h1>
+            <p class="text-zinc-600 text-[10px] uppercase tracking-[0.5em] font-light">Extracting competitor DNA in real-time</p>
         </div>
 
-        <div class="glass p-1 rounded-lg neon-blue mb-20 relative overflow-hidden">
-            <div class="scanner-line"></div>
-            <div class="p-8 md:p-12 bg-black rounded-lg">
+        <div class="relative p-1">
+            <svg class="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
+                <path d="M 50% 0 L 20 0 Q 0 0 0 20 L 0 calc(100% - 20) Q 0 100% 20 100% L 50% 100%"
+                      fill="none" stroke="rgba(37,99,235,0.3)" stroke-width="1" />
+                <path class="path-flow" d="M 50% 0 L 20 0 Q 0 0 0 20 L 0 calc(100% - 20) Q 0 100% 20 100% L 50% 100%"
+                      fill="none" stroke="#2563eb" stroke-width="1.5" />
+               
+                <path d="M 50% 0 L calc(100% - 20) 0 Q 100% 0 100% 20 L 100% calc(100% - 20) Q 100% 100% calc(100% - 20) 100% L 50% 100%"
+                      fill="none" stroke="rgba(37,99,235,0.3)" stroke-width="1" />
+                <path class="path-flow" d="M 50% 0 L calc(100% - 20) 0 Q 100% 0 100% 20 L 100% calc(100% - 20) Q 100% 100% calc(100% - 20) 100% L 50% 100%"
+                      fill="none" stroke="#2563eb" stroke-width="1.5" />
+            </svg>
+
+            <div class="bg-[#030303] rounded-xl p-8 md:p-12 relative z-10">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                   
                     <div class="space-y-6">
-                        <h3 class="text-blue-600 font-bold text-xs uppercase tracking-widest border-b border-blue-600/20 pb-2">Target A: Your Asset</h3>
-                        <div class="space-y-4">
-                            <input type="text" id="myName" placeholder="Project Name" class="w-full p-4 text-sm uppercase tracking-widest">
-                            <div class="grid grid-cols-2 gap-4">
-                                <input type="text" id="myPrice" placeholder="Pricing Model" class="p-4 text-sm">
-                                <input type="text" id="targetAudience" placeholder="Target Audience" class="p-4 text-sm">
-                            </div>
-                            <textarea id="myFeatures" placeholder="Core Features / Strengths" class="w-full p-4 h-24 text-sm"></textarea>
-                            <textarea id="myWeaknesses" placeholder="Known Weaknesses (Internal)" class="w-full p-4 h-20 text-sm"></textarea>
+                        <div class="flex items-center gap-2 mb-4">
+                            <div class="w-1 h-4 bg-blue-600"></div>
+                            <h3 class="text-zinc-500 font-bold text-[10px] uppercase tracking-widest">Target Asset (You)</h3>
                         </div>
+                        <input type="text" id="myName" placeholder="PROJECT NAME" class="w-full p-4 text-xs uppercase tracking-[0.2em]">
+                        <input type="text" id="myUrl" placeholder="WEB ADDRESS (yoursite.com)" class="w-full p-4 text-xs text-blue-500">
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="text" id="myPrice" placeholder="PRICE POINT" class="p-4 text-xs">
+                            <input type="text" id="targetAudience" placeholder="TARGET AUDIENCE" class="p-4 text-xs">
+                        </div>
+                        <textarea id="myFeatures" placeholder="CORE STRENGTHS & FEATURES" class="w-full p-4 h-32 text-xs"></textarea>
                     </div>
 
                     <div class="space-y-6">
-                        <h3 class="text-red-600 font-bold text-xs uppercase tracking-widest border-b border-red-600/20 pb-2">Target B: Competition</h3>
-                        <div class="space-y-4">
-                            <input type="text" id="compName" placeholder="Competitor Name" class="w-full p-4 text-sm uppercase tracking-widest">
-                            <input type="text" id="compUrl" placeholder="https://competitor.com" class="w-full p-4 text-sm text-red-400">
-                            <input type="text" id="compPrice" placeholder="Competitor Pricing" class="w-full p-4 text-sm">
-                            <textarea id="compFeatures" placeholder="Competitor Features / Known Strategy" class="w-full p-4 h-48 text-sm"></textarea>
+                        <div class="flex items-center gap-2 mb-4">
+                            <div class="w-1 h-4 bg-red-600"></div>
+                            <h3 class="text-zinc-500 font-bold text-[10px] uppercase tracking-widest">Rival Asset (Competitor)</h3>
                         </div>
+                        <input type="text" id="compName" placeholder="RIVAL NAME" class="w-full p-4 text-xs uppercase tracking-[0.2em]">
+                        <input type="text" id="compUrl" placeholder="RIVAL WEB ADDRESS (rival.com)" class="w-full p-4 text-xs text-red-500">
+                        <input type="text" id="compPrice" placeholder="RIVAL PRICING" class="w-full p-4 text-xs">
+                        <textarea id="compFeatures" placeholder="RIVAL STRATEGY & CAPABILITIES" class="w-full p-4 h-52 text-xs"></textarea>
                     </div>
                 </div>
 
-                <div class="mt-12 text-center">
-                    <button id="mainBtn" onclick="generateStrategy()" class="bg-blue-600 hover:bg-blue-500 text-white px-12 py-5 font-black uppercase tracking-[0.3em] transition-all w-full md:w-auto neon-blue">
-                        Initiate Neural Scan
+                <div class="mt-16 flex flex-col items-center">
+                    <button id="mainBtn" onclick="generateStrategy()" class="glow-button w-full max-w-xl bg-blue-600 text-white font-black py-6 uppercase tracking-[0.5em] text-sm rounded-sm">
+                        DECRYPT MARKET VULNERABILITIES
                     </button>
-                    <div id="loader" class="hidden mt-6 text-blue-500 font-mono text-xs animate-pulse">Analyzing market patterns...</div>
-                    <div id="errorBox" class="hidden mt-6 text-red-500 font-mono text-xs uppercase">Error in tactical uplink.</div>
+                    <div id="loader" class="hidden mt-6 text-blue-500 font-mono text-[9px] uppercase tracking-[0.6em] animate-pulse italic">
+                        Accessing Neural Network...
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div id="results" class="hidden animate-page">
-            <div id="lockedContent" class="blur-lock relative bg-zinc-950 p-10 rounded-2xl border border-white/5">
-                <div class="flex flex-col md:flex-row justify-between items-end border-b border-white/5 pb-10 mb-10 gap-6">
+        <div id="results" class="hidden mt-32 animate-in fade-in duration-1000">
+            <div id="lockedContent" class="blur-lock bg-zinc-950/40 p-10 rounded-2xl border border-white/5 relative">
+                <div class="flex flex-col md:flex-row justify-between items-end border-b border-white/5 pb-8 mb-10 gap-6">
                     <div>
-                        <span class="text-blue-500 font-mono text-xs uppercase tracking-[0.4em]">Battle Intelligence Report</span>
-                        <h2 class="text-5xl font-black italic mt-2 uppercase tracking-tighter text-white">Strategy <span class="text-zinc-700">Output</span></h2>
+                        <span class="text-blue-500 font-mono text-[10px] uppercase tracking-[0.5em]">Tactical Data Packet</span>
+                        <h2 class="text-5xl font-black italic mt-2 uppercase tracking-tighter">Strategic <span class="text-zinc-700">Audit</span></h2>
                     </div>
                     <div class="text-right">
-                        <div id="scoreValue" class="text-7xl font-black text-blue-600 tracking-tighter">0/100</div>
-                        <p class="text-[10px] uppercase text-zinc-500 tracking-widest">Dominance Score</p>
+                        <div id="scoreValue" class="text-7xl font-black text-blue-600 tracking-tighter">--</div>
+                        <p class="text-[9px] uppercase text-zinc-600 tracking-widest">Dominance Probability</p>
                     </div>
                 </div>
-
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                    <div class="lg:col-span-2 space-y-10">
-                        <div class="bg-white/5 p-6 rounded-lg italic text-lg text-zinc-300 border-l-4 border-blue-600" id="scoreExplanation"></div>
-                        <div id="strategyText" class="prose prose-invert prose-blue max-w-none text-zinc-400"></div>
+                    <div class="lg:col-span-2">
+                        <div class="text-blue-400 italic mb-8 text-xl leading-relaxed" id="scoreExplanation"></div>
+                        <div id="strategyText" class="prose prose-invert prose-blue max-w-none text-zinc-400 text-sm leading-loose"></div>
                     </div>
                     <div class="space-y-6">
-                        <div class="glass p-6 rounded-lg">
-                            <h4 class="text-red-500 font-bold uppercase text-[10px] tracking-widest mb-4">Competitor Edge</h4>
-                            <ul id="compWinsList" class="text-sm space-y-3 text-zinc-400 list-disc list-inside"></ul>
+                        <div class="bg-white/5 p-6 rounded border border-white/5">
+                            <h4 class="text-red-500 font-bold uppercase text-[9px] tracking-widest mb-4">Competitor Advantage</h4>
+                            <ul id="compWinsList" class="text-[11px] space-y-3 text-zinc-500 list-disc list-inside italic"></ul>
                         </div>
-                        <div class="glass p-6 rounded-lg">
-                            <h4 class="text-blue-500 font-bold uppercase text-[10px] tracking-widest mb-4">Required Shifts</h4>
-                            <ul id="improvementsList" class="text-sm space-y-3 text-zinc-400 list-disc list-inside"></ul>
+                        <div class="bg-white/5 p-6 rounded border border-white/5">
+                            <h4 class="text-blue-500 font-bold uppercase text-[9px] tracking-widest mb-4">Tactical Adjustments</h4>
+                            <ul id="improvementsList" class="text-[11px] space-y-3 text-zinc-500 list-disc list-inside italic"></ul>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div id="unlockOverlay" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-6 bg-black/60 backdrop-blur-xl">
-                <div class="glass p-10 rounded-2xl max-w-md w-full text-center border-blue-600/30">
-                    <div class="w-16 h-16 bg-blue-600/10 border border-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke-width="2"/></svg>
-                    </div>
-                    <h3 class="text-2xl font-bold italic uppercase tracking-widest mb-2">Decrypt Report</h3>
-                    <p class="text-zinc-500 text-xs mb-8 uppercase tracking-widest">Enter priority email to unlock intelligence packet.</p>
-                    <input type="email" id="unlockEmail" placeholder="corporate@email.com" class="w-full p-4 mb-4 text-center">
-                    <button onclick="unlockContent()" class="w-full bg-white text-black font-black py-5 uppercase tracking-widest hover:bg-zinc-200 transition">Access Strategy</button>
-                    <p class="text-[9px] text-zinc-700 mt-6 uppercase tracking-widest">Security provided by Sakorp Systems &copy; 2025</p>
+            <div id="unlockOverlay" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-3xl p-6">
+                <div class="bg-black border border-blue-600/20 p-12 rounded-2xl max-w-md w-full text-center shadow-[0_0_60px_rgba(37,99,235,0.1)]">
+                    <h3 class="text-2xl font-black italic uppercase tracking-widest mb-4">Report Secured</h3>
+                    <p class="text-zinc-600 text-[10px] mb-8 uppercase tracking-[0.3em] leading-relaxed">Enter priority communication channel to decrypt strategy report.</p>
+                    <input type="email" id="unlockEmail" placeholder="EMAIL@CORPORATE.COM" class="w-full p-4 mb-4 text-center text-[10px] tracking-widest">
+                    <button onclick="unlockContent()" class="w-full bg-white text-black font-black py-5 uppercase tracking-[0.4em] text-[10px] hover:bg-zinc-200 transition-colors">
+                        Unlock Intelligence
+                    </button>
+                    <p class="text-[8px] text-zinc-800 mt-6 uppercase tracking-widest italic">Encrypted by Sakorp Defense Systems &copy; 2025</p>
                 </div>
             </div>
         </div>
     </main>
 
-    <footer class="py-20 border-t border-white/5 text-center">
-        <p class="text-zinc-800 text-[10px] uppercase tracking-[0.5em]">SYSTEM_ARCH: SAKORP HOLDING // RIVALLY_UNIT</p>
+    <footer class="py-24 text-center border-t border-white/5">
+        <p class="text-zinc-800 text-[9px] uppercase tracking-[0.6em]">Powered by Sakorp Studio Division // All Rights Reserved</p>
     </footer>
 
     <script>
-    // TVOJA ORIGINALNA LOGIKA (NE DIRAM NIŠTA ŠTO RADI)
     let globalResult = null;
 
     async function generateStrategy() {
@@ -135,7 +176,7 @@
         const compUrl = document.getElementById('compUrl').value;
        
         if(!myName || !compName) {
-            alert("Please enter at least your product name and the competitor's name.");
+            alert("Identification Required.");
             return;
         }
 
@@ -144,7 +185,7 @@
                 name: myName,
                 price: document.getElementById('myPrice').value,
                 features: document.getElementById('myFeatures').value,
-                weaknesses: document.getElementById('myWeaknesses').value
+                weaknesses: "N/A"
             },
             competitor_product: {
                 name: compName,
@@ -156,9 +197,7 @@
         };
 
         document.getElementById('loader').style.display = 'block';
-        document.getElementById('errorBox').classList.add('hidden');
         document.getElementById('results').classList.add('hidden');
-       
         document.getElementById('lockedContent').classList.add('blur-lock');
         document.getElementById('unlockOverlay').classList.remove('hidden');
 
@@ -169,47 +208,31 @@
                 body: JSON.stringify(data)
             });
 
-            if (!response.ok) throw new Error("Server communication error.");
-           
             globalResult = await response.json();
 
             document.getElementById('scoreValue').innerText = globalResult.dominance_score + "/100";
             document.getElementById('scoreExplanation').innerText = globalResult.score_explanation;
             document.getElementById('strategyText').innerHTML = globalResult.html_content;
-           
             document.getElementById('compWinsList').innerHTML = globalResult.reality_check.competitor_wins.map(i => `<li>${i}</li>`).join('');
             document.getElementById('improvementsList').innerHTML = globalResult.reality_check.improvements_needed.map(i => `<li>${i}</li>`).join('');
 
             document.getElementById('results').classList.remove('hidden');
             document.getElementById('loader').style.display = 'none';
-           
-            setTimeout(() => {
-                document.getElementById('results').scrollIntoView({behavior: "smooth", block: "start"});
-            }, 100);
-
         } catch (error) {
             document.getElementById('loader').style.display = 'none';
-            document.getElementById('errorBox').innerText = "AI is busy. Please try again in 10 seconds.";
-            document.getElementById('errorBox').classList.remove('hidden');
-            document.getElementById('unlockOverlay').classList.add('hidden');
+            alert("Tactical Connection Error.");
         }
     }
 
     async function unlockContent() {
         const emailInput = document.getElementById('unlockEmail');
         const email = emailInput.value.trim();
-        const btn = document.querySelector('#unlockOverlay button');
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailPattern.test(email)) {
-            alert("Please enter a valid email address.");
-            emailInput.focus();
+            alert("Valid communication channel required.");
             return;
         }
-
-        const originalText = btn.innerHTML;
-        btn.innerHTML = "Unlocking...";
-        btn.disabled = true;
 
         try {
             await fetch('/save-lead', {
@@ -222,14 +245,11 @@
                     competitor_name: document.getElementById('compName').value
                 })
             });
-        } catch (e) { console.log("Lead save error (non-fatal)"); }
+        } catch (e) {}
 
-        setTimeout(() => {
-            document.getElementById('lockedContent').classList.remove('blur-lock');
-            document.getElementById('unlockOverlay').classList.add('hidden');
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-        }, 800);
+        document.getElementById('lockedContent').classList.remove('blur-lock');
+        document.getElementById('unlockOverlay').classList.add('hidden');
+        window.scrollTo({ top: document.getElementById('results').offsetTop - 100, behavior: 'smooth' });
     }
     </script>
 </body>
