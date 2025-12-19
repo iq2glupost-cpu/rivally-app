@@ -1,9 +1,10 @@
 fastapi
 uvicorn
-google-generativeai
+google-genai
 supabase
 pydantic
 python-multipart
+
 
 
 
