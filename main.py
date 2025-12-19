@@ -11,7 +11,6 @@ import google.generativeai as genai
 from supabase import create_client, Client
 
 app = FastAPI()
-
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 
 # CONFIG
@@ -26,10 +25,23 @@ SMTP_PASS = os.environ.get("SMTP_PASS")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY) if SUPABASE_URL else None
 if GEMINI_API_KEY: genai.configure(api_key=GEMINI_API_KEY)
 
-# INSTRUKCIJE ZA DUBOKI IZVEŠTAJ
+# --- UNAPREĐENA AI INSTRUKCIJA ZA MAKSIMALNU VREDNOST ---
 SYSTEM_INSTRUCTION = """
-You are RIVALLY - An elite competitive marketing strategist.
-Output ONLY valid JSON with fields: 'dominance_score', 'score_explanation' (provocative teaser), and 'html_content' (long, deep-dive tactical audit).
+You are RIVALLY - SAKORP's elite strategic warfare engine.
+Analyze the battle between Target Alpha (the user) and Target Beta (rival).
+YOUR OUTPUT MUST BE ONLY VALID JSON.
+
+REPORT REQUIREMENTS (html_content):
+1. USE PREMIUM HTML: Use <div class='p-4 border-l-2 border-blue-500 bg-zinc-900/50 mb-6'> for Alpha insights and red for Beta.
+2. KILL-SHOT STRATEGY: Include a 'Kill-Shot' section with one brutal strategic move to dominate.
+3. 24-MONTH FORECAST: Predict the market state if things remain unchanged.
+4. ACTIONABLE QUICK WINS: Provide 3 steps for immediate execution tomorrow morning.
+5. DEEP ANALYSIS: Compare brand identity, psychology, pricing, and infrastructure.
+
+FIELDS:
+- dominance_score: integer (0-100)
+- score_explanation: Provocative 1-2 sentence teaser.
+- html_content: The comprehensive, rich HTML report.
 """
 
 model = genai.GenerativeModel(
@@ -41,13 +53,12 @@ model = genai.GenerativeModel(
 def send_strategic_email(target_email, report_content, score, competitor):
     if not SMTP_USER: return
     msg = MIMEMultipart()
-    msg["Subject"] = f"RIVALLY STRATEGIC AUDIT: {score}% Dominance vs {competitor}"
+    msg["Subject"] = f"RIVALLY AUDIT: {score}% Dominance vs {competitor}"
     msg["From"] = f"SAKORP RIVALLY <{SMTP_USER}>"
     msg["To"] = target_email
     body = f"""<div style="background:#000; color:#fff; padding:30px; font-family:sans-serif;">
         <h1 style="color:#2563eb;">Strategic Report complete.</h1>
-        <h2 style="font-size:40px;">Your Dominance Score: {score}%</h2>
-        <hr style="border-color:#333;">
+        <h2 style="font-size:40px;">Dominance Score: {score}%</h2>
         <div style="color:#ccc;">{report_content}</div>
         <p style="margin-top:30px; font-size:10px; color:#555;">SAKORP HOLDING // AI DIVISION</p>
     </div>"""
@@ -57,14 +68,14 @@ def send_strategic_email(target_email, report_content, score, competitor):
             server.starttls()
             server.login(SMTP_USER, SMTP_PASS)
             server.send_message(msg)
-    except Exception as e: print(f"Email Error: {e}")
+    except: pass
 
 @app.get("/", response_class=HTMLResponse)
 async def read_index(): return FileResponse('index.html')
 
 @app.post("/generate-rival-strategy")
 async def generate_strategy(data: dict):
-    prompt = f"Battle: {data['my_product']} vs {data['competitor_product']}. Strategic scan for dominance."
+    prompt = f"Battle: {data['my_product']} vs {data['competitor_product']}. Strategic scan for Alpha dominance."
     try:
         response = model.generate_content(prompt)
         return json.loads(response.text.replace('```json', '').replace('```', '').strip())
@@ -76,6 +87,5 @@ async def save_lead(data: dict):
         try:
             supabase.table("history").insert({"business_name": data['product_name'], "email": data['email']}).execute()
         except: pass
-    # AKTIVIRANJE MEJLA
     send_strategic_email(data['email'], data['report_html'], data['score'], data['competitor_name'])
     return {"status": "success"}
