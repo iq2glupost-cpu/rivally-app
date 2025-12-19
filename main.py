@@ -133,7 +133,7 @@ FIELDS:
 """
 
 model = genai.GenerativeModel(
-    model_name="gemini-2.5-pro", # TVOJ MODEL OSTAVLJEN NETAKNUT
+    model_name="gemini-2.5-pro", 
     system_instruction=SYSTEM_INSTRUCTION,
     generation_config={"response_mime_type": "application/json", "temperature": 0.2}
 )
@@ -169,3 +169,4 @@ async def save_lead(data: dict):
         data.get('competitor_name', 'Target Beta')
     )
     return {"status": "success"}
+
