@@ -72,12 +72,6 @@
         </div>
        
         <p class="text-blue-900 text-[10px] tracking-[0.5em] uppercase font-bold italic mt-4">Strategic Intelligence Division // SAKORP CORPORATION</p>
-       
-        <div class="mt-4 flex justify-center opacity-30 hover:opacity-100 transition-opacity">
-            <a href="about.html" class="text-[8px] tracking-[0.4em] uppercase font-bold border-b border-zinc-800 pb-1 hover:border-blue-600 transition-colors">
-                Holding Manifesto // About Us
-            </a>
-        </div>
     </header>
 
     <main class="max-w-5xl mx-auto">
@@ -114,6 +108,11 @@
                 <p id="scoreTeaser" class="max-w-2xl mx-auto text-xl italic text-zinc-300 font-light mt-12 px-6"></p>
             </div>
 
+            <div class="max-w-3xl mx-auto bg-blue-600/5 border border-blue-600/20 p-12 rounded-2xl text-left">
+                <h4 class="text-blue-500 font-black uppercase text-[10px] tracking-[0.5em] mb-6 italic">Subject: Tactical Breach Identified ⚠️</h4>
+                <div id="breachText" class="text-zinc-200 text-sm leading-[1.8] font-bold">Rival's core market infrastructure shows critical vulnerability in customer retention. The full report contains the exact strategic implementation to neutralize this advantage.</div>
+            </div>
+
             <div id="emailGate" class="max-w-3xl mx-auto text-center pt-24 border-t border-white/5">
                 <h3 class="text-5xl font-black italic uppercase mb-12">Master Intelligence File</h3>
                
@@ -143,7 +142,6 @@
     </footer>
 
     <script>
-    // JS ostaje isti radi funkcionalnosti
     let globalResult = null;
     async function generateStrategy() {
         const data = {
