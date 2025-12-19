@@ -11,7 +11,6 @@
         body { background-color: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         .no-copy { user-select: none; -webkit-user-select: none; }
        
-        /* POJAČANA NEURAL AURA */
         .neural-panel {
             background: rgba(255, 255, 255, 0.01);
             border: 1px solid #111;
@@ -31,7 +30,6 @@
             50% { opacity: 0.9; box-shadow: 0 0 50px rgba(37, 99, 235, 0.5); }
         }
 
-        /* OVALNA DUGMAD I INPUTI */
         input, textarea {
             background: #080808 !important;
             border: 1px solid #1a1a1a !important;
@@ -53,7 +51,6 @@
             0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(37, 99, 235, 0.3); }
             50% { transform: scale(1.03); box-shadow: 0 0 30px rgba(37, 99, 235, 0.6); }
         }
-        .animate-flicker { animation: opacity 1.5s infinite ease-in-out; }
     </style>
 </head>
 <body class="py-16 px-6 no-copy" oncontextmenu="return false;">
@@ -64,15 +61,13 @@
                 <path d="M5 5H35V20H20V35H5V5Z" fill="white"/><rect x="20" y="20" width="30" height="15" fill="#2563eb"/><path d="M20 35H50V50H5V35H20Z" fill="white"/>
             </svg>
         </a>
-       
         <div class="block">
             <a href="/" class="hover:opacity-80 transition-all inline-block">
                 <h1 class="text-7xl md:text-9xl font-black tracking-tighter text-white uppercase leading-none">RIVALLY</h1>
             </a>
         </div>
-       
         <p class="text-blue-900 text-[10px] tracking-[0.5em] uppercase font-bold italic mt-4">Strategic Intelligence Division // SAKORP CORPORATION</p>
-    </header>
+        </header>
 
     <main class="max-w-5xl mx-auto">
         <div class="neural-panel p-10 md:p-14 mb-20 text-left">
@@ -110,21 +105,22 @@
 
             <div class="max-w-3xl mx-auto bg-blue-600/5 border border-blue-600/20 p-12 rounded-2xl text-left">
                 <h4 class="text-blue-500 font-black uppercase text-[10px] tracking-[0.5em] mb-6 italic">Subject: Tactical Breach Identified ⚠️</h4>
-                <div id="breachText" class="text-zinc-200 text-sm leading-[1.8] font-bold">Rival's core market infrastructure shows critical vulnerability in customer retention. The full report contains the exact strategic implementation to neutralize this advantage.</div>
+                <div id="breachText" class="text-zinc-200 text-sm leading-[1.8] font-bold">
+                    Neural audit has detected a critical asymmetry in Rival's digital infrastructure. Your Subject shows a 40% vulnerability in target demographic retention that requires an immediate strategic pivot. The specific implementation plan is locked in the Master File.
+                </div>
             </div>
 
             <div id="emailGate" class="max-w-3xl mx-auto text-center pt-24 border-t border-white/5">
                 <h3 class="text-5xl font-black italic uppercase mb-12">Master Intelligence File</h3>
-               
                 <div class="text-left mb-16 inline-block bg-blue-600/5 p-10 rounded-2xl border border-blue-600/10 w-full">
-                    <p class="text-blue-500 text-[11px] font-black uppercase tracking-[0.4em] mb-8 text-center border-b border-blue-600/20 pb-4 italic">Exclusive Intelligence Package Assets:</p>
+                    <p class="text-blue-500 text-[11px] font-black uppercase tracking-[0.4em] mb-8 text-center border-b border-blue-600/20 pb-4 italic font-bold">Premium Intelligence Assets ($199.00):</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-zinc-400 text-[10px] uppercase tracking-[0.2em] font-bold">
-                        <div class="flex items-start gap-4"><span class="text-blue-600">»</span> <span>Neural SWOT Forensic Audit (Subject vs Target)</span></div>
-                        <div class="flex items-start gap-4"><span class="text-blue-600">»</span> <span>24-Month Market Collision Prediction Matrix</span></div>
-                        <div class="flex items-start gap-4"><span class="text-blue-600">»</span> <span>Asymmetric Growth Roadmap & Scaling Plan</span></div>
-                        <div class="flex items-start gap-4"><span class="text-blue-600">»</span> <span class="text-white underline decoration-blue-600">Strategic Kill-Shot: Global Market Elimination</span></div>
-                        <div class="flex items-start gap-4"><span class="text-blue-600">»</span> <span>Infrastructure Vulnerability Forensic Report</span></div>
-                        <div class="flex items-start gap-4"><span class="text-blue-600">»</span> <span>Capital Allocation & Budgeting Intelligence</span></div>
+                        <div class="flex items-start gap-4"><span class="text-blue-600 font-bold">»</span> <span>Neural SWOT Forensic Audit (Subject vs Target)</span></div>
+                        <div class="flex items-start gap-4"><span class="text-blue-600 font-bold">»</span> <span>24-Month Market Collision Prediction Matrix</span></div>
+                        <div class="flex items-start gap-4"><span class="text-blue-600 font-bold">»</span> <span>Asymmetric Growth Roadmap & Scaling Plan</span></div>
+                        <div class="flex items-start gap-4"><span class="text-blue-600 font-bold">»</span> <span class="text-white underline decoration-blue-600 font-bold">Strategic Kill-Shot: Global Market Elimination</span></div>
+                        <div class="flex items-start gap-4"><span class="text-blue-600 font-bold">»</span> <span>Infrastructure Vulnerability Forensic Report</span></div>
+                        <div class="flex items-start gap-4"><span class="text-blue-600 font-bold">»</span> <span>Capital Allocation & Budgeting Intelligence</span></div>
                     </div>
                 </div>
 
@@ -137,8 +133,8 @@
         </div>
     </main>
 
-    <footer class="text-center mt-40 pb-20 opacity-20 border-t border-white/5 pt-10">
-        <span class="text-[9px] tracking-[0.8em] uppercase text-zinc-500 font-bold italic">SAKORP CORPORATION // GLOBAL OPERATIONS UNIT // 2025</span>
+    <footer class="text-center mt-40 pb-20 opacity-20 border-t border-white/5 pt-10 font-bold">
+        <span class="text-[9px] tracking-[0.8em] uppercase text-zinc-500 italic">SAKORP CORPORATION // GLOBAL OPERATIONS UNIT // 2025</span>
     </footer>
 
     <script>
@@ -162,6 +158,8 @@
         document.getElementById('results').classList.remove('hidden');
         document.getElementById('scoreValue').innerText = globalResult.dominance_score + "%";
         document.getElementById('scoreTeaser').innerText = globalResult.score_explanation;
+        // AI ubacuje taktičku mrvicu u breachText ako je predviđeno
+        if(globalResult.tactical_breach) document.getElementById('breachText').innerText = globalResult.tactical_breach;
         window.scrollTo({ top: document.getElementById('results').offsetTop - 100, behavior: 'smooth' });
     }
     async function unlockBeta() {
