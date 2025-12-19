@@ -11,30 +11,27 @@
         body { background-color: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         .no-copy { user-select: none; -webkit-user-select: none; }
        
-        /* POJAČANA NEURAL AURA: UPADLJIVIJI PLAVI OKVIR */
+        /* POJAČANA NEURAL AURA */
         .neural-panel {
             background: rgba(255, 255, 255, 0.01);
             border: 1px solid #111;
             border-radius: 24px;
             position: relative;
         }
-
         .neural-panel::after {
             content: '';
-            position: absolute;
-            inset: -2px;
+            position: absolute; inset: -2px;
             border: 2px solid #2563eb;
             border-radius: inherit;
             z-index: -1;
             animation: boldAuraPulse 4s infinite ease-in-out;
         }
-
         @keyframes boldAuraPulse {
             0%, 100% { opacity: 0.3; box-shadow: 0 0 20px rgba(37, 99, 235, 0.2); }
             50% { opacity: 0.9; box-shadow: 0 0 50px rgba(37, 99, 235, 0.5); }
         }
 
-        /* INPUTI I OVALNA DUGMAD */
+        /* OVALNA DUGMAD I INPUTI */
         input, textarea {
             background: #080808 !important;
             border: 1px solid #1a1a1a !important;
@@ -42,15 +39,7 @@
             color: #fff !important;
             font-size: 13px !important;
         }
-        input:focus { border-color: #2563eb !important; outline: none; }
-       
-        /* OVALNI EMAIL INPUT */
         .input-oval { border-radius: 50px !important; padding-left: 30px !important; padding-right: 30px !important; }
-
-        @keyframes btnPulse {
-            0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(37, 99, 235, 0.3); }
-            50% { transform: scale(1.03); box-shadow: 0 0 30px rgba(37, 99, 235, 0.6); }
-        }
 
         .btn-main {
             background: linear-gradient(180deg, #1e40af 0%, #1e3a8a 100%);
@@ -60,7 +49,11 @@
             border-radius: 50px;
             animation: btnPulse 3s infinite ease-in-out;
         }
-        .btn-main:hover { transform: translateY(-1px); box-shadow: 0 0 40px rgba(37, 99, 235, 0.7); animation-play-state: paused; }
+        @keyframes btnPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(37, 99, 235, 0.3); }
+            50% { transform: scale(1.03); box-shadow: 0 0 30px rgba(37, 99, 235, 0.6); }
+        }
+        .animate-flicker { animation: opacity 1.5s infinite ease-in-out; }
     </style>
 </head>
 <body class="py-16 px-6 no-copy" oncontextmenu="return false;">
@@ -72,18 +65,26 @@
             </svg>
         </a>
        
-        <a href="/" class="hover:opacity-80 transition-all inline-block">
-            <h1 class="text-7xl md:text-9xl font-black tracking-tighter text-white uppercase leading-none">RIVALLY</h1>
-        </a>
+        <div class="block">
+            <a href="/" class="hover:opacity-80 transition-all inline-block">
+                <h1 class="text-7xl md:text-9xl font-black tracking-tighter text-white uppercase leading-none">RIVALLY</h1>
+            </a>
+        </div>
        
         <p class="text-blue-900 text-[10px] tracking-[0.5em] uppercase font-bold italic mt-4">Strategic Intelligence Division // SAKORP CORPORATION</p>
+       
+        <div class="mt-4 flex justify-center opacity-30 hover:opacity-100 transition-opacity">
+            <a href="about.html" class="text-[8px] tracking-[0.4em] uppercase font-bold border-b border-zinc-800 pb-1 hover:border-blue-600 transition-colors">
+                Holding Manifesto // About Us
+            </a>
+        </div>
     </header>
 
     <main class="max-w-5xl mx-auto">
         <div class="neural-panel p-10 md:p-14 mb-20 text-left">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <div class="space-y-4">
-                    <label class="text-[10px] uppercase tracking-widest text-zinc-500 font-bold border-b border-blue-900/10 pb-2 block italic">Target_Alpha (Subject)</label>
+                    <label class="text-[10px] uppercase tracking-widest text-zinc-500 font-bold border-b border-blue-900/10 pb-2 block italic text-sans">Target_Alpha (Subject)</label>
                     <input type="text" id="myName" placeholder="PROJECT NAME" class="w-full p-4">
                     <input type="text" id="myUrl" placeholder="OFFICIAL URL" class="w-full p-4 text-blue-500 font-bold">
                     <div class="grid grid-cols-2 gap-4">
@@ -102,40 +103,74 @@
             </div>
             <div class="mt-16 flex flex-col items-center">
                 <button onclick="generateStrategy()" id="mainBtn" class="btn-main px-20 py-6 font-black uppercase tracking-[0.2em] text-xs text-white">Initiate Tactical Audit</button>
-                <div id="loader" class="hidden mt-10 text-center text-blue-500 font-bold text-xs tracking-[0.3em] uppercase animate-pulse">Processing...</div>
+                <div id="loader" class="hidden mt-10 text-center text-blue-500 font-bold text-xs tracking-[0.3em] uppercase animate-pulse">Processing Intelligence...</div>
             </div>
         </div>
 
         <div id="results" class="hidden mt-32 space-y-20">
             <div class="text-center">
-                <div id="scoreValue" class="text-[150px] font-black text-white tracking-tighter leading-none mb-4">0%</div>
+                <div id="scoreValue" class="text-[120px] md:text-[150px] font-black text-white tracking-tighter leading-none mb-4">0%</div>
                 <div class="text-blue-600 text-[11px] uppercase tracking-[1em] font-black italic">Market Dominance Quotient</div>
                 <p id="scoreTeaser" class="max-w-2xl mx-auto text-xl italic text-zinc-300 font-light mt-12 px-6"></p>
             </div>
 
-            <div class="max-w-3xl mx-auto bg-blue-600/5 border border-blue-600/20 p-12 rounded-2xl text-left">
-                <h4 class="text-blue-500 font-black uppercase text-[10px] tracking-[0.5em] mb-6 italic">Subject: Tactical Breach Identified ⚠️</h4>
-                <div id="breachText" class="text-zinc-200 text-base leading-[1.8] font-bold">Rival's core market infrastructure shows 40% vulnerability in customer retention due to outdated conversion mapping.</div>
-            </div>
-
-            <div id="emailGate" class="max-w-2xl mx-auto text-center pt-24 border-t border-white/5">
+            <div id="emailGate" class="max-w-3xl mx-auto text-center pt-24 border-t border-white/5">
                 <h3 class="text-5xl font-black italic uppercase mb-12">Master Intelligence File</h3>
                
-                <div class="text-left mb-16 inline-block w-full">
-                    <ul class="text-zinc-500 text-[10px] uppercase tracking-[0.4em] space-y-6 font-bold">
-                        <li class="flex items-center gap-5"><span class="text-blue-600">»</span> <span class="text-white">Neural SWOT Forensic Audit</span></li>
-                        <li class="flex items-center gap-5"><span class="text-blue-600">»</span> <span class="text-white">24-Month Market Collision Prediction Matrix</span></li>
-                        <li class="flex items-center gap-5"><span class="text-blue-600">»</span> <span class="text-white italic text-blue-500 underline">Strategic Kill-Shot Move (Eliminate Beta)</span></li>
-                        <li class="flex items-center gap-5"><span class="text-blue-600">»</span> <span class="text-white">Asymmetric Growth Roadmap</span></li>
-                    </ul>
+                <div class="text-left mb-16 inline-block bg-blue-600/5 p-10 rounded-2xl border border-blue-600/10 w-full">
+                    <p class="text-blue-500 text-[11px] font-black uppercase tracking-[0.4em] mb-8 text-center border-b border-blue-600/20 pb-4 italic">Exclusive Intelligence Package Assets:</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-zinc-400 text-[10px] uppercase tracking-[0.2em] font-bold">
+                        <div class="flex items-start gap-4"><span class="text-blue-600">»</span> <span>Neural SWOT Forensic Audit (Subject vs Target)</span></div>
+                        <div class="flex items-start gap-4"><span class="text-blue-600">»</span> <span>24-Month Market Collision Prediction Matrix</span></div>
+                        <div class="flex items-start gap-4"><span class="text-blue-600">»</span> <span>Asymmetric Growth Roadmap & Scaling Plan</span></div>
+                        <div class="flex items-start gap-4"><span class="text-blue-600">»</span> <span class="text-white underline decoration-blue-600">Strategic Kill-Shot: Global Market Elimination</span></div>
+                        <div class="flex items-start gap-4"><span class="text-blue-600">»</span> <span>Infrastructure Vulnerability Forensic Report</span></div>
+                        <div class="flex items-start gap-4"><span class="text-blue-600">»</span> <span>Capital Allocation & Budgeting Intelligence</span></div>
+                    </div>
                 </div>
 
                 <div class="flex flex-col items-center">
                     <input type="email" id="unlockEmail" placeholder="ENTER PRIORITY EMAIL" class="input-oval w-full max-w-md p-6 mb-10 text-center text-xs tracking-[0.3em] uppercase bg-transparent border-b border-zinc-900 focus:border-blue-600 transition-all font-bold">
                     <button onclick="unlockBeta()" class="btn-main w-full max-w-md py-6 text-xs text-white uppercase font-black">Request Master File (Beta Access)</button>
                 </div>
+                <p id="inboxNotice" class="hidden mt-10 text-blue-500 text-[10px] uppercase font-black tracking-widest animate-pulse italic">Transmission Successful. Check Secure Inbox.</p>
             </div>
         </div>
     </main>
+
+    <footer class="text-center mt-40 pb-20 opacity-20 border-t border-white/5 pt-10">
+        <span class="text-[9px] tracking-[0.8em] uppercase text-zinc-500 font-bold italic">SAKORP CORPORATION // GLOBAL OPERATIONS UNIT // 2025</span>
+    </footer>
+
+    <script>
+    // JS ostaje isti radi funkcionalnosti
+    let globalResult = null;
+    async function generateStrategy() {
+        const data = {
+            my_product: { name: document.getElementById('myName').value, url: document.getElementById('myUrl').value, features: document.getElementById('myFeatures').value, price: document.getElementById('myPrice').value },
+            competitor_product: { name: document.getElementById('compName').value, url: document.getElementById('compUrl').value, features: document.getElementById('compFeatures').value, price: document.getElementById('compPrice').value },
+            target_audience: document.getElementById('targetAudience').value
+        };
+        if(!data.my_product.name) return alert("System requires identity.");
+        document.getElementById('loader').classList.remove('hidden');
+        try {
+            const response = await fetch('/generate-rival-strategy', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
+            globalResult = await response.json();
+            displayResult();
+        } catch (e) { alert("Neural Uplink Error."); }
+        document.getElementById('loader').classList.add('hidden');
+    }
+    function displayResult() {
+        document.getElementById('results').classList.remove('hidden');
+        document.getElementById('scoreValue').innerText = globalResult.dominance_score + "%";
+        document.getElementById('scoreTeaser').innerText = globalResult.score_explanation;
+        window.scrollTo({ top: document.getElementById('results').offsetTop - 100, behavior: 'smooth' });
+    }
+    async function unlockBeta() {
+        const email = document.getElementById('unlockEmail').value;
+        if(!email.includes('@')) return alert("Valid email required.");
+        document.getElementById('inboxNotice').classList.remove('hidden');
+    }
+    </script>
 </body>
 </html>
