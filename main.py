@@ -6,7 +6,7 @@ from email.mime.multipart import MIMEMultipart
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
-import google.generativeai as genai
+import google.genai
 from supabase import create_client
 
 app = FastAPI()
@@ -156,6 +156,7 @@ async def save_lead(data: dict):
     # SLANJE MASTER IZVEŠTAJA NA MEJL
     send_master_report(data['email'], data['premium_content'], data['score'], data['competitor_name'])
     return {"status": "success"}
+
 
 
 
