@@ -14,28 +14,21 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], all
 
 # --- CORE CONFIG ---
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
-SMTP_USER = os.environ.get("SMTP_USER")
-SMTP_PASS = os.environ.get("SMTP_PASSWORD") # Usklađeno sa Vercel varijablom
-
-# Inicijalizacija Supabase klijenta
-SUPABASE_URL = os.environ.get("SUPABASE_URL")
-SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_KEY")
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY) if SUPABASE_URL else None
+SMTP_USER = os.environ.get("SMTP_USER") # sakorp.rivally@gmail.com
+SMTP_PASS = os.environ.get("SMTP_PASS") # 16-char App Password
 
 if GEMINI_API_KEY: genai.configure(api_key=GEMINI_API_KEY)
 
-# --- THE ELITE MASTER TEMPLATE (TVOJ DIZAJN) ---
+# --- THE ELITE MASTER TEMPLATE ---
 def send_elite_report(target_email, premium_content, score, competitor):
-    if not SMTP_USER or not SMTP_PASS:
-        print("SMTP Error: Missing SMTP_USER or SMTP_PASSWORD in Vercel")
-        return
-  
+    if not SMTP_USER: return
+   
     msg = MIMEMultipart()
     msg["Subject"] = f"CLASSIFIED: Strategic Intelligence Briefing | Dominance: {score}%"
     msg["From"] = f"SAKORP CORPORATION <{SMTP_USER}>"
     msg["To"] = target_email
-  
-    # Tvoj HTML sa vodenim žigom ostaje IDENTIČAN
+   
+    # HTML sa vodenim žigom i institucionalnim dizajnom
     body = f"""
     <html>
     <head>
@@ -48,7 +41,7 @@ def send_elite_report(target_email, premium_content, score, competitor):
             <tr>
                 <td align="center">
                     <table width="650" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border: 1px solid #dddddd; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                      
+                       
                         <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 150px; color: rgba(37, 99, 235, 0.03); font-weight: 900; pointer-events: none; z-index: 0; white-space: nowrap;">
                             SAKORP
                         </div>
@@ -114,13 +107,10 @@ def send_elite_report(target_email, premium_content, score, competitor):
     msg.attach(MIMEText(body, "html"))
     try:
         with smtplib.SMTP("smtp.gmail.com", 587) as server:
-            server.starttls()
-            server.login(SMTP_USER, SMTP_PASS)
-            server.send_message(msg)
-    except Exception as e:
-        print(f"SMTP error: {e}")
+            server.starttls(); server.login(SMTP_USER, SMTP_PASS); server.send_message(msg)
+    except: pass
 
-# --- AI INSTRUCTIONS ---
+# --- AI INSTRUCTIONS (Institutional Tone) ---
 SYSTEM_INSTRUCTION = """
 You are RIVALLY - SAKORP's chief intelligence officer. Output VALID JSON.
 TONE: Institutional, precise, brutal. Use terms like 'Market Asymmetry', 'Capital Inefficiency', 'Tactical Leverage'.
@@ -133,7 +123,7 @@ FIELDS:
 """
 
 model = genai.GenerativeModel(
-    model_name="gemini-2.5-pro", 
+    model_name="gemini-2.5-pro",
     system_instruction=SYSTEM_INSTRUCTION,
     generation_config={"response_mime_type": "application/json", "temperature": 0.2}
 )
@@ -151,22 +141,15 @@ async def generate_strategy(data: dict):
 
 @app.post("/save-lead")
 async def save_lead(data: dict):
-    # Logika za bazu (Supabase)
+    # BELEŽENJE U BAZU (Supabase)
     if supabase:
         try:
             supabase.table("history").insert({
-                "business_name": data.get('product_name', 'Audit'),
+                "business_name": data['product_name'],
                 "email": data['email']
             }).execute()
-        except Exception as e:
-            print(f"Supabase Error: {e}")
-  
-    # POZIVAMO TVOJU FUNKCIJU SA ISPRAVNIM PARAMETRIMA
-    send_elite_report(
-        data['email'],
-        data.get('premium_content', 'Strategic intelligence locked.'),
-        data.get('score', 0),
-        data.get('competitor_name', 'Target Beta')
-    )
+        except Exception as e: print(f"DB Error: {e}")
+   
+    # SLANJE MASTER IZVEŠTAJA NA MEJL
+    send_master_report(data['email'], data['premium_content'], data['score'], data['competitor_name'])
     return {"status": "success"}
-
