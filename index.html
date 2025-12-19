@@ -19,19 +19,14 @@
             border-radius: 20px; animation: subtlePulse 5s infinite ease-in-out;
         }
 
-        /* NOVI FLICKER LOADER EFEKAT */
-        @keyframes neuralFlicker {
-            0%, 100% { opacity: 1; text-shadow: 0 0 10px #2563eb; }
-            50% { opacity: 0.3; text-shadow: none; }
-        }
+        @keyframes neuralFlicker { 0%, 100% { opacity: 1; text-shadow: 0 0 10px #2563eb; } 50% { opacity: 0.3; } }
         .animate-flicker { animation: neuralFlicker 1.2s infinite ease-in-out; }
 
         .glass-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 15px; padding: 25px; }
         input, textarea { background: #080808 !important; border: 1px solid #1a1a1a !important; border-radius: 8px !important; color: #fff !important; font-size: 13px !important; }
         input:focus { border-color: #2563eb !important; outline: none; }
+       
         .btn-main { background: linear-gradient(180deg, #1e40af 0%, #1e3a8a 100%); border: 1px solid #2563eb; transition: all 0.3s; cursor: pointer; }
-        .btn-main:hover { transform: translateY(-1px); box-shadow: 0 0 30px rgba(37, 99, 235, 0.4); }
-        .blur-intro { filter: blur(25px); opacity: 0.1; pointer-events: none; transition: all 1s ease; }
     </style>
 </head>
 <body class="py-16 px-6 no-copy" oncontextmenu="return false;">
@@ -45,7 +40,10 @@
         <h1 class="text-7xl font-black tracking-tighter mb-2 italic uppercase">
             <a href="/" class="hover:text-blue-500 transition-colors">RIVALLY</a>
         </h1>
-        <p class="text-blue-900 text-[10px] tracking-[0.5em] uppercase font-bold italic">Neural Market Warfare</p>
+        <div class="flex flex-col items-center">
+            <p class="text-blue-900 text-[10px] tracking-[0.5em] uppercase font-bold italic">Neural Market Warfare</p>
+            <span class="mt-2 px-3 py-1 bg-blue-950/30 border border-blue-900/40 text-blue-500 text-[8px] uppercase tracking-[0.3em] rounded-full">BETA PHASE // ACCESS OPEN</span>
+        </div>
     </header>
 
     <main class="max-w-5xl mx-auto">
@@ -70,54 +68,71 @@
                 </div>
             </div>
             <div class="mt-16 flex flex-col items-center">
-                <button onclick="generateStrategy()" id="mainBtn" class="btn-main px-14 py-5 rounded-full font-black uppercase tracking-widest text-xs text-white">
-                    Initiate Neural Scan
-                </button>
-               
+                <button onclick="generateStrategy()" id="mainBtn" class="btn-main px-14 py-5 rounded-full font-black uppercase text-xs text-white tracking-widest">Initiate Neural Scan</button>
                 <div id="loader" class="hidden mt-10 text-center">
                     <p class="text-blue-500 font-bold text-xs tracking-[0.4em] uppercase animate-flicker">PLEASE WAIT A FEW SECONDS</p>
-                    <p class="text-zinc-600 font-mono text-[9px] uppercase tracking-[0.6em] mt-3 italic">Analyzing Data // Establishing Strategic Uplink...</p>
+                    <p class="text-zinc-600 font-mono text-[9px] uppercase mt-3 italic">Establishing Strategic Uplink...</p>
                 </div>
             </div>
         </div>
 
-        <div id="results" class="hidden mt-32 space-y-12">
+        <div id="results" class="hidden mt-32 space-y-24">
             <div class="text-center">
                 <div id="scoreValue" class="text-9xl font-black text-blue-600 tracking-tighter mb-4">00%</div>
-                <p id="scoreTeaser" class="max-w-2xl mx-auto text-xl italic text-zinc-300 font-light mb-16 px-6"></p>
+                <div class="text-zinc-600 text-[10px] uppercase tracking-[0.5em] mb-12 font-bold">Dominance Index Result</div>
             </div>
 
-            <div id="emailGate" class="bg-[#050505] border border-blue-900/30 p-12 rounded-3xl max-w-xl mx-auto shadow-2xl relative z-40 text-center">
-                <h3 class="text-2xl font-black mb-4 uppercase italic text-white tracking-tighter">Unlock Beta Intel</h3>
-                <p class="text-zinc-500 text-[10px] mb-8 uppercase tracking-widest italic">Enter corporate email to receive the Strategic Master File.</p>
-                <input type="email" id="unlockEmail" placeholder="ENTER PRIORITY EMAIL" class="w-full max-w-md p-4 mb-4 text-center text-xs tracking-widest uppercase">
-                <button onclick="unlockBeta()" class="w-full bg-blue-600 text-white font-black py-5 rounded-xl uppercase text-xs tracking-widest hover:bg-blue-500 shadow-xl transition">Unlock Master Strategy (Beta Access)</button>
-            </div>
-
-            <div id="previewCards" class="hidden blur-intro grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="glass-card">
-                    <h4 class="text-blue-500 font-bold uppercase text-[9px] tracking-widest mb-4">01/ Strategic Overview 📊</h4>
-                    <div id="overviewText" class="text-zinc-400 text-xs leading-relaxed"></div>
+                    <h4 class="text-blue-500 font-bold uppercase text-[9px] tracking-widest mb-6 border-b border-blue-900/20 pb-2">01/ Strategic Narrative 📊</h4>
+                    <div id="overviewText" class="text-zinc-300 text-[13px] leading-relaxed"></div>
                 </div>
                 <div class="glass-card">
-                    <h4 class="text-blue-500 font-bold uppercase text-[9px] tracking-widest mb-4">02/ Product Audit 🧠</h4>
-                    <div id="auditText" class="text-zinc-400 text-xs leading-relaxed"></div>
+                    <h4 class="text-blue-500 font-bold uppercase text-[9px] tracking-widest mb-6 border-b border-blue-900/20 pb-2">02/ Critical Audit 🧠</h4>
+                    <div id="auditText" class="text-zinc-300 text-[13px] leading-relaxed"></div>
                 </div>
                 <div class="glass-card">
-                    <h4 class="text-blue-500 font-bold uppercase text-[9px] tracking-widest mb-4">03/ Tactical Tweaks ⚡</h4>
-                    <ul id="tweaksList" class="text-zinc-400 text-xs leading-relaxed italic space-y-2"></ul>
+                    <h4 class="text-blue-500 font-bold uppercase text-[9px] tracking-widest mb-6 border-b border-blue-900/20 pb-2">03/ Tactical Gaps ⚡</h4>
+                    <ul id="tweaksList" class="text-zinc-400 text-[13px] italic space-y-3"></ul>
                 </div>
             </div>
 
-            <div id="inboxNotice" class="hidden text-center p-10 bg-blue-900/10 border border-blue-900/30 rounded-2xl">
-                <p class="text-blue-500 text-xs uppercase tracking-[0.4em] font-bold">Transmission Successful</p>
-                <p class="text-zinc-400 text-sm mt-4">The Master File has been transmitted to your inbox. Decrypt it to see the Kill-Shot move.</p>
+            <div id="emailGate" class="bg-zinc-900/40 border border-blue-900/30 p-12 rounded-3xl max-w-2xl mx-auto shadow-2xl text-center relative z-40">
+                <h3 class="text-3xl font-black mb-6 uppercase italic text-white tracking-tighter">Unlock Master Strategic File</h3>
+               
+                <div class="text-left mb-12 inline-block max-w-md mx-auto">
+                    <p class="text-[10px] text-blue-500 font-bold uppercase tracking-widest mb-6 border-b border-blue-900/20 pb-2">The Master File Includes:</p>
+                    <ul class="text-zinc-400 text-[11px] uppercase tracking-widest space-y-4 font-light">
+                        <li class="flex items-center gap-3">
+                            <span class="text-blue-500">▶</span> <span class="text-white font-bold">Strategic Kill-Shot Move</span> (Eliminate Rival Beta)
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <span class="text-blue-500">▶</span> 24-Month Market Collision Prediction
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <span class="text-blue-500">▶</span> Full Psychological Warfare & Acquisition Plan
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <span class="text-blue-500">▶</span> Deep Infrastructure & SWOT Audit
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <span class="text-blue-500">▶</span> Content & SEO Supremacy Roadmap
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="flex flex-col items-center">
+                    <input type="email" id="unlockEmail" placeholder="ENTER PRIORITY EMAIL" class="w-full max-w-md p-4 mb-6 text-center text-xs tracking-widest uppercase focus:border-blue-500 transition-all">
+                    <button onclick="unlockBeta()" class="w-full max-w-md bg-blue-600 text-white font-black py-5 rounded-xl uppercase text-xs tracking-widest hover:bg-blue-500 shadow-xl transition">Request Master File (Beta Access)</button>
+                </div>
+               
+                <div id="inboxNotice" class="hidden mt-8 text-blue-500 text-[10px] uppercase font-bold tracking-widest animate-pulse italic">Transmission Successful. Check your inbox to decrypt.</div>
             </div>
         </div>
     </main>
 
     <footer class="text-center mt-32 pb-16 opacity-30">
-        <span class="text-[8px] tracking-[0.6em] uppercase text-zinc-500 font-bold italic">Sakorp Intelligence // &copy; 2025</span>
+        <span class="text-[8px] tracking-[0.6em] uppercase text-zinc-500 font-bold italic">Sakorp Holding Intelligence // &copy; 2025</span>
     </footer>
 
     <script>
@@ -129,22 +144,16 @@
             target_audience: document.getElementById('targetAudience').value
         };
         if(!data.my_product.name) return alert("Identification required.");
-       
         document.getElementById('loader').classList.remove('hidden');
-        document.getElementById('mainBtn').innerText = "SCANNING...";
-
         try {
             const response = await fetch('/generate-rival-strategy', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
             globalResult = await response.json();
             document.getElementById('results').classList.remove('hidden');
             document.getElementById('scoreValue').innerText = globalResult.dominance_score + "%";
-            document.getElementById('scoreTeaser').innerText = globalResult.score_explanation;
             document.getElementById('overviewText').innerHTML = globalResult.free_sections.strategic_overview;
             document.getElementById('auditText').innerHTML = globalResult.free_sections.product_audit;
-            const tweaksHtml = globalResult.free_sections.tactical_tweaks.map(t => `<li>• ${t}</li>`).join('');
-            document.getElementById('tweaksList').innerHTML = tweaksHtml;
+            document.getElementById('tweaksList').innerHTML = globalResult.free_sections.tactical_tweaks.map(t => `<li>• ${t}</li>`).join('');
             document.getElementById('loader').classList.add('hidden');
-            document.getElementById('mainBtn').innerText = "SCAN COMPLETE";
             window.scrollTo({ top: document.getElementById('results').offsetTop - 50, behavior: 'smooth' });
         } catch (e) { alert("Tactical Error."); document.getElementById('loader').classList.add('hidden'); }
     }
@@ -157,8 +166,6 @@
                 email: email, score: globalResult.dominance_score, product_name: document.getElementById('myName').value,
                 competitor_name: document.getElementById('compName').value, premium_content: globalResult.premium_report
             })});
-            document.getElementById('previewCards').classList.remove('hidden', 'blur-intro');
-            document.getElementById('emailGate').classList.add('hidden');
             document.getElementById('inboxNotice').classList.remove('hidden');
         } catch (e) { alert("Transmission failed."); }
     }
