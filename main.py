@@ -25,23 +25,17 @@ SMTP_PASS = os.environ.get("SMTP_PASS")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY) if SUPABASE_URL else None
 if GEMINI_API_KEY: genai.configure(api_key=GEMINI_API_KEY)
 
-# --- UNAPREĐENA AI INSTRUKCIJA ZA MAKSIMALNU VREDNOST ---
+# INSTRUKCIJA ZA FREEMIUM MODEL
 SYSTEM_INSTRUCTION = """
-You are RIVALLY - SAKORP's elite strategic warfare engine.
-Analyze the battle between Target Alpha (the user) and Target Beta (rival).
-YOUR OUTPUT MUST BE ONLY VALID JSON.
-
-REPORT REQUIREMENTS (html_content):
-1. USE PREMIUM HTML: Use <div class='p-4 border-l-2 border-blue-500 bg-zinc-900/50 mb-6'> for Alpha insights and red for Beta.
-2. KILL-SHOT STRATEGY: Include a 'Kill-Shot' section with one brutal strategic move to dominate.
-3. 24-MONTH FORECAST: Predict the market state if things remain unchanged.
-4. ACTIONABLE QUICK WINS: Provide 3 steps for immediate execution tomorrow morning.
-5. DEEP ANALYSIS: Compare brand identity, psychology, pricing, and infrastructure.
+You are RIVALLY - SAKORP's strategic engine.
+Analyze the battle between Alpha (User) and Beta (Rival).
+OUTPUT VALID JSON ONLY.
 
 FIELDS:
-- dominance_score: integer (0-100)
-- score_explanation: Provocative 1-2 sentence teaser.
-- html_content: The comprehensive, rich HTML report.
+1. "dominance_score": integer (0-100).
+2. "score_explanation": A punchy, 2-sentence teaser (Public).
+3. "free_summary": A high-quality but SHORT introductory analysis (Unlocked with email). Max 3 paragraphs. Focus on the high-level battle.
+4. "premium_audit": A MASSIVE, DEEP HTML report (Premium only). Include Kill-Shot strategy, 24-month forecast, and SEO vulnerability mapping.
 """
 
 model = genai.GenerativeModel(
@@ -53,15 +47,10 @@ model = genai.GenerativeModel(
 def send_strategic_email(target_email, report_content, score, competitor):
     if not SMTP_USER: return
     msg = MIMEMultipart()
-    msg["Subject"] = f"RIVALLY AUDIT: {score}% Dominance vs {competitor}"
+    msg["Subject"] = f"RIVALLY FREE SUMMARY: {score}% vs {competitor}"
     msg["From"] = f"SAKORP RIVALLY <{SMTP_USER}>"
     msg["To"] = target_email
-    body = f"""<div style="background:#000; color:#fff; padding:30px; font-family:sans-serif;">
-        <h1 style="color:#2563eb;">Strategic Report complete.</h1>
-        <h2 style="font-size:40px;">Dominance Score: {score}%</h2>
-        <div style="color:#ccc;">{report_content}</div>
-        <p style="margin-top:30px; font-size:10px; color:#555;">SAKORP HOLDING // AI DIVISION</p>
-    </div>"""
+    body = f"<div style='background:#000; color:#fff; padding:30px; font-family:sans-serif;'><h1>Introductory Analysis: {score}%</h1><hr>{report_content}<p>Upgrade to Premium for the full Tactical Audit.</p></div>"
     msg.attach(MIMEText(body, "html"))
     try:
         with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
@@ -75,7 +64,7 @@ async def read_index(): return FileResponse('index.html')
 
 @app.post("/generate-rival-strategy")
 async def generate_strategy(data: dict):
-    prompt = f"Battle: {data['my_product']} vs {data['competitor_product']}. Strategic scan for Alpha dominance."
+    prompt = f"Battle Analysis: {data['my_product']} vs {data['competitor_product']}."
     try:
         response = model.generate_content(prompt)
         return json.loads(response.text.replace('```json', '').replace('```', '').strip())
