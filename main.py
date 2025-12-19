@@ -24,19 +24,14 @@ SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY) if SUPABASE_URL else None
 if GEMINI_API_KEY: genai.configure(api_key=GEMINI_API_KEY)
 
-class ComparisonRequest(BaseModel):
-    my_product: dict
-    competitor_product: dict
-    target_audience: str
-
-# SYSTEM INSTRUCTIONS
+# INSTRUKCIJE ZA DUBOKI IZVEŠTAJ
 SYSTEM_INSTRUCTION = """
 You are RIVALLY - An elite competitive marketing strategist.
-Output ONLY JSON.
-Fields:
-1. 'dominance_score': integer (0-100)
-2. 'score_explanation': A sharp, 1-2 sentence teaser that points out a critical weakness or opportunity to pique interest.
-3. 'html_content': The full, deep-dive strategic report in HTML.
+YOUR OUTPUT MUST BE ONLY VALID JSON.
+
+1. 'dominance_score': (0-100)
+2. 'score_explanation': A sharp, 1-2 sentence teaser. Identify ONE SPECIFIC critical weakness or high-value opportunity in the market battle that would immediately shock or intrigue the user.
+3. 'html_content': A VERY LONG, DEEP-DIVE STRATEGIC REPORT. Include SWOT, detailed feature comparison, content gap analysis, SEO positioning, and a 3-step action plan for total market dominance.
 """
 
 model = genai.GenerativeModel(
@@ -51,9 +46,10 @@ async def read_index():
 
 @app.post("/generate-rival-strategy")
 async def generate_strategy(data: dict):
-    prompt = f"Battle: {data['my_product']} vs {data['competitor_product']}. Strategic Teaser + Full Audit."
+    prompt = f"Battle Analysis: {data['my_product']} vs {data['competitor_product']}. Strategic scan for dominance."
     try:
         response = model.generate_content(prompt)
+        # Čišćenje JSON-a za stabilnost
         clean_json = response.text.replace('```json', '').replace('```', '').strip()
         return json.loads(clean_json)
     except: raise HTTPException(status_code=500)
@@ -62,6 +58,10 @@ async def generate_strategy(data: dict):
 async def save_lead(data: dict):
     if supabase:
         try:
-            supabase.table("history").insert({"business_name": data['product_name'], "email": data['email']}).execute()
+            supabase.table("history").insert({
+                "business_name": data['product_name'],
+                "email": data['email'],
+                "ai_response": f"Audit Unlocked: {data['score']}% vs {data['competitor_name']}"
+            }).execute()
         except: pass
     return {"status": "success"}
