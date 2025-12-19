@@ -6,7 +6,7 @@ from email.mime.multipart import MIMEMultipart
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
-import google.genai
+import google.generativeai as genai
 from supabase import create_client
 
 app = FastAPI()
@@ -16,10 +16,7 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], all
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 SMTP_USER = os.environ.get("SMTP_USER") # sakorp.rivally@gmail.com
 SMTP_PASS = os.environ.get("SMTP_PASS") # 16-char App Password
-SUPABASE_URL = os.environ.get("SUPABASE_URL")
-SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 
-supabase = create_client(SUPABASE_URL, SUPABASE_KEY) if SUPABASE_URL else None
 if GEMINI_API_KEY: genai.configure(api_key=GEMINI_API_KEY)
 
 # --- THE ELITE MASTER TEMPLATE ---
@@ -156,7 +153,3 @@ async def save_lead(data: dict):
     # SLANJE MASTER IZVEŠTAJA NA MEJL
     send_master_report(data['email'], data['premium_content'], data['score'], data['competitor_name'])
     return {"status": "success"}
-
-
-
-
