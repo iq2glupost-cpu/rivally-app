@@ -9,6 +9,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap');
         body { background-color: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         .no-copy { user-select: none; -webkit-user-select: none; }
+       
         @keyframes subtlePulse {
             0%, 100% { border-color: rgba(37, 99, 235, 0.15); box-shadow: 0 0 15px rgba(37, 99, 235, 0.05); }
             50% { border-color: rgba(37, 99, 235, 0.4); box-shadow: 0 0 30px rgba(37, 99, 235, 0.15); }
@@ -17,6 +18,14 @@
             background: rgba(255, 255, 255, 0.01); border: 1px solid #1e3a8a;
             border-radius: 20px; animation: subtlePulse 5s infinite ease-in-out;
         }
+
+        /* NOVI FLICKER LOADER EFEKAT */
+        @keyframes neuralFlicker {
+            0%, 100% { opacity: 1; text-shadow: 0 0 10px #2563eb; }
+            50% { opacity: 0.3; text-shadow: none; }
+        }
+        .animate-flicker { animation: neuralFlicker 1.2s infinite ease-in-out; }
+
         .glass-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 15px; padding: 25px; }
         input, textarea { background: #080808 !important; border: 1px solid #1a1a1a !important; border-radius: 8px !important; color: #fff !important; font-size: 13px !important; }
         input:focus { border-color: #2563eb !important; outline: none; }
@@ -60,10 +69,16 @@
                     <textarea id="compFeatures" placeholder="Known gaps or market position..." class="w-full p-4 h-52"></textarea>
                 </div>
             </div>
-            <div class="mt-16 flex justify-center">
-                <button onclick="generateStrategy()" id="mainBtn" class="btn-main px-14 py-5 rounded-full font-black uppercase tracking-widest text-xs text-white">Initiate Neural Scan</button>
+            <div class="mt-16 flex flex-col items-center">
+                <button onclick="generateStrategy()" id="mainBtn" class="btn-main px-14 py-5 rounded-full font-black uppercase tracking-widest text-xs text-white">
+                    Initiate Neural Scan
+                </button>
+               
+                <div id="loader" class="hidden mt-10 text-center">
+                    <p class="text-blue-500 font-bold text-xs tracking-[0.4em] uppercase animate-flicker">PLEASE WAIT A FEW SECONDS</p>
+                    <p class="text-zinc-600 font-mono text-[9px] uppercase tracking-[0.6em] mt-3 italic">Analyzing Data // Establishing Strategic Uplink...</p>
+                </div>
             </div>
-            <div id="loader" class="hidden text-center mt-6 text-blue-900 font-mono text-[9px] uppercase tracking-widest animate-pulse italic">Connecting to Neural Grid...</div>
         </div>
 
         <div id="results" class="hidden mt-32 space-y-12">
@@ -114,23 +129,22 @@
             target_audience: document.getElementById('targetAudience').value
         };
         if(!data.my_product.name) return alert("Identification required.");
+       
         document.getElementById('loader').classList.remove('hidden');
+        document.getElementById('mainBtn').innerText = "SCANNING...";
+
         try {
             const response = await fetch('/generate-rival-strategy', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
             globalResult = await response.json();
             document.getElementById('results').classList.remove('hidden');
             document.getElementById('scoreValue').innerText = globalResult.dominance_score + "%";
             document.getElementById('scoreTeaser').innerText = globalResult.score_explanation;
-           
-            // Populate Cards
             document.getElementById('overviewText').innerHTML = globalResult.free_sections.strategic_overview;
             document.getElementById('auditText').innerHTML = globalResult.free_sections.product_audit;
-           
-            // Fix [object Object] by mapping the array
             const tweaksHtml = globalResult.free_sections.tactical_tweaks.map(t => `<li>• ${t}</li>`).join('');
             document.getElementById('tweaksList').innerHTML = tweaksHtml;
-
             document.getElementById('loader').classList.add('hidden');
+            document.getElementById('mainBtn').innerText = "SCAN COMPLETE";
             window.scrollTo({ top: document.getElementById('results').offsetTop - 50, behavior: 'smooth' });
         } catch (e) { alert("Tactical Error."); document.getElementById('loader').classList.add('hidden'); }
     }
@@ -143,8 +157,6 @@
                 email: email, score: globalResult.dominance_score, product_name: document.getElementById('myName').value,
                 competitor_name: document.getElementById('compName').value, premium_content: globalResult.premium_report
             })});
-           
-            // Reveal Free Content & Show Inbox Notice
             document.getElementById('previewCards').classList.remove('hidden', 'blur-intro');
             document.getElementById('emailGate').classList.add('hidden');
             document.getElementById('inboxNotice').classList.remove('hidden');
