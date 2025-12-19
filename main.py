@@ -6,8 +6,7 @@ from email.mime.multipart import MIMEMultipart
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
-# NOVI IMPORT ZA 2025. GODINU
-from google import genai
+import google.generativeai as genai
 from supabase import create_client
 
 app = FastAPI()
@@ -16,18 +15,19 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], all
 # --- CORE CONFIG ---
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 SMTP_USER = os.environ.get("SMTP_USER")
-SMTP_PASS = os.environ.get("SMTP_PASSWORD")
+SMTP_PASS = os.environ.get("SMTP_PASSWORD") # Usklađeno sa Vercel varijablom
 
+# Inicijalizacija Supabase klijenta
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_KEY")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY) if SUPABASE_URL else None
 
-# NOVA INICIJALIZACIJA KLIJENTA PREKO GOOGLE-GENAI
-client = genai.Client(api_key=GEMINI_API_KEY) if GEMINI_API_KEY else None
+if GEMINI_API_KEY: genai.configure(api_key=GEMINI_API_KEY)
 
+# --- THE ELITE MASTER TEMPLATE (TVOJ DIZAJN) ---
 def send_elite_report(target_email, premium_content, score, competitor):
     if not SMTP_USER or not SMTP_PASS:
-        print("SMTP Error: Missing SMTP_USER or SMTP_PASSWORD")
+        print("SMTP Error: Missing SMTP_USER or SMTP_PASSWORD in Vercel")
         return
   
     msg = MIMEMultipart()
@@ -35,6 +35,7 @@ def send_elite_report(target_email, premium_content, score, competitor):
     msg["From"] = f"SAKORP CORPORATION <{SMTP_USER}>"
     msg["To"] = target_email
   
+    # Tvoj HTML sa vodenim žigom ostaje IDENTIČAN
     body = f"""
     <html>
     <head>
@@ -47,9 +48,11 @@ def send_elite_report(target_email, premium_content, score, competitor):
             <tr>
                 <td align="center">
                     <table width="650" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border: 1px solid #dddddd; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                      
                         <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 150px; color: rgba(37, 99, 235, 0.03); font-weight: 900; pointer-events: none; z-index: 0; white-space: nowrap;">
                             SAKORP
                         </div>
+
                         <tr>
                             <td style="padding: 40px; background-color: #000000; color: #ffffff;">
                                 <table width="100%" border="0">
@@ -65,19 +68,23 @@ def send_elite_report(target_email, premium_content, score, competitor):
                                 </table>
                             </td>
                         </tr>
+
                         <tr>
                             <td style="padding: 50px; position: relative; z-index: 1;">
                                 <div style="text-align: center; margin-bottom: 50px;">
                                     <div style="font-size: 110px; font-weight: 900; color: #000; line-height: 1; letter-spacing: -5px;">{score}<span style="font-size: 40px; color: #2563eb;">%</span></div>
                                     <div style="font-size: 12px; font-weight: bold; color: #999; text-transform: uppercase; letter-spacing: 6px; margin-top: 10px;">Market Dominance Quotient</div>
                                 </div>
+
                                 <div style="border-left: 4px solid #2563eb; padding-left: 20px; margin-bottom: 40px;">
                                     <h3 style="font-family: 'Playfair Display', serif; font-size: 22px; color: #000; margin: 0 0 10px 0;">Executive Neural Audit</h3>
                                     <p style="color: #444; font-size: 15px; line-height: 1.6; margin: 0;">This document serves as a high-fidelity strategic audit between Target Alpha and Target Beta ({competitor}). No information within this briefing may be shared without SAKORP authorization.</p>
                                 </div>
+
                                 <div style="font-size: 15px; color: #333; line-height: 1.9; font-family: 'Inter', sans-serif;">
                                     {premium_content}
                                 </div>
+
                                 <table width="100%" border="0" style="margin-top: 50px; background-color: #fafafa; border: 1px solid #eeeeee; border-radius: 4px;">
                                     <tr>
                                         <td style="padding: 30px; text-align: center;">
@@ -89,6 +96,7 @@ def send_elite_report(target_email, premium_content, score, competitor):
                                 </table>
                             </td>
                         </tr>
+
                         <tr>
                             <td style="padding: 30px 40px; background-color: #fafafa; border-top: 1px solid #eeeeee; text-align: center;">
                                 <div style="font-size: 9px; color: #bbb; text-transform: uppercase; letter-spacing: 4px; font-weight: bold;">
@@ -112,6 +120,7 @@ def send_elite_report(target_email, premium_content, score, competitor):
     except Exception as e:
         print(f"SMTP error: {e}")
 
+# --- AI INSTRUCTIONS ---
 SYSTEM_INSTRUCTION = """
 You are RIVALLY - SAKORP's chief intelligence officer. Output VALID JSON.
 TONE: Institutional, precise, brutal. Use terms like 'Market Asymmetry', 'Capital Inefficiency', 'Tactical Leverage'.
@@ -123,6 +132,12 @@ FIELDS:
 4. premium_report (Full Master File in HTML. Sections: [I] NEURAL SWOT, [II] 24-MONTH COLLISION FORECAST, [III] STRATEGIC KILL-SHOT MOVE)
 """
 
+model = genai.GenerativeModel(
+    model_name="gemini-2.5-pro", # TVOJ MODEL OSTAVLJEN NETAKNUT
+    system_instruction=SYSTEM_INSTRUCTION,
+    generation_config={"response_mime_type": "application/json", "temperature": 0.2}
+)
+
 @app.get("/", response_class=HTMLResponse)
 async def read_index(): return FileResponse('index.html')
 
@@ -130,23 +145,13 @@ async def read_index(): return FileResponse('index.html')
 async def generate_strategy(data: dict):
     prompt = f"Battle: {data['my_product']} vs {data['competitor_product']}. Target Audience: {data['target_audience']}."
     try:
-        # KORIŠĆENJE NOVOG SDK-A I TVOG gemini-2.5-pro MODELA
-        response = client.models.generate_content(
-            model="gemini-2.5-pro",
-            contents=prompt,
-            config={
-                "system_instruction": SYSTEM_INSTRUCTION,
-                "response_mime_type": "application/json",
-                "temperature": 0.2
-            }
-        )
-        return json.loads(response.text)
-    except Exception as e:
-        print(f"AI Error: {e}")
-        raise HTTPException(status_code=500)
+        response = model.generate_content(prompt)
+        return json.loads(response.text.replace('```json', '').replace('```', '').strip())
+    except: raise HTTPException(status_code=500)
 
 @app.post("/save-lead")
 async def save_lead(data: dict):
+    # Logika za bazu (Supabase)
     if supabase:
         try:
             supabase.table("history").insert({
@@ -156,6 +161,7 @@ async def save_lead(data: dict):
         except Exception as e:
             print(f"Supabase Error: {e}")
   
+    # POZIVAMO TVOJU FUNKCIJU SA ISPRAVNIM PARAMETRIMA
     send_elite_report(
         data['email'],
         data.get('premium_content', 'Strategic intelligence locked.'),
