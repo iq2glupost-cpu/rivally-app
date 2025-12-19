@@ -10,7 +10,7 @@
         body { background-color: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         .no-copy { user-select: none; -webkit-user-select: none; }
        
-        /* PANEL JE SADA STABILAN (NEMA TREPERENJA) */
+        /* GLAVNI PANEL SA PLAVIM DISKRETNIM PULSIRANJEM */
         .neural-panel {
             background: rgba(255, 255, 255, 0.01);
             border: 1px solid #111;
@@ -18,7 +18,6 @@
             position: relative;
         }
 
-        /* SAMO DISKRETNA PLAVA AURA OKO OKVIRA */
         .neural-panel::after {
             content: '';
             position: absolute;
@@ -26,20 +25,38 @@
             border: 1px solid #1e3a8a;
             border-radius: inherit;
             z-index: -1;
-            animation: softAura 6s infinite ease-in-out;
+            animation: mainFramePulse 5s infinite ease-in-out;
         }
 
-        @keyframes softAura {
-            0%, 100% { opacity: 0.2; box-shadow: 0 0 15px rgba(37, 99, 235, 0.05); }
-            50% { opacity: 0.5; box-shadow: 0 0 30px rgba(37, 99, 235, 0.15); }
+        @keyframes mainFramePulse {
+            0%, 100% { border-color: rgba(30, 58, 138, 0.4); box-shadow: 0 0 15px rgba(37, 99, 235, 0.05); }
+            50% { border-color: rgba(37, 99, 235, 0.8); box-shadow: 0 0 30px rgba(37, 99, 235, 0.2); }
         }
 
-        .glass-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 15px; padding: 25px; }
-        input, textarea { background: #080808 !important; border: 1px solid #1a1a1a !important; border-radius: 8px !important; color: #fff !important; font-size: 13px !important; }
-        input:focus { border-color: #2563eb !important; outline: none; }
+        /* STATIČNA POLJA (BEZ PULSIRANJA) */
+        input, textarea {
+            background: #080808 !important;
+            border: 1px solid #1a1a1a !important;
+            border-radius: 8px !important;
+            color: #fff !important;
+            font-size: 13px !important;
+        }
+        input:focus, textarea:focus { border-color: #2563eb !important; outline: none; background: #0a0a0a !important; }
        
-        .btn-main { background: linear-gradient(180deg, #1e40af 0%, #1e3a8a 100%); border: 1px solid #2563eb; transition: all 0.3s; cursor: pointer; }
-        .btn-main:hover { transform: translateY(-1px); box-shadow: 0 0 30px rgba(37, 99, 235, 0.4); }
+        /* PULSIRANJE DUGMETA */
+        @keyframes btnPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(37, 99, 235, 0.2); }
+            50% { transform: scale(1.02); box-shadow: 0 0 25px rgba(37, 99, 235, 0.4); }
+        }
+
+        .btn-main {
+            background: linear-gradient(180deg, #1e40af 0%, #1e3a8a 100%);
+            border: 1px solid #2563eb;
+            transition: all 0.3s;
+            cursor: pointer;
+            animation: btnPulse 3s infinite ease-in-out;
+        }
+        .btn-main:hover { transform: translateY(-1px); box-shadow: 0 0 30px rgba(37, 99, 235, 0.6); animation-play-state: paused; }
 
         @keyframes flickerText { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
         .animate-flicker { animation: flickerText 1.5s infinite ease-in-out; }
@@ -53,7 +70,11 @@
                 <path d="M5 5H35V20H20V35H5V5Z" fill="white"/><rect x="20" y="20" width="30" height="15" fill="#2563eb"/><path d="M20 35H50V50H5V35H20Z" fill="white"/>
             </svg>
         </div>
-        <h1 class="text-7xl font-black tracking-tighter mb-2 italic uppercase text-white">RIVALLY</h1>
+       
+        <a href="/" class="hover:opacity-80 transition-all inline-block">
+            <h1 class="text-7xl font-black tracking-tighter mb-2 italic uppercase text-white">RIVALLY</h1>
+        </a>
+       
         <p class="text-blue-900 text-[10px] tracking-[0.5em] uppercase font-bold italic">Neural Market Warfare // SAKORP CORPORATION</p>
     </header>
 
