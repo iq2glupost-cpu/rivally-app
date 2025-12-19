@@ -16,7 +16,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- CONFIG ---
+# ENV
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
 SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
@@ -24,23 +24,19 @@ SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY) if SUPABASE_URL else None
 if GEMINI_API_KEY: genai.configure(api_key=GEMINI_API_KEY)
 
-class ProductData(BaseModel):
-    name: str
-    url: str
-    features: str
-    price: str
-
 class ComparisonRequest(BaseModel):
-    my_product: ProductData
-    competitor_product: ProductData
+    my_product: dict
+    competitor_product: dict
     target_audience: str
 
-# AI INSTRUCTIONS FOR TEASER & HOOK
+# SYSTEM INSTRUCTIONS
 SYSTEM_INSTRUCTION = """
-You are RIVALLY - An elite market strategist.
-Return ONLY valid JSON.
-'score_explanation' MUST be a provocative, punchy 1-2 sentence teaser that makes the user want to see the full report.
-'html_content' MUST be the comprehensive strategic audit in HTML format.
+You are RIVALLY - An elite competitive marketing strategist.
+Output ONLY JSON.
+Fields:
+1. 'dominance_score': integer (0-100)
+2. 'score_explanation': A sharp, 1-2 sentence teaser that points out a critical weakness or opportunity to pique interest.
+3. 'html_content': The full, deep-dive strategic report in HTML.
 """
 
 model = genai.GenerativeModel(
@@ -54,8 +50,8 @@ async def read_index():
     return FileResponse('index.html')
 
 @app.post("/generate-rival-strategy")
-async def generate_strategy(request: ComparisonRequest):
-    prompt = f"Analyze: {request.my_product} vs {request.competitor_product} for audience: {request.target_audience}."
+async def generate_strategy(data: dict):
+    prompt = f"Battle: {data['my_product']} vs {data['competitor_product']}. Strategic Teaser + Full Audit."
     try:
         response = model.generate_content(prompt)
         clean_json = response.text.replace('```json', '').replace('```', '').strip()
@@ -66,10 +62,6 @@ async def generate_strategy(request: ComparisonRequest):
 async def save_lead(data: dict):
     if supabase:
         try:
-            supabase.table("history").insert({
-                "business_name": data['product_name'],
-                "email": data['email'],
-                "ai_response": f"Score: {data['score']} vs {data['competitor_name']}"
-            }).execute()
+            supabase.table("history").insert({"business_name": data['product_name'], "email": data['email']}).execute()
         except: pass
     return {"status": "success"}
