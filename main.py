@@ -56,5 +56,36 @@ async def generate_strategy(data: dict):
     except Exception as e:
         print(f"AI Error: {e}")
         raise HTTPException(status_code=500)
+@app.get("/", response_class=HTMLResponse)
+async def read_index(): return FileResponse('index.html')
 
-# --- [Ostatak koda save_lead ostaje ISTI] ---
+@app.post("/generate-rival-strategy")
+async def generate_strategy(data: dict):
+    prompt = f"Battle: {data['my_product']} vs {data['competitor_product']}. Target Audience: {data['target_audience']}."
+    try:
+        response = model.generate_content(prompt)
+        return json.loads(response.text.replace('```json', '').replace('```', '').strip())
+    except: raise HTTPException(status_code=500)
+
+@app.post("/save-lead")
+async def save_lead(data: dict):
+    # Logika za bazu (Supabase)
+    if supabase:
+        try:
+            supabase.table("history").insert({
+                "business_name": data.get('product_name', 'Audit'),
+                "email": data['email']
+            }).execute()
+        except Exception as e:
+            print(f"Supabase Error: {e}")
+  
+    # POZIVAMO TVOJU FUNKCIJU SA ISPRAVNIM PARAMETRIMA
+    send_elite_report(
+        data['email'],
+        data.get('premium_content', 'Strategic intelligence locked.'),
+        data.get('score', 0),
+        data.get('competitor_name', 'Target Beta')
+    )
+    return {"status": "success"}
+
+
