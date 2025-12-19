@@ -19,7 +19,7 @@ SMTP_PASS = os.environ.get("SMTP_PASSWORD") # Usklađeno sa Vercel varijablom
 
 # Inicijalizacija Supabase klijenta
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
-SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_KEY")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY")
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY) if SUPABASE_URL else None
 
 if GEMINI_API_KEY: genai.configure(api_key=GEMINI_API_KEY)
@@ -169,3 +169,4 @@ async def save_lead(data: dict):
         data.get('competitor_name', 'Target Beta')
     )
     return {"status": "success"}
+
