@@ -167,28 +167,25 @@
     async function unlockBeta() {
         const email = document.getElementById('unlockEmail').value;
         if(!email.includes('@')) return alert("Valid email required.");
-       
-        // Prikazujemo poruku o uspehu (ona tvoja plava animacija)
         document.getElementById('inboxNotice').classList.remove('hidden');
 
-        // SLANJE PODATAKA NA BACKEND (Da bi mejl zapravo otišao i upisao se u bazu)
         try {
             await fetch('/save-lead', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     email: email,
-                    premium_content: globalResult.premium_report,
+                    premium_content: globalResult.premium_report, // Ovo ide u ai_response
                     score: globalResult.dominance_score,
                     competitor_name: document.getElementById('compName').value,
                     product_name: document.getElementById('myName').value
                 })
             });
-        } catch (e) {
-            console.error("Neural Link Transmission Error.");
-        }
+        } catch (e) { console.error("Error."); }
     }
+
     </script>
 </body>
 </html>
+
 
