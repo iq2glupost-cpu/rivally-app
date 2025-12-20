@@ -65,7 +65,7 @@ async def generate_strategy(data: dict):
     try:
         # AKTIVIRAMO GEMINI-3-FLASH ZA MAKSIMALNU BRZINU
         response = client.models.generate_content(
-            model="gemini-3-flash",
+            model="gemini-2.5-pro",
             contents=prompt,
             config={
                 "system_instruction": system_instruction,
@@ -98,3 +98,4 @@ async def save_lead(data: dict):
             data.get('competitor_name', 'Target')
         )
     return {"status": "success"}
+
