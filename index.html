@@ -168,8 +168,10 @@
         const email = document.getElementById('unlockEmail').value;
         if(!email.includes('@')) return alert("Valid email required.");
        
+        // Prikazujemo poruku o uspehu (ona tvoja plava animacija)
         document.getElementById('inboxNotice').classList.remove('hidden');
 
+        // SLANJE PODATAKA NA BACKEND (Da bi mejl zapravo otišao i upisao se u bazu)
         try {
             await fetch('/save-lead', {
                 method: 'POST',
@@ -178,13 +180,15 @@
                     email: email,
                     premium_content: globalResult.premium_report,
                     score: globalResult.dominance_score,
-                    competitor_name: document.getElementById('compName').value
+                    competitor_name: document.getElementById('compName').value,
+                    product_name: document.getElementById('myName').value
                 })
             });
         } catch (e) {
-            console.error("Transmission failed.");
+            console.error("Neural Link Transmission Error.");
         }
     }
     </script>
 </body>
 </html>
+
