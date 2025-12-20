@@ -6,24 +6,29 @@ from email.mime.multipart import MIMEMultipart
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
-# IZMENA: Korišćenje nove genai biblioteke
+# Koristimo novu google-genai biblioteku (mora biti u requirements.txt)
 from google import genai
-from supabase import create_client
 
 app = FastAPI()
-app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 # --- CORE CONFIG ---
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 SMTP_USER = os.environ.get("SMTP_USER")
 SMTP_PASS = os.environ.get("SMTP_PASS")
 
-# IZMENA: Inicijalizacija klijenta umesto stare genai.configure metode
+# Inicijalizacija novog klijenta
 client = genai.Client(api_key=GEMINI_API_KEY) if GEMINI_API_KEY else None
 
 # --- THE ELITE MASTER TEMPLATE ---
 def send_elite_report(target_email, premium_content, score, competitor):
-    if not SMTP_USER: return
+    if not SMTP_USER or not SMTP_PASS:
+        return
   
     msg = MIMEMultipart()
     msg["Subject"] = f"CLASSIFIED: Strategic Intelligence Briefing | Dominance: {score}%"
@@ -42,11 +47,6 @@ def send_elite_report(target_email, premium_content, score, competitor):
             <tr>
                 <td align="center">
                     <table width="650" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; border: 1px solid #dddddd; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                      
-                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 150px; color: rgba(37, 99, 235, 0.03); font-weight: 900; pointer-events: none; z-index: 0; white-space: nowrap;">
-                            SAKORP
-                        </div>
-
                         <tr>
                             <td style="padding: 40px; background-color: #000000; color: #ffffff;">
                                 <table width="100%" border="0">
@@ -62,39 +62,14 @@ def send_elite_report(target_email, premium_content, score, competitor):
                                 </table>
                             </td>
                         </tr>
-
                         <tr>
-                            <td style="padding: 50px; position: relative; z-index: 1;">
+                            <td style="padding: 50px;">
                                 <div style="text-align: center; margin-bottom: 50px;">
                                     <div style="font-size: 110px; font-weight: 900; color: #000; line-height: 1; letter-spacing: -5px;">{score}<span style="font-size: 40px; color: #2563eb;">%</span></div>
-                                    <div style="font-size: 12px; font-weight: bold; color: #999; text-transform: uppercase; letter-spacing: 6px; margin-top: 10px;">Market Dominance Quotient</div>
+                                    <div style="font-size: 12px; font-weight: bold; color: #999; text-transform: uppercase; letter-spacing: 6px;">Market Dominance Quotient</div>
                                 </div>
-
-                                <div style="border-left: 4px solid #2563eb; padding-left: 20px; margin-bottom: 40px;">
-                                    <h3 style="font-family: 'Playfair Display', serif; font-size: 22px; color: #000; margin: 0 0 10px 0;">Executive Neural Audit</h3>
-                                    <p style="color: #444; font-size: 15px; line-height: 1.6; margin: 0;">This document serves as a high-fidelity strategic audit between Target Alpha and Target Beta ({competitor}). No information within this briefing may be shared without SAKORP authorization.</p>
-                                </div>
-
-                                <div style="font-size: 15px; color: #333; line-height: 1.9; font-family: 'Inter', sans-serif;">
+                                <div style="font-size: 15px; color: #333; line-height: 1.9;">
                                     {premium_content}
-                                </div>
-
-                                <table width="100%" border="0" style="margin-top: 50px; background-color: #fafafa; border: 1px solid #eeeeee; border-radius: 4px;">
-                                    <tr>
-                                        <td style="padding: 30px; text-align: center;">
-                                            <div style="font-size: 11px; font-weight: bold; color: #2563eb; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 15px;">Strategic Countermeasure Recommended</div>
-                                            <p style="color: #666; font-size: 14px; margin-bottom: 25px;">The identified market gaps require immediate architectural realignment. Deploy SAKORP division resources to neutralize threats.</p>
-                                            <a href="https://sakorp.com/studio" style="background-color: #000000; color: #ffffff; padding: 16px 40px; text-decoration: none; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; border-radius: 2px;">Contact SAKORP HQ</a>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td style="padding: 30px 40px; background-color: #fafafa; border-top: 1px solid #eeeeee; text-align: center;">
-                                <div style="font-size: 9px; color: #bbb; text-transform: uppercase; letter-spacing: 4px; font-weight: bold;">
-                                    &copy; 2025 SAKORP HOLDING SYSTEMS // GLOBAL OPERATIONS UNIT
                                 </div>
                             </td>
                         </tr>
@@ -108,31 +83,39 @@ def send_elite_report(target_email, premium_content, score, competitor):
     msg.attach(MIMEText(body, "html"))
     try:
         with smtplib.SMTP("smtp.gmail.com", 587) as server:
-            server.starttls(); server.login(SMTP_USER, SMTP_PASS); server.send_message(msg)
-    except: pass
+            server.starttls()
+            server.login(SMTP_USER, SMTP_PASS)
+            server.send_message(msg)
+    except Exception as e:
+        print(f"Email error: {e}")
 
 # --- AI INSTRUCTIONS ---
 SYSTEM_INSTRUCTION = """
-You are RIVALLY - SAKORP's chief intelligence officer. Output VALID JSON.
-TONE: Institutional, precise, brutal. Use terms like 'Market Asymmetry', 'Capital Inefficiency', 'Tactical Leverage'.
+You are RIVALLY - SAKORP's chief intelligence officer. Output VALID JSON ONLY.
+TONE: Institutional, precise, brutal.
 
 FIELDS:
 1. dominance_score (int)
-2. score_explanation (Brief institutional teaser)
-3. free_hook (One paragraph of deep market context)
-4. premium_report (Full Master File in HTML. Sections: [I] NEURAL SWOT, [II] 24-MONTH COLLISION FORECAST, [III] STRATEGIC KILL-SHOT MOVE)
+2. score_explanation (string)
+3. free_hook (string)
+4. premium_report (HTML string)
 """
 
 @app.get("/", response_class=HTMLResponse)
-async def read_index(): return FileResponse('index.html')
+async def read_index():
+    return FileResponse('index.html')
 
 @app.post("/generate-rival-strategy")
 async def generate_strategy(data: dict):
-    prompt = f"Battle: {data['my_product']} vs {data['competitor_product']}. Target Audience: {data['target_audience']}."
+    if not client:
+        raise HTTPException(status_code=500, detail="AI Client not configured")
+       
+    prompt = f"Battle: {data.get('my_product')} vs {data.get('competitor_product')}. Target Audience: {data.get('target_audience')}."
+   
     try:
-        # IZMENA: Novi način generisanja sadržaja sa konfiguracijom unutar poziva
+        # Poziv Gemini 2.5 Pro modela (ili 2.0 zavisno od dostupnosti)
         response = client.models.generate_content(
-            model="gemini-2.0-pro-exp-02-05", # Ažurirano na stabilnu pro verziju za 2025. godinu
+            model="gemini-2.0-pro-exp-02-05",
             contents=prompt,
             config={
                 "system_instruction": SYSTEM_INSTRUCTION,
@@ -140,12 +123,25 @@ async def generate_strategy(data: dict):
                 "temperature": 0.2
             }
         )
-        return json.loads(response.text.replace('```json', '').replace('```', '').strip())
+       
+        # Čišćenje odgovora od eventualnih markdown tagova
+        raw_text = response.text.strip()
+        if raw_text.startswith("```"):
+            raw_text = raw_text.split("\n", 1)[1].rsplit("\n", 1)[0].strip()
+       
+        return json.loads(raw_text)
+       
     except Exception as e:
         print(f"AI Error: {e}")
-        raise HTTPException(status_code=500)
+        raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/save-lead")
 async def save_lead(data: dict):
-    # Ostatak logike ostaje netaknut kako si tražio
+    # Slanje izveštaja na mejl koristeći ispravno ime funkcije
+    send_elite_report(
+        data.get('email'),
+        data.get('premium_content'),
+        data.get('score'),
+        data.get('competitor_name')
+    )
     return {"status": "success"}
