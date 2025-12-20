@@ -75,20 +75,23 @@ async def generate_strategy(data: dict):
 @app.post("/save-lead")
 async def save_lead(data: dict):
     email = data.get('email', '').strip().lower()
+    premium_report = data.get('premium_content', '') # Ovo je odgovor koji baza traži
    
-    # 1. UPIS U SUPABASE (Tabela mora imati kolone: business_name i email)
+    # 1. UPIS U SUPABASE (Dodata kolona ai_response da baza ne bi izbacivala grešku)
     if supabase:
         try:
             supabase.table("history").insert({
                 "business_name": data.get('product_name'),
-                "email": email
+                "email": email,
+                "ai_response": premium_report  # OVO JE KLJUČNO ZA TVOJU BAZU
             }).execute()
-        except Exception as e: print(f"Supabase Error: {e}")
+        except Exception as e:
+            print(f"Supabase Error: {e}")
 
     # 2. SLANJE MEJLA
     send_elite_report(
         email,
-        data.get('premium_content', ''),
+        premium_report,
         data.get('score', 0),
         data.get('competitor_name', 'Competitor')
     )
