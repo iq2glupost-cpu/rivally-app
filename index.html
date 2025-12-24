@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -113,7 +113,7 @@
             <div id="emailGate" class="max-w-3xl mx-auto text-center pt-24 border-t border-white/5">
                 <h3 class="text-5xl font-black italic uppercase mb-12">Master Intelligence File</h3>
                 <div class="text-left mb-16 inline-block bg-blue-600/5 p-10 rounded-2xl border border-blue-600/10 w-full">
-                    <p class="text-blue-500 text-[11px] font-black uppercase tracking-[0.4em] mb-8 text-center border-b border-blue-600/20 pb-4 italic font-bold">Premium Intelligence Assets ($199.00):</p>
+                    <p class="text-blue-500 text-[11px] font-black uppercase tracking-[0.4em] mb-8 text-center border-b border-blue-600/20 pb-4 italic font-bold">BETA Intelligence Assets (FREE GENERATE):</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-zinc-400 text-[10px] uppercase tracking-[0.2em] font-bold">
                         <div class="flex items-start gap-4"><span class="text-blue-600 font-bold">»</span> <span>Neural SWOT Forensic Audit</span></div>
                         <div class="flex items-start gap-4"><span class="text-blue-600 font-bold">»</span> <span>24-Month Collision Matrix</span></div>
@@ -124,7 +124,7 @@
 
                 <div class="flex flex-col items-center">
                     <input type="email" id="unlockEmail" placeholder="ENTER PRIORITY EMAIL" class="input-oval w-full max-w-md p-6 mb-10 text-center text-xs tracking-[0.3em] uppercase bg-transparent border-b border-zinc-900 focus:border-blue-600 transition-all font-bold">
-                    <button onclick="unlockBeta()" class="btn-main w-full max-w-md py-6 text-xs text-white uppercase font-black">Request Master File (Beta Access)</button>
+                    <button onclick="unlockBeta()" class="btn-main w-full max-w-md py-6 text-xs text-white uppercase font-black">Request Master File (Beta Access - FREE)</button>
                 </div>
                 <p id="inboxNotice" class="hidden mt-10 text-blue-500 text-[10px] uppercase font-black tracking-widest animate-pulse italic">Transmission Successful. Check Secure Inbox.</p>
             </div>
@@ -163,7 +163,6 @@
         window.scrollTo({ top: document.getElementById('results').offsetTop - 100, behavior: 'smooth' });
     }
 
-    // NOVA POVEZANA FUNKCIJA ZA SLANJE MEJLA
     async function unlockBeta() {
         const email = document.getElementById('unlockEmail').value;
         if(!email.includes('@')) return alert("Valid email required.");
@@ -175,7 +174,7 @@
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
                     email: email,
-                    premium_content: globalResult.premium_report, // Ovo ide u ai_response
+                    premium_content: globalResult.premium_report,
                     score: globalResult.dominance_score,
                     competitor_name: document.getElementById('compName').value,
                     product_name: document.getElementById('myName').value
@@ -183,9 +182,6 @@
             });
         } catch (e) { console.error("Error."); }
     }
-
     </script>
 </body>
 </html>
-
-
