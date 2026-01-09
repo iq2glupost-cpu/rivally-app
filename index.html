@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -7,10 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-      
+
         body { background-color: #000; color: #fff; font-family: 'Inter', sans-serif; overflow-x: hidden; }
         .no-copy { user-select: none; -webkit-user-select: none; }
-      
+
         .neural-panel {
             background: rgba(255, 255, 255, 0.01);
             border: 1px solid #111;
@@ -30,13 +30,14 @@
             50% { opacity: 0.9; box-shadow: 0 0 50px rgba(37, 99, 235, 0.5); }
         }
 
-        input, textarea {
+        input, textarea, select {
             background: #080808 !important;
             border: 1px solid #1a1a1a !important;
             border-radius: 12px !important;
             color: #fff !important;
             font-size: 13px !important;
         }
+        textarea { resize: vertical; }
         .input-oval { border-radius: 50px !important; padding-left: 30px !important; padding-right: 30px !important; }
 
         .btn-main {
@@ -50,6 +51,22 @@
         @keyframes btnPulse {
             0%, 100% { transform: scale(1); box-shadow: 0 0 10px rgba(37, 99, 235, 0.3); }
             50% { transform: scale(1.03); box-shadow: 0 0 30px rgba(37, 99, 235, 0.6); }
+        }
+
+        .btn-main:disabled{
+            opacity: .45;
+            cursor: not-allowed;
+            animation: none;
+        }
+
+        .micro-label{
+            font-size: 10px;
+            letter-spacing: .35em;
+            text-transform: uppercase;
+            font-weight: 800;
+            color: rgb(113 113 122);
+            border-bottom: 1px solid rgba(37,99,235,.10);
+            padding-bottom: 10px;
         }
     </style>
 </head>
@@ -66,33 +83,73 @@
                 <h1 class="text-7xl md:text-9xl font-black tracking-tighter text-white uppercase leading-none">RIVALLY</h1>
             </a>
         </div>
-        <p class="text-blue-900 text-[10px] tracking-[0.5em] uppercase font-bold italic mt-4">Strategic Intelligence Division // SAKORP CORPORATION</p>
+        <p class="text-blue-900 text-[10px] tracking-[0.5em] uppercase font-bold italic mt-4">
+            Strategic Intelligence Division // SAKORP CORPORATION
+        </p>
     </header>
 
     <main class="max-w-5xl mx-auto">
         <div class="neural-panel p-10 md:p-14 mb-20 text-left">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <div class="space-y-4">
-                    <label class="text-[10px] uppercase tracking-widest text-zinc-500 font-bold border-b border-blue-900/10 pb-2 block italic text-sans">Target_Alpha (Subject)</label>
-                    <input type="text" id="myName" placeholder="PROJECT NAME" class="w-full p-4">
-                    <input type="text" id="myUrl" placeholder="OFFICIAL URL" class="w-full p-4 text-blue-500 font-bold">
+                    <label class="micro-label block italic text-sans">Target_Alpha (Subject)</label>
+
+                    <input type="text" id="myName" placeholder="PROJECT NAME (e.g. JoySpring Kids Drops)" class="w-full p-4">
+
+                    <input type="text" id="myUrl" placeholder="OFFICIAL URL (e.g. https://yoursite.com)" class="w-full p-4 text-blue-500 font-bold">
+
                     <div class="grid grid-cols-2 gap-4">
-                        <input type="text" id="myPrice" placeholder="PRICING e.g. $49" class="p-4">
-                        <input type="text" id="targetAudience" placeholder="DEMOGRAPHIC" class="p-4">
+                        <input type="text" id="myPrice" placeholder="PRICING (e.g. $49/mo)" class="p-4">
+                        <input type="text" id="targetAudience" placeholder="AUDIENCE (e.g. parents, SMB, B2B teams)" class="p-4">
                     </div>
-                    <textarea id="myFeatures" placeholder="Core assets and capabilities..." class="w-full p-4 h-32"></textarea>
+
+                    <!-- ✅ NEW: Market / Category -->
+                    <input type="text" id="marketCategory" placeholder="CATEGORY / MARKET (e.g. Supplements, SaaS, E-commerce)" class="w-full p-4">
+
+                    <!-- ✅ NEW: Primary Goal -->
+                    <input type="text" id="primaryGoal" placeholder="PRIMARY GOAL (e.g. raise price, steal customers, enter EU)" class="w-full p-4">
+
+                    <!-- ✅ Improved placeholder -->
+                    <textarea id="myFeatures"
+                              placeholder="Core assets & capabilities (bullet style works best):
+• What you do in one sentence
+• Top 3 features
+• Differentiator / moat
+• Biggest weakness you fear
+• Any unique offer / pricing angle"
+                              class="w-full p-4 h-40"></textarea>
                 </div>
+
                 <div class="space-y-4">
-                    <label class="text-[10px] uppercase tracking-widest text-zinc-500 font-bold border-b border-red-900/10 pb-2 block italic">Target_Beta (Target)</label>
-                    <input type="text" id="compName" placeholder="RIVAL IDENTIFIER" class="w-full p-4">
-                    <input type="text" id="compUrl" placeholder="RIVAL URL" class="w-full p-4 text-red-500 font-bold">
-                    <input type="text" id="compPrice" placeholder="RIVAL PRICE" class="p-4">
-                    <textarea id="compFeatures" placeholder="Known market gaps and vulnerabilities..." class="w-full p-4 h-52"></textarea>
+                    <label class="micro-label block italic">Target_Beta (Target)</label>
+
+                    <input type="text" id="compName" placeholder="RIVAL IDENTIFIER (e.g. CompetitorBrand)" class="w-full p-4">
+
+                    <input type="text" id="compUrl" placeholder="RIVAL URL (e.g. https://competitor.com)" class="w-full p-4 text-red-500 font-bold">
+
+                    <input type="text" id="compPrice" placeholder="RIVAL PRICE (e.g. $59 / $0.99 / $199/mo)" class="p-4">
+
+                    <!-- ✅ Improved placeholder -->
+                    <textarea id="compFeatures"
+                              placeholder="Known market gaps & vulnerabilities (bullet style):
+• What they do well
+• Where they are weak
+• Complaints / bad UX
+• Pricing weakness
+• Missing features / positioning holes"
+                              class="w-full p-4 h-56"></textarea>
                 </div>
             </div>
+
             <div class="mt-16 flex flex-col items-center">
-                <button onclick="generateStrategy()" id="mainBtn" class="btn-main px-20 py-6 font-black uppercase tracking-[0.2em] text-xs text-white">Initiate Tactical Audit</button>
-                <div id="loader" class="hidden mt-10 text-center text-blue-500 font-bold text-xs tracking-[0.3em] uppercase animate-pulse">Processing Intelligence...</div>
+                <button onclick="generateStrategy()" id="mainBtn"
+                        class="btn-main px-20 py-6 font-black uppercase tracking-[0.2em] text-xs text-white">
+                    Initiate Tactical Audit
+                </button>
+
+                <div id="loader" class="hidden mt-10 text-center text-blue-500 font-bold text-xs tracking-[0.3em] uppercase animate-pulse">
+                    Processing Intelligence...
+                </div>
             </div>
         </div>
 
@@ -104,7 +161,9 @@
             </div>
 
             <div class="max-w-3xl mx-auto bg-blue-600/5 border border-blue-600/20 p-12 rounded-2xl text-left">
-                <h4 class="text-blue-500 font-black uppercase text-[10px] tracking-[0.5em] mb-6 italic">Subject: Tactical Breach Identified ⚠️</h4>
+                <h4 class="text-blue-500 font-black uppercase text-[10px] tracking-[0.5em] mb-6 italic">
+                    Subject: Tactical Breach Identified ⚠️
+                </h4>
                 <div id="breachText" class="text-zinc-200 text-sm leading-[1.8] font-bold">
                     Neural audit has detected a critical asymmetry...
                 </div>
@@ -112,8 +171,11 @@
 
             <div id="emailGate" class="max-w-3xl mx-auto text-center pt-24 border-t border-white/5">
                 <h3 class="text-5xl font-black italic uppercase mb-12">Master Intelligence File</h3>
+
                 <div class="text-left mb-16 inline-block bg-blue-600/5 p-10 rounded-2xl border border-blue-600/10 w-full">
-                    <p class="text-blue-500 text-[11px] font-black uppercase tracking-[0.4em] mb-8 text-center border-b border-blue-600/20 pb-4 italic font-bold">BETA Intelligence Assets (FREE GENERATE):</p>
+                    <p class="text-blue-500 text-[11px] font-black uppercase tracking-[0.4em] mb-8 text-center border-b border-blue-600/20 pb-4 italic font-bold">
+                        BETA Intelligence Assets (FREE GENERATE):
+                    </p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-zinc-400 text-[10px] uppercase tracking-[0.2em] font-bold">
                         <div class="flex items-start gap-4"><span class="text-blue-600 font-bold">»</span> <span>Neural SWOT Forensic Audit</span></div>
                         <div class="flex items-start gap-4"><span class="text-blue-600 font-bold">»</span> <span>24-Month Collision Matrix</span></div>
@@ -123,10 +185,20 @@
                 </div>
 
                 <div class="flex flex-col items-center">
-                    <input type="email" id="unlockEmail" placeholder="ENTER PRIORITY EMAIL" class="input-oval w-full max-w-md p-6 mb-10 text-center text-xs tracking-[0.3em] uppercase bg-transparent border-b border-zinc-900 focus:border-blue-600 transition-all font-bold">
-                    <button onclick="unlockBeta()" class="btn-main w-full max-w-md py-6 text-xs text-white uppercase font-black">Request Master File (Beta Access - FREE)</button>
+                    <input type="email" id="unlockEmail"
+                           placeholder="ENTER PRIORITY EMAIL"
+                           class="input-oval w-full max-w-md p-6 mb-10 text-center text-xs tracking-[0.3em] uppercase bg-transparent border-b border-zinc-900 focus:border-blue-600 transition-all font-bold">
+
+                    <button onclick="unlockBeta()" id="unlockBtn"
+                            class="btn-main w-full max-w-md py-6 text-xs text-white uppercase font-black"
+                            disabled>
+                        Request Master File (Beta Access - FREE)
+                    </button>
                 </div>
-                <p id="inboxNotice" class="hidden mt-10 text-blue-500 text-[10px] uppercase font-black tracking-widest animate-pulse italic">Transmission Successful. Check Secure Inbox.</p>
+
+                <p id="inboxNotice" class="hidden mt-10 text-blue-500 text-[10px] uppercase font-black tracking-widest animate-pulse italic">
+                    Transmission Successful. Check Secure Inbox.
+                </p>
             </div>
         </div>
     </main>
@@ -137,35 +209,95 @@
 
     <script>
     let globalResult = null;
+
+    function setBusy(isBusy){
+        const mainBtn = document.getElementById('mainBtn');
+        const unlockBtn = document.getElementById('unlockBtn');
+        if(mainBtn) mainBtn.disabled = isBusy;
+        if(unlockBtn) unlockBtn.disabled = isBusy || !globalResult; // unlock allowed only after result
+        document.getElementById('loader').classList.toggle('hidden', !isBusy);
+    }
+
+    function isValidEmail(email){
+        // solid enough for frontend
+        return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(email || '').trim());
+    }
+
     async function generateStrategy() {
+        const myName = document.getElementById('myName').value.trim();
+        const compName = document.getElementById('compName').value.trim();
+
         const data = {
-            my_product: { name: document.getElementById('myName').value, url: document.getElementById('myUrl').value, features: document.getElementById('myFeatures').value, price: document.getElementById('myPrice').value },
-            competitor_product: { name: document.getElementById('compName').value, url: document.getElementById('compUrl').value, features: document.getElementById('compFeatures').value, price: document.getElementById('compPrice').value },
-            target_audience: document.getElementById('targetAudience').value
+            my_product: {
+                name: myName,
+                url: document.getElementById('myUrl').value.trim(),
+                features: document.getElementById('myFeatures').value.trim(),
+                price: document.getElementById('myPrice').value.trim()
+            },
+            competitor_product: {
+                name: compName,
+                url: document.getElementById('compUrl').value.trim(),
+                features: document.getElementById('compFeatures').value.trim(),
+                price: document.getElementById('compPrice').value.trim()
+            },
+            target_audience: document.getElementById('targetAudience').value.trim(),
+
+            // ✅ NEW
+            market_category: document.getElementById('marketCategory').value.trim(),
+            primary_goal: document.getElementById('primaryGoal').value.trim()
         };
-        if(!data.my_product.name) return alert("System requires identity.");
-        document.getElementById('loader').classList.remove('hidden');
+
+        if(!data.my_product.name) return alert("System requires identity (Project Name).");
+        if(!data.competitor_product.name) return alert("System requires target (Rival Identifier).");
+
+        setBusy(true);
         try {
-            const response = await fetch('/generate-rival-strategy', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
+            const response = await fetch('/generate-rival-strategy', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+
             globalResult = await response.json();
             displayResult();
-        } catch (e) { alert("Neural Uplink Error."); }
-        document.getElementById('loader').classList.add('hidden');
+
+            // enable unlock button now
+            document.getElementById('unlockBtn').disabled = false;
+
+        } catch (e) {
+            alert("Neural Uplink Error.");
+        } finally {
+            setBusy(false);
+        }
     }
 
     function displayResult() {
         document.getElementById('results').classList.remove('hidden');
-        document.getElementById('scoreValue').innerText = globalResult.dominance_score + "%";
-        document.getElementById('scoreTeaser').innerText = globalResult.score_explanation;
-        if(globalResult.tactical_breach) {
+
+        const score = (globalResult && (globalResult.dominance_score ?? 0)) || 0;
+        document.getElementById('scoreValue').innerText = score + "%";
+
+        document.getElementById('scoreTeaser').innerText =
+            (globalResult && globalResult.score_explanation) ? globalResult.score_explanation : "Signal unstable.";
+
+        if(globalResult && globalResult.tactical_breach) {
             document.getElementById('breachText').innerText = globalResult.tactical_breach;
         }
+
         window.scrollTo({ top: document.getElementById('results').offsetTop - 100, behavior: 'smooth' });
     }
 
     async function unlockBeta() {
-        const email = document.getElementById('unlockEmail').value;
-        if(!email.includes('@')) return alert("Valid email required.");
+        if(!globalResult){
+            return alert("Generate the tactical audit first.");
+        }
+
+        const email = document.getElementById('unlockEmail').value.trim();
+        if(!isValidEmail(email)) return alert("Valid email required.");
+
+        const unlockBtn = document.getElementById('unlockBtn');
+        unlockBtn.disabled = true;
+
         document.getElementById('inboxNotice').classList.remove('hidden');
 
         try {
@@ -176,11 +308,20 @@
                     email: email,
                     premium_content: globalResult.premium_report,
                     score: globalResult.dominance_score,
-                    competitor_name: document.getElementById('compName').value,
-                    product_name: document.getElementById('myName').value
+                    competitor_name: document.getElementById('compName').value.trim(),
+                    product_name: document.getElementById('myName').value.trim(),
+
+                    // ✅ optional extra context (doesn't break backend if ignored)
+                    market_category: document.getElementById('marketCategory').value.trim(),
+                    primary_goal: document.getElementById('primaryGoal').value.trim()
                 })
             });
-        } catch (e) { console.error("Error."); }
+        } catch (e) {
+            console.error("Error.");
+        } finally {
+            // don't re-enable immediately; keeps "classified" feel
+            setTimeout(()=>{ unlockBtn.disabled = false; }, 2500);
+        }
     }
     </script>
 </body>
