@@ -7,7 +7,7 @@ class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         # Uzimamo ključ iz Vercel Environment Variables
         # (Na Vercelu ga nazovi RAINFOREST_KEY)
-        api_key = os.environ.get('RAINFOREST_API_KEY')
+        api_key = os.environ.get('RAINFOREST_KEY')
 
         # Primer parametara za Rainforest (npr. tražimo određeni proizvod po ASIN-u)
         params = {
