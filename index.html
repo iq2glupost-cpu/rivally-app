@@ -1,187 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RIVALLY - Instant Buy Box Analyzer by SAKORP</title>
-    <style>
-        :root {
-            --primary-color: #007bff;
-            --text-dark: #1a1a1a;
-            --text-light: #6c757d;
-            --bg-page: #f8f9fa;
-            --bg-card: #ffffff;
-            --border-color: #e1e4e8;
-            --shadow: 0 10px 30px rgba(0,0,0,0.05);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RIVALLY - Instant Buy Box Analyzer</title>
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-page);
-            margin: 0;
-            padding: 0;
-            color: var(--text-dark);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+<style>
+:root {
+    --primary-color: #007bff;
+    --text-dark: #1a1a1a;
+    --text-light: #6c757d;
+    --bg-page: #f8f9fa;
+    --bg-card: #ffffff;
+    --border-color: #e1e4e8;
+    --shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
 
-        header {
-            background-color: var(--bg-card);
-            padding: 15px 50px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+    background: var(--bg-page);
+    margin:0;
+}
 
-        .brand-logo { font-size: 24px; font-weight: 800; color: var(--text-dark); text-decoration: none; }
-        .brand-logo span { color: var(--primary-color); }
-        .powered-by { font-size: 12px; color: var(--text-light); }
+.main {
+    max-width:600px;
+    margin:80px auto;
+    background:#fff;
+    padding:40px;
+    border-radius:16px;
+    box-shadow:var(--shadow);
+}
 
-        .main-content {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 50px 20px;
-        }
+input, button {
+    width:100%;
+    padding:14px;
+    margin:10px 0;
+}
 
-        .analyzer-container {
-            max-width: 550px;
-            width: 100%;
-            background: var(--bg-card);
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            border: 1px solid #f0f0f0;
-        }
+button {
+    background:#007bff;
+    color:white;
+    border:none;
+    border-radius:8px;
+}
 
-        h1 { text-align: center; font-size: 28px; margin-bottom: 10px; font-weight: 800; }
-        .subtitle { text-align: center; color: var(--text-light); margin-bottom: 30px; }
+.diagnosis-card {
+    margin-top:20px;
+    padding:20px;
+    border-radius:10px;
+}
 
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
-        input { width: 100%; padding: 14px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 16px; }
-        
-        button {
-            width: 100%;
-            padding: 16px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: 700;
-        }
+.HIGH { background:#ffe5e5; }
+.MEDIUM { background:#fff5cc; }
+.LOW { background:#e6ffe6; }
 
-        button:disabled { background-color: #a0cfff; cursor: wait; }
-
-        #result-box { margin-top: 30px; display: none; border-top: 2px solid var(--border-color); padding-top: 30px; }
-        
-        .diagnosis-card { padding: 25px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #e1e4e8; }
-        .LOW { background-color: #f5fff6; border-color: #c3e6cb; color: #155724; }
-        .HIGH { background-color: #fff5f5; border-color: #ffcccc; color: #cc0000; }
-
-        .headline { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
-        .details { font-size: 14px; line-height: 1.5; }
-
-        footer { text-align: center; padding: 20px; color: var(--text-light); font-size: 13px; }
-    </style>
+</style>
 </head>
+
 <body>
 
-<header>
-    <a href="/" class="brand-logo">RIVALLY<span>.</span></a>
-    <div class="powered-by">Powered by <strong>SAKORP</strong></div>
-</header>
+<div class="main">
 
-<div class="main-content">
-    <div class="analyzer-container">
-        <h1>Instant Buy Box Threat Analyzer</h1>
-        <p class="subtitle">Enter your details below to diagnose your listing's health.</p>
-       
-        <div class="form-group">
-            <label for="asin">Product ASIN</label>
-            <input type="text" id="asin" placeholder="e.g. B08N5WRWNW">
-        </div>
-        <div class="form-group">
-            <label for="seller_id">Your Amazon Seller ID</label>
-            <input type="text" id="seller_id" placeholder="e.g. A1B2C3D4E5F6G">
-        </div>
+<h2>Buy Box Analyzer</h2>
 
-        <button onclick="checkBuyBox()" id="submitBtn">Analyze My Listing Now</button>
+<input id="asin" placeholder="ASIN">
+<input id="seller_id" placeholder="Seller ID">
 
-        <div id="result-box">
-            <div id="diagnosis" class="diagnosis-card LOW">
-                <div id="diag-headline" class="headline">Analysis Complete!</div>
-                <div id="diag-details" class="details"></div>
-            </div>
-        </div>
-    </div>
+<button onclick="check()">Analyze</button>
+
+<div id="result"></div>
+
 </div>
 
-<footer>
-    &copy; 2026 SAKORP. All rights reserved. RIVALLY is a proprietary tool of SAKORP.
-</footer>
-
 <script>
-    async function checkBuyBox() {
-        const asinInput = document.getElementById('asin').value.trim();
-        const sellerInput = document.getElementById('seller_id').value.trim();
-        const btn = document.getElementById('submitBtn');
-        const resultBox = document.getElementById('result-box');
-        const diagHeadline = document.getElementById('diag-headline');
-        const diagDetails = document.getElementById('diag-details');
+async function check() {
 
-        if (!asinInput || !sellerInput) {
-            alert("Please enter both ASIN and Seller ID.");
-            return;
-        }
+    const asin = document.getElementById("asin").value;
+    const seller = document.getElementById("seller_id").value;
+    const result = document.getElementById("result");
 
-        btn.disabled = true;
-        resultBox.style.display = 'none';
-        
-        let seconds = 0;
-        const loadingInterval = setInterval(() => {
-            seconds++;
-            if (seconds < 5) btn.innerText = "Connecting to Amazon servers...";
-            else if (seconds < 10) btn.innerText = "Extracting prices...";
-            else if (seconds < 15) btn.innerText = "Analyzing threats...";
-            else btn.innerText = "Processing... Rainforest is slow today...";
-        }, 1000);
+    result.innerHTML = "Analyzing...";
 
-        try {
-            // WE CALL YOUR API
-            const response = await fetch(`/api?asin=${asinInput}&seller_id=${sellerInput}`);
+    try {
+        const res = await fetch(`/api?asin=${asin}&seller_id=${seller}`);
+        const data = await res.json();
 
-            if (!response.ok) {
-                if(response.status === 504) throw new Error("Vercel Timeout (10s limit).");
-                throw new Error("API Error: " + response.status);
-            }
+        const product = data.product;
+        const buybox = product.buybox_winner || {};
 
-            const data = await response.json();
+        const winnerId =
+            buybox?.seller?.id ||
+            buybox?.merchant_info?.id ||
+            buybox?.fulfillment?.third_party_seller?.id || "";
 
-            if (data && data.product) {
-                diagHeadline.innerText = data.product.title;
-                const winner = data.product.buybox_winner ? data.product.buybox_winner.price.display_amount : "Not found";
-                diagDetails.innerText = `ASIN: ${asinInput} analyzed. Buy Box Price: ${winner}. Current Seller ID being checked: ${sellerInput}.`;
-                resultBox.style.display = 'block';
+        const sellers =
+            buybox?.mixed_offers_count ||
+            product?.mixed_offers_count ||
+            1;
+
+        let headline = "";
+        let details = "";
+        let level = "LOW";
+
+        if (seller !== winnerId) {
+            level = "HIGH";
+            headline = "🚨 You are NOT winning the Buy Box";
+            details = "Another seller is taking your sales right now.";
+        } else {
+            if (sellers > 10) {
+                level = "HIGH";
+                headline = "⚠️ High Risk";
+                details = `${sellers} sellers detected. You can lose Buy Box ANY moment.`;
+            } else if (sellers > 5) {
+                level = "MEDIUM";
+                headline = "⚡ Medium Risk";
+                details = `${sellers} competitors. Monitor pricing closely.`;
             } else {
-                alert("Product not found. Verify the ASIN.");
+                level = "LOW";
+                headline = "✅ Buy Box Stable";
+                details = "Low competition. You are safe for now.";
             }
-
-        } catch (error) {
-            console.error(error);
-            alert("Error: " + error.message + " Try again or check Vercel Logs.");
-        } finally {
-            clearInterval(loadingInterval);
-            btn.innerText = "Analyze My Listing Now";
-            btn.disabled = false;
         }
+
+        result.className = "diagnosis-card " + level;
+        result.innerHTML = `<h3>${headline}</h3><p>${details}</p>`;
+
+    } catch(e) {
+        result.innerHTML = "Error fetching data";
     }
+}
 </script>
+
 </body>
 </html>
-
