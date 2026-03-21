@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RIVALLY - Instant Buy Box Analyzer by SAKORP</title>
+    <style>
+        /* Modern CSS Reset & Reset */
+        :root {
+            --primary-color: #007bff; /* Modern Blue */
+            --text-dark: #1a1a1a;
+            --text-light: #6c757d;
+            --bg-page: #f8f9fa;
+            --bg-card: #ffffff;
+            --border-color: #e1e4e8;
+            --shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; 
+            background-color: var(--bg-page); 
+            margin: 0; 
+            padding: 0; 
+            color: var(--text-dark);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header / Navigation */
+        header {
+            background-color: var(--bg-card);
+            padding: 15px 50px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        .brand-logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-dark);
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .brand-logo span {
+            color: var(--primary-color);
+        }
+
+        .powered-by {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .powered-by a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .powered-by a:hover {
+            text-decoration: underline;
+        }
+
+        /* Main Container */
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 20px;
+        }
+
+        .analyzer-container { 
+            max-width: 550px; 
+            width: 100%;
+            background: var(--bg-card); 
+            padding: 40px; 
+            border-radius: 16px; 
+            box-shadow: var(--shadow);
+            border: 1px solid #f0f0f0;
+        }
+
+        h1 { 
+            text-align: center; 
+            color: var(--text-dark); 
+            font-size: 28px; 
+            font-weight: 800;
+            margin-top: 0;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        /* Form Styles */
+        .form-group { margin-bottom: 20px; }
+        
+        label { 
+            display: block; 
+            font-weight: 600; 
+            margin-bottom: 8px; 
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+        
+        input { 
+            width: 100%; 
+            padding: 14px; 
+            border: 1px solid var(--border-color); 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+
+        button { 
+            width: 100%; 
+            padding: 16px; 
+            background-color: var(--primary-color); 
+            color: white; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: 16px; 
+            cursor: pointer; 
+            font-weight: 700; 
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        button:hover { background-color: #0069d9; }
+        button:active { transform: translateY(1px); }
+        button:disabled { background-color: #a0cfff; cursor: not-allowed; }
+        
+        /* Result Styles */
+        #result-box { margin-top: 30px; display: none; border-top: 2px solid var(--border-color); padding-top: 30px; }
+        
+        .diagnosis-card { 
+            padding: 25px; 
+            border-radius: 12px; 
+            margin-bottom: 30px; 
+            border: 1px solid transparent;
+        }
+        
+        .HIGH { 
+            background-color: #fff5f5; 
+            border-color: #ffcccc;
+            color: #cc0000;
+        }
+        .MEDIUM { 
+            background-color: #fffdf5; 
+            border-color: #ffeeba;
+            color: #856404;
+        }
+        .LOW { 
+            background-color: #f5fff6; 
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        
+        .headline { font-size: 20px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.3px;}
+        .details { font-size: 15px; line-height: 1.6; opacity: 0.9; }
+        
+        /* SAKORP Shield Upsell Banner */
+        .upsell-banner { 
+            background-color: #111111; 
+            color: #ffffff; 
+            padding: 30px; 
+            border-radius: 12px; 
+            text-align: center; 
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--primary-color);
+        }
+
+        .upsell-banner h3 { 
+            margin-top: 0; 
+            color: #ffffff; 
+            font-size: 22px;
+            font-weight: 800;
+        }
+        
+        .upsell-banner span.shield-brand {
+            color: var(--primary-color);
+        }
+
+        .upsell-banner p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #cccccc;
+            margin-bottom: 20px;
+        }
+
+        .upsell-btn { 
+            display: inline-block; 
+            padding: 14px 28px; 
+            background-color: var(--primary-color); 
+            color: white; 
+            text-decoration: none; 
+            font-weight: 700; 
+            border-radius: 8px; 
+            transition: background-color 0.2s;
+        }
+        
+        .upsell-btn:hover { background-color: #0069d9; }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-light);
+            font-size: 14px;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/" class="brand-logo">RIVALLY<span>.</span></a>
+    <div class="powered-by">Powered by <a href="https://sakorp.com" target="_blank">SAKORP</a></div>
+</header>
+
+<div class="main-content">
+    <div class="analyzer-container">
+        <h1>Instant Buy Box Threat Analyzer</h1>
+        <p class="subtitle">Enter your details below to diagnose your listing's health.</p>
+        
+        <div class="form-group">
+            <label for="asin">Product ASIN</label>
+            <input type="text" id="asin" placeholder="e.g. B08N5WRWNW" autocomplete="off">
+        </div>
+        <div class="form-group">
+            <label for="seller_id">Your Amazon Seller ID</label>
+            <input type="text" id="seller_id" placeholder="e.g. A1B2C3D4E5F6G" autocomplete="off">
+        </div>
+        <button onclick="checkBuyBox()" id="submitBtn">Analyze My Listing Now</button>
+
+        <div id="result-box">
+            <div id="diagnosis" class="diagnosis-card">
+                <div id="diag-headline" class="headline"></div>
+                <div id="diag-details" class="details"></div>
+            </div>
+
+            <div class="upsell-banner">
+                <h3>Protect Your Amazon Profits instantly</h3>
+                <p>This report is just a snapshot. While you sleep, competitors actively change prices to steal your Buy Box and drain your profit.</p>
+                <p>Don't leave your revenue to chance. <strong>Monitor 24/7, detect hijackers, and automate your pricing strategy.</strong></p>
+                <a href="https://sakorp.com" target="_blank" class="upsell-btn">Reveal What's Actually Causing -></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    &copy; 2023 SAKORP. All rights reserved. RIVALLY is a proprietary tool of SAKORP.
+</footer>
+
+<script>
+    async function checkBuyBox() {
+        const asin = document.getElementById('asin').value.trim();
+        const sellerId = document.getElementById('seller_id').value.trim();
+        const btn = document.getElementById('submitBtn');
+        const resultBox = document.getElementById('result-box');
+
+        if (!asin || !sellerId) {
+            alert("Please enter both your ASIN and Seller ID.");
+            return;
+        }
+
+        btn.innerText = "Analyzing Listing...";
+        btn.disabled = true;
+        resultBox.style.display = 'none'; // Hide previous results
+
+        try {
+            const response = await fetch('/api/check', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ asin: asin, seller_id: sellerId })
+            });
+            const data = await response.json();
+
+            if (data.status === "success") {
+                const diagnosis = data.data.diagnosis;
+                
+                // Set text
+                document.getElementById('diag-headline').innerText = diagnosis.headline;
+                document.getElementById('diag-details').innerText = diagnosis.details;
+                
+                // Set color class based on threat level
+                const diagCard = document.getElementById('diagnosis');
+                diagCard.className = 'diagnosis-card ' + diagnosis.threat_level;
+                
+                // Show results with smooth scroll
+                resultBox.style.display = 'block';
+                window.scrollTo({ top: resultBox.offsetTop + 100, behavior: 'smooth' });
+            } else {
+                alert("Error analyzing ASIN. Please ensure the ASIN and Seller ID are valid and try again.");
+            }
+        } catch (error) {
+            alert("Connection error. Please check your internet connection.");
+        } finally {
+            btn.innerText = "Analyze My Listing Now";
+            btn.disabled = false;
+        }
+    }
+</script>
+
+</body>
+</html>
+
