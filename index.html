@@ -282,44 +282,57 @@
             return;
         }
 
-        btn.innerText = "Analyzing Listing...";
+        btn.innerText = "Analyzing Listing (this can take up to 30s)...";
         btn.disabled = true;
-        resultBox.style.display = 'none'; // Hide previous results
+        resultBox.style.display = 'none';
+
+        // timeout helper (30s max čekanje)
+        const fetchWithTimeout = (url, options, timeout = 30000) => {
+            return Promise.race([
+                fetch(url, options),
+                new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error("timeout")), timeout)
+                )
+            ]);
+        };
 
         try {
-            const response = await fetch('/api/check', {
+            const response = await fetchWithTimeout('/api/check', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ asin: asin, seller_id: sellerId })
-            });
+            }, 30000);
+
             const data = await response.json();
 
             if (data.status === "success") {
                 const diagnosis = data.data.diagnosis;
-                
-                // Set text
+
                 document.getElementById('diag-headline').innerText = diagnosis.headline;
                 document.getElementById('diag-details').innerText = diagnosis.details;
-                
-                // Set color class based on threat level
+
                 const diagCard = document.getElementById('diagnosis');
                 diagCard.className = 'diagnosis-card ' + diagnosis.threat_level;
-                
-                // Show results with smooth scroll
+
                 resultBox.style.display = 'block';
                 window.scrollTo({ top: resultBox.offsetTop + 100, behavior: 'smooth' });
+
             } else {
-                alert("Error analyzing ASIN. Please ensure the ASIN and Seller ID are valid and try again.");
+                alert("Error analyzing ASIN. Please check inputs.");
             }
+
         } catch (error) {
-            alert("Connection error. Please check your internet connection.");
+            if (error.message === "timeout") {
+                alert("Analysis is taking longer than expected. Please try again.");
+            } else {
+                alert("Connection error. Please try again.");
+            }
         } finally {
             btn.innerText = "Analyze My Listing Now";
             btn.disabled = false;
         }
     }
 </script>
-
 </body>
 </html>
 
