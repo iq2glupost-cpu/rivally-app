@@ -57,7 +57,7 @@
             border: 1px solid #f0f0f0;
         }
 
-        h1 { text-align: center; font-size: 28px; margin-bottom: 10px; }
+        h1 { text-align: center; font-size: 28px; margin-bottom: 10px; font-weight: 800; }
         .subtitle { text-align: center; color: var(--text-light); margin-bottom: 30px; }
 
         .form-group { margin-bottom: 20px; }
@@ -87,15 +87,6 @@
         .headline { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
         .details { font-size: 14px; line-height: 1.5; }
 
-        .upsell-banner {
-            background-color: #111111;
-            color: #ffffff;
-            padding: 25px;
-            border-radius: 12px;
-            text-align: center;
-            border: 2px solid var(--primary-color);
-        }
-
         footer { text-align: center; padding: 20px; color: var(--text-light); font-size: 13px; }
     </style>
 </head>
@@ -109,90 +100,81 @@
 <div class="main-content">
     <div class="analyzer-container">
         <h1>Instant Buy Box Threat Analyzer</h1>
-        <p class="subtitle">Unesite ASIN da proverite stanje vašeg Amazon listinga.</p>
+        <p class="subtitle">Enter your details below to diagnose your listing's health.</p>
        
         <div class="form-group">
-            <label>Product ASIN</label>
-            <input type="text" id="asin" placeholder="npr. B08N5WRWNW">
+            <label for="asin">Product ASIN</label>
+            <input type="text" id="asin" placeholder="e.g. B08N5WRWNW">
         </div>
-        <div class="form-group" style="display:none;"> <label>Seller ID</label>
-            <input type="text" id="seller_id" value="SAKORP_USER">
+        <div class="form-group">
+            <label for="seller_id">Your Amazon Seller ID</label>
+            <input type="text" id="seller_id" placeholder="e.g. A1B2C3D4E5F6G">
         </div>
 
         <button onclick="checkBuyBox()" id="submitBtn">Analyze My Listing Now</button>
 
         <div id="result-box">
             <div id="diagnosis" class="diagnosis-card LOW">
-                <div id="diag-headline" class="headline">Analiza završena!</div>
+                <div id="diag-headline" class="headline">Analysis Complete!</div>
                 <div id="diag-details" class="details"></div>
-            </div>
-
-            <div class="upsell-banner">
-                <p>Želite 24/7 zaštitu od hijackera?</p>
-                <a href="https://sakorp.com" target="_blank" style="color: #007bff; font-weight: bold; text-decoration: none;">Saznajte više o SAKORP Shield-u →</a>
             </div>
         </div>
     </div>
 </div>
 
 <footer>
-    &copy; 2026 SAKORP. Sva prava zadržana. RIVALLY je vlasništvo kompanije SAKORP Corporation.
+    &copy; 2026 SAKORP. All rights reserved. RIVALLY is a proprietary tool of SAKORP.
 </footer>
 
 <script>
     async function checkBuyBox() {
         const asinInput = document.getElementById('asin').value.trim();
+        const sellerInput = document.getElementById('seller_id').value.trim();
         const btn = document.getElementById('submitBtn');
         const resultBox = document.getElementById('result-box');
         const diagHeadline = document.getElementById('diag-headline');
         const diagDetails = document.getElementById('diag-details');
 
-        if (!asinInput) {
-            alert("Molimo unesite ASIN proizvoda.");
+        if (!asinInput || !sellerInput) {
+            alert("Please enter both ASIN and Seller ID.");
             return;
         }
 
-        // 1. Priprema i animacija dugmeta dok čekamo Rainforest
         btn.disabled = true;
         resultBox.style.display = 'none';
         
         let seconds = 0;
         const loadingInterval = setInterval(() => {
             seconds++;
-            if (seconds < 5) btn.innerText = "Povezivanje sa Amazon serverima...";
-            else if (seconds < 10) btn.innerText = "Izvlačenje cena i Buy Box stanja...";
-            else if (seconds < 15) btn.innerText = "Skoro gotovo, analiziramo pretnje...";
-            else btn.innerText = "Još samo trenutak...";
+            if (seconds < 5) btn.innerText = "Connecting to Amazon servers...";
+            else if (seconds < 10) btn.innerText = "Extracting prices...";
+            else if (seconds < 15) btn.innerText = "Analyzing threats...";
+            else btn.innerText = "Processing... Rainforest is slow today...";
         }, 1000);
 
         try {
-            // 2. Pozivamo naš Vercel API
-            // Dodajemo ASIN kao parametar u linku
-            const response = await fetch(`/api?asin=${asinInput}`);
+            // WE CALL YOUR API
+            const response = await fetch(`/api?asin=${asinInput}&seller_id=${sellerInput}`);
 
-            if (!response.ok) throw new Error("Serveru treba previše vremena ili je ključ neispravan.");
+            if (!response.ok) {
+                if(response.status === 504) throw new Error("Vercel Timeout (10s limit).");
+                throw new Error("API Error: " + response.status);
+            }
 
             const data = await response.json();
 
-            // 3. Prikazujemo dobijene podatke
             if (data && data.product) {
                 diagHeadline.innerText = data.product.title;
-                
-                const price = data.product.buybox_winner ? 
-                    `${data.product.buybox_winner.price.value} ${data.product.buybox_winner.price.currency}` : 
-                    "Nema cene";
-                
-                diagDetails.innerText = `Proizvod je uspešno lociran. Trenutna Buy Box cena: ${price}. Stanje listinga je stabilno.`;
-                
+                const winner = data.product.buybox_winner ? data.product.buybox_winner.price.display_amount : "Not found";
+                diagDetails.innerText = `ASIN: ${asinInput} analyzed. Buy Box Price: ${winner}. Current Seller ID being checked: ${sellerInput}.`;
                 resultBox.style.display = 'block';
-                window.scrollTo({ top: resultBox.offsetTop, behavior: 'smooth' });
             } else {
-                alert("Nismo našli proizvod za taj ASIN. Proverite da li je ispravan.");
+                alert("Product not found. Verify the ASIN.");
             }
 
         } catch (error) {
             console.error(error);
-            alert("Veza je pukla jer Rainforest API-ju treba više od 15-20 sekundi. Proverite konzolu za detalje.");
+            alert("Error: " + error.message + " Try again or check Vercel Logs.");
         } finally {
             clearInterval(loadingInterval);
             btn.innerText = "Analyze My Listing Now";
@@ -200,7 +182,6 @@
         }
     }
 </script>
-
 </body>
 </html>
 
