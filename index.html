@@ -298,26 +298,37 @@ async function checkBuyBox() {
         const product = data.product;
         const buybox = product.buybox_winner || {};
 
+        // 🔥 BITNO — bolji extraction
         const winnerId =
+            buybox?.seller?.seller_id ||
             buybox?.seller?.id ||
+            buybox?.merchant_info?.merchant_id ||
             buybox?.merchant_info?.id ||
-            buybox?.fulfillment?.third_party_seller?.id || "";
+            buybox?.fulfillment?.third_party_seller?.id ||
+            "";
 
         const sellers =
-            buybox?.mixed_offers_count ||
-            product?.mixed_offers_count ||
             product?.offers_count ||
+            product?.mixed_offers_count ||
+            buybox?.mixed_offers_count ||
             1;
 
         let headline = "";
         let details = "";
         let level = "LOW";
 
-        if (sellerId !== winnerId) {
+        // 🔴 NAJBITNIJI FIX
+        if (!winnerId) {
+            level = "HIGH";
+            headline = "⚠️ Unable to Verify Buy Box Owner";
+            details = "Amazon is hiding the Buy Box owner. This usually means high competition or suppressed listing.";
+        }
+        else if (sellerId !== winnerId) {
             level = "HIGH";
             headline = "🚨 You Are Losing the Buy Box";
-            details = "Another seller is capturing your sales right now.";
-        } else {
+            details = "Another seller is currently winning the Buy Box and taking your sales.";
+        }
+        else {
             if (sellers > 10) {
                 level = "HIGH";
                 headline = "⚠️ High Risk Detected";
@@ -333,6 +344,7 @@ async function checkBuyBox() {
             }
         }
 
+        // UI update
         document.getElementById('diag-headline').innerText = headline;
         document.getElementById('diag-details').innerText = details;
 
@@ -351,6 +363,7 @@ async function checkBuyBox() {
     }
 }
 </script>
+
 
 
 </body>
