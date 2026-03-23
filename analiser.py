@@ -33,7 +33,7 @@ def analyze_buybox(asin, target_seller_id):
         price = (buybox.get("price") or {}).get("value", 0.0)
 
         # =========================
-        # SELLER DETECTION (ROBUST)
+        # SELLER DETECTION
         # =========================
         winner_id = ""
         winner_name = "Unknown Seller"
@@ -51,7 +51,6 @@ def analyze_buybox(asin, target_seller_id):
             winner_id = seller.get("id", "")
             winner_name = seller.get("name", "Unknown Seller")
 
-            # fallback iz URL-a
             if not winner_id and seller.get("link"):
                 link = seller["link"]
                 if "seller=" in link:
@@ -64,16 +63,13 @@ def analyze_buybox(asin, target_seller_id):
             winner_name = "Amazon.com"
 
         # =========================
-        # SELLER COUNT (FINAL FIX)
+        # SELLER COUNT
         # =========================
-
         total_sellers = 1
 
-        # 🔥 NAJBITNIJE - iz buybox_winner
         if buybox.get("mixed_offers_count") is not None:
             total_sellers = int(buybox.get("mixed_offers_count"))
 
-        # fallback (retko)
         elif product.get("mixed_offers_count") is not None:
             total_sellers = int(product.get("mixed_offers_count"))
 
@@ -83,26 +79,49 @@ def analyze_buybox(asin, target_seller_id):
         elif product.get("offers"):
             total_sellers = len(product.get("offers"))
 
-        # sigurnost
         if total_sellers < 1:
             total_sellers = 1
 
+        # =========================
+        # 🔥 BASIC MODE (NO SELLER ID)
+        # =========================
+        if not target_seller_id:
+            headline = f"{total_sellers} sellers detected on this listing"
 
+            details = (
+                f"There are {total_sellers} active sellers competing for the Buy Box.\n\n"
+                f"Current Buy Box price: ${price}\n\n"
+                "Enter your Seller ID to see if you're winning or losing the Buy Box.\n\n"
+                "This is only a surface-level analysis."
+            )
+
+            return {
+                "status": "success",
+                "data": {
+                    "asin": asin,
+                    "market": {
+                        "total_sellers": total_sellers
+                    },
+                    "diagnosis": {
+                        "headline": headline,
+                        "details": details,
+                        "risk_block": "Limited analysis",
+                        "hidden_trigger": "Unlock full Buy Box intelligence with Seller ID",
+                        "threat_level": "MEDIUM" if total_sellers > 1 else "LOW"
+                    }
+                }
+            }
 
         # =========================
-        # BUY BOX LOGIC
+        # FULL MODE (WITH SELLER ID)
         # =========================
         target_id = target_seller_id.strip()
         holds = (target_id == winner_id.strip())
 
-        # fallback (Rainforest edge case)
         if not holds:
             if target_id in json.dumps(buybox):
                 holds = True
 
-        # =========================
-        # RISK ENGINE
-        # =========================
         if holds:
             if total_sellers == 1:
                 risk_level = "HIGH"
@@ -117,48 +136,20 @@ def analyze_buybox(asin, target_seller_id):
             risk_level = "CRITICAL"
             risk_score = 92
 
-        # =========================
-        # COPY (APPLE STYLE)
-        # =========================
         if holds:
             headline = "You Control the Buy Box — But You Are Exposed"
-
             details = (
                 f"You currently hold the Buy Box at ${price}.\n\n"
-                f"There are at least {total_sellers} active sellers on this listing.\n\n"
-                "This may not reflect the full scope of competitive pressure.\n"
-                "Buy Box ownership in environments like this can shift quickly.\n\n"
-                "A single pricing or fulfillment change can remove you instantly."
+                f"There are at least {total_sellers} active sellers.\n\n"
+                "Buy Box ownership can shift quickly."
             )
         else:
             headline = "You Are Losing the Buy Box"
-
             details = (
-                "A competing seller is currently dominating the Buy Box.\n\n"
                 f"Current Buy Box price: ${price}\n\n"
-                "Price and fulfillment advantage detected.\n\n"
-                "This may not reflect the full scope of factors affecting your position.\n"
-                "Additional competitive signals are influencing Buy Box rotation."
+                "A competitor is dominating the listing.\n\n"
+                "Multiple signals are affecting your position."
             )
-
-        # =========================
-        # PREMIUM RISK BLOCK
-        # =========================
-        risk_block = (
-            f"Risk level: {risk_level}\n\n"
-            "Listings in this state typically experience increased volatility.\n\n"
-            "Performance can decline once competitive pressure intensifies.\n\n"
-            "These conditions tend to escalate rather than stabilize."
-        )
-
-        # =========================
-        # HIDDEN HOOK
-        # =========================
-        hidden = (
-            "This view reflects only surface-level signals.\n"
-            "Additional factors affecting Buy Box allocation are not visible here.\n\n"
-            "Continuous monitoring is required to fully understand these changes."
-        )
 
         return {
             "status": "success",
@@ -179,8 +170,9 @@ def analyze_buybox(asin, target_seller_id):
                 "diagnosis": {
                     "headline": headline,
                     "details": details,
-                    "risk_block": risk_block,
-                    "hidden_trigger": hidden
+                    "risk_block": f"Risk level: {risk_level}",
+                    "hidden_trigger": "Full competitive signals hidden",
+                    "threat_level": risk_level
                 }
             }
         }
