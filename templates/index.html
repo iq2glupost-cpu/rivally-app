@@ -1,413 +1,316 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RIVALLY - Instant Buy Box Analyzer by SAKORP</title>
-    <style>
-        /* Modern CSS Reset & Reset */
-        :root {
-            --primary-color: #007bff; /* Modern Blue */
-            --text-dark: #1a1a1a;
-            --text-light: #6c757d;
-            --bg-page: #f8f9fa;
-            --bg-card: #ffffff;
-            --border-color: #e1e4e8;
-            --shadow: 0 10px 30px rgba(0,0,0,0.05);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RIVALLY - Instant Buy Box Analyzer by SAKORP</title>
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: var(--bg-page);
-            margin: 0;
-            padding: 0;
-            color: var(--text-dark);
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        /* Header / Navigation */
-        header {
-            background-color: var(--bg-card);
-            padding: 15px 50px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-        }
-
-        .brand-logo {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--text-dark);
-            text-decoration: none;
-            letter-spacing: -1px;
-        }
-
-        .brand-logo span {
-            color: var(--primary-color);
-        }
-
-        .powered-by {
-            font-size: 12px;
-            color: var(--text-light);
-        }
-
-        .powered-by a {
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 600;
-        }
-       
-        .powered-by a:hover {
-            text-decoration: underline;
-        }
-
-        /* Main Container */
-        .main-content {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 50px 20px;
-        }
-
-        .analyzer-container {
-            max-width: 550px;
-            width: 100%;
-            background: var(--bg-card);
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            border: 1px solid #f0f0f0;
-        }
-
-        h1 {
-            text-align: center;
-            color: var(--text-dark);
-            font-size: 28px;
-            font-weight: 800;
-            margin-top: 0;
-            margin-bottom: 10px;
-            letter-spacing: -0.5px;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: var(--text-light);
-            margin-bottom: 30px;
-            font-size: 16px;
-        }
-
-        /* Form Styles */
-        .form-group { margin-bottom: 20px; }
-       
-        label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: var(--text-dark);
-        }
-       
-        input {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 16px;
-            transition: border-color 0.2s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
-        }
-
-        button {
-            width: 100%;
-            padding: 16px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            font-weight: 700;
-            transition: background-color 0.2s, transform 0.1s;
-        }
-
-        button:hover { background-color: #0069d9; }
-        button:active { transform: translateY(1px); }
-        button:disabled { background-color: #a0cfff; cursor: not-allowed; }
-       
-        /* Result Styles */
-        #result-box { margin-top: 30px; display: none; border-top: 2px solid var(--border-color); padding-top: 30px; }
-       
-        .diagnosis-card {
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            border: 1px solid transparent;
-        }
-       
-        .HIGH {
-            background-color: #fff5f5;
-            border-color: #ffcccc;
-            color: #cc0000;
-        }
-        .MEDIUM {
-            background-color: #fffdf5;
-            border-color: #ffeeba;
-            color: #856404;
-        }
-        .LOW {
-            background-color: #f5fff6;
-            border-color: #c3e6cb;
-            color: #155724;
-        }
-       
-        .headline { font-size: 20px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.3px;}
-        .details { font-size: 15px; line-height: 1.6; opacity: 0.9; }
-       
-        /* SAKORP Shield Upsell Banner */
-        .upsell-banner {
-            background-color: #111111;
-            color: #ffffff;
-            padding: 30px;
-            border-radius: 12px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            border: 2px solid var(--primary-color);
-        }
-
-        .upsell-banner h3 {
-            margin-top: 0;
-            color: #ffffff;
-            font-size: 22px;
-            font-weight: 800;
-        }
-       
-        .upsell-banner span.shield-brand {
-            color: var(--primary-color);
-        }
-
-        .upsell-banner p {
-            font-size: 15px;
-            line-height: 1.6;
-            color: #cccccc;
-            margin-bottom: 20px;
-        }
-
-        .upsell-btn {
-            display: inline-block;
-            padding: 14px 28px;
-            background-color: var(--primary-color);
-            color: white;
-            text-decoration: none;
-            font-weight: 700;
-            border-radius: 8px;
-            transition: background-color 0.2s;
-        }
-       
-        .upsell-btn:hover { background-color: #0069d9; }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: var(--text-light);
-            font-size: 14px;
-            border-top: 1px solid var(--border-color);
-            background-color: var(--bg-card);
-        }
-    </style>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-D3X28BQ146"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D3X28BQ146"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-D3X28BQ146');
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-D3X28BQ146');
 </script>
 
+<style>
+/* === OSNOVNI STILOVI ZADRŽANI === */
+:root {
+    --primary-color: #007bff;
+    --primary-hover: #0056b3;
+    --text-dark: #1a1a1a;
+    --text-light: #6c757d;
+    --bg-page: #f8f9fa;
+    --bg-card: #ffffff;
+    --border-color: #e1e4e8;
+    --shadow: 0 12px 36px rgba(0,0,0,0.08);
+}
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+    background-color: var(--bg-page);
+    margin: 0;
+    display:flex; flex-direction:column; min-height:100vh;
+}
+header {
+    background-color: rgba(255,255,255,0.9);
+    backdrop-filter: blur(10px);
+    padding:15px 50px;
+    display:flex; justify-content:space-between;
+}
+.brand-logo {font-size:24px;font-weight:800;text-decoration:none;color:#000;}
+.brand-logo span {color:var(--primary-color);}
+.powered-by {font-size:12px;cursor:pointer;}
+
+.main-content {
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:50px 20px;
+}
+
+.analyzer-container {
+    max-width:550px;width:100%;
+    background:#fff;padding:40px;
+    border-radius:16px;
+    box-shadow:var(--shadow);
+}
+
+input {
+    width:100%;padding:14px;margin-bottom:15px;
+    border-radius:8px;border:1px solid #ddd;
+    box-sizing: border-box;
+}
+
+button.primary-btn {
+    width:100%;padding:16px;
+    background:#007bff;color:#fff;
+    border:none;border-radius:8px;
+    font-weight:700;cursor:pointer;
+}
+
+#result-box {display:none;margin-top:30px;}
+
+.diagnosis-card {
+    padding:25px;
+    border-radius:12px;
+    margin-bottom:20px;
+    border:1px solid #ddd;
+}
+
+.HIGH {background:#fff5f5;}
+.MEDIUM {background:#fffdf5;}
+.LOW {background:#f5fff6;}
+
+/* === STILIZOVAN SHIELD BRIDGE (DEEP MONITORING) === */
+.shield-bridge {
+    padding:25px;
+    background:#f0f7ff;
+    border-radius:12px;
+    border: 1px solid #cce5ff;
+}
+
+.shield-bridge-title {
+    font-size:14px;
+    font-weight:800;
+    color:var(--primary-hover);
+    text-transform:uppercase;
+    margin-bottom:15px;
+    letter-spacing: 0.5px;
+}
+
+.shield-bridge-desc {
+    font-size:14px;
+    color:var(--text-dark);
+    line-height:1.6;
+}
+
+.shield-bridge-desc ul {
+    margin: 15px 0;
+    padding-left: 20px;
+}
+
+.shield-bridge-desc li {
+    margin-bottom: 8px;
+}
+
+/* Veliko i jasno CTA dugme za Whitelistu */
+.shield-cta {
+    display: block;
+    width: 100%;
+    margin-top: 25px;
+    background: none;
+    border: none;
+    color: var(--primary-hover);
+    font-weight: 900;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-transform: uppercase;
+    text-align: center;
+    transition: color 0.2s ease;
+}
+
+.shield-cta:hover {
+    color: #003d82;
+}
+
+.modal-overlay {
+    position:fixed;
+    top:0;left:0;width:100%;height:100%;
+    background:rgba(0,0,0,0.5);
+    display:none;justify-content:center;align-items:center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background:#fff;
+    padding:30px;
+    border-radius:12px;
+    width: 100%;
+    max-width: 350px;
+    text-align: center;
+}
+
+.modal-content h3 { margin-top: 0; }
+.close-modal-btn { 
+    background: none; border: none; font-size: 20px; 
+    cursor: pointer; float: right; margin-top: -15px; margin-right: -15px; 
+}
+</style>
 </head>
+
 <body>
 
 <header>
-    <a href="/" class="brand-logo">RIVALLY<span>.</span></a>
-    <div class="powered-by">Powered by <a href="https://sakorp.com" target="_blank">SAKORP</a></div>
+<a href="/" class="brand-logo">RIVALLY<span>.</span></a>
+<div class="powered-by" onclick="openModal()">Powered by SAKORP</div>
 </header>
 
 <div class="main-content">
-    <div class="analyzer-container">
-        <h1>Real-time Buy Box intelligence.</h1>
-        <p class="subtitle">Identify who's winning your Buy Box,and why.</p>
-       
-        <div class="form-group">
-            <label for="asin">Product ASIN</label>
-            <input type="text" id="asin" placeholder="e.g. B08N5WRWNW" autocomplete="off">
-        </div>
-        <div class="form-group">
-            <label for="seller_id">Your Amazon Seller ID</label>
-            <input type="text" id="seller_id" placeholder="e.g. A1B2C3D4E5F6G" autocomplete="off">
-        </div>
-        <button onclick="checkBuyBox()" id="submitBtn">Analyze My Listing Now</button>
+<div class="analyzer-container">
 
-        <div id="result-box">
-            <div id="diagnosis" class="diagnosis-card">
-                <div id="diag-headline" class="headline"></div>
-                <div id="diag-details" class="details"></div>
-            </div>
+<h1>Instant Buy Box Threat Analyzer</h1>
+<p class="subtitle">Enter your ASIN to check listing risk.</p>
 
-            <div class="upsell-banner">
-                <h3>Protect Your Amazon Profits instantly</h3>
-                <p>This report is just a snapshot. While you sleep, competitors actively change prices to steal your Buy Box and drain your profit.</p>
-                <p>Don't leave your revenue to chance. <strong>Monitor 24/7, detect hijackers, and automate your pricing strategy.</strong></p>
-                <a href="#" id="openWaitlistBtn" class="upsell-btn">Reveal What's Actually Causing -></a>
-            </div>
-        </div>
-    </div>
+<input type="text" id="asin" placeholder="Product ASIN">
+<input type="text" id="seller_id" placeholder="Seller ID (Optional)">
+
+<button onclick="checkBuyBox()" id="submitBtn" class="primary-btn">
+Analyze My Listing Now
+</button>
+
+<div id="result-box">
+
+<div id="diagnosis" class="diagnosis-card">
+<div id="diag-headline"></div>
+<div id="diag-details"></div>
 </div>
 
-<footer>
-    &copy; 2023 SAKORP. All rights reserved. RIVALLY is a proprietary tool of SAKORP.
-</footer>
+<div class="shield-bridge">
+    <div class="shield-bridge-title">Deep Monitoring</div>
 
-<script>
-    async function checkBuyBox() {
-        const asin = document.getElementById('asin').value.trim();
-        const sellerId = document.getElementById('seller_id').value.trim();
-        const btn = document.getElementById('submitBtn');
-        const resultBox = document.getElementById('result-box');
+    <div class="shield-bridge-desc">
+        A surface-level analysis is just the beginning. Protect your listing from every angle with <b>SAKORP Shield</b>:
+        
+        <ul>
+            <li>Complete <b>24/7 Monitoring</b> of Buy Box Rotation & All Winners</li>
+            <li><b>Forensic Hijacking Protection</b> with Detailed PDF Reports formatted for Amazon Support cases</li>
+            <li><b>Instant Real-Time alerts</b> for any Buy Box Price or Winner change</li>
+            <li><b>Automated Revenue Impact Analysis</b> for lost Buy Box hours</li>
+            <li><b>Comprehensive Insights</b> for complete Buy Box tracking.</li>
+        </ul>
 
-        if (!asin || !sellerId) {
-            alert("Please enter both your ASIN and Seller ID.");
-            return;
-        }
-
-        btn.innerText = "Analyzing Listing...";
-        btn.disabled = true;
-        resultBox.style.display = 'none'; // Hide previous results
-
-        try {
-            const response = await fetch('/api/check', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ asin: asin, seller_id: sellerId })
-            });
-            const data = await response.json();
-
-            if (data.status === "success") {
-                const diagnosis = data.data.diagnosis;
-               
-                // Set text
-                document.getElementById('diag-headline').innerText = diagnosis.headline;
-                document.getElementById('diag-details').innerText = diagnosis.details;
-               
-                // Set color class based on threat level
-                const diagCard = document.getElementById('diagnosis');
-                diagCard.className = 'diagnosis-card ' + diagnosis.threat_level;
-               
-                // Show results with smooth scroll
-                resultBox.style.display = 'block';
-                window.scrollTo({ top: resultBox.offsetTop + 100, behavior: 'smooth' });
-            } else {
-                alert("Error analyzing ASIN. Please ensure the ASIN and Seller ID are valid and try again.");
-            }
-        } catch (error) {
-            alert("Connection error. Please check your internet connection.");
-        } finally {
-            btn.innerText = "Analyze My Listing Now";
-            btn.disabled = false;
-        }
-    }
-</script>
-
-<div id="waitlistModal" style="display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); backdrop-filter: blur(5px);">
-  <div style="background-color: #1a1a2e; margin: 10% auto; padding: 40px; border: 1px solid #333; width: 90%; max-width: 450px; border-radius: 12px; color: white; text-align: center; position: relative; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
-    <span id="closeModal" style="color: #aaa; position: absolute; top: 15px; right: 20px; font-size: 28px; font-weight: bold; cursor: pointer;">&times;</span>
-    
-    <h2 style="margin-top: 0; color: #fff; font-size: 24px; margin-bottom: 15px;">Exclusive Early Access</h2>
-    <p style="font-size: 15px; margin-bottom: 25px; color: #ccc; line-height: 1.5;">We are currently in closed beta, perfecting our tools to help you protect your Buy Box and maximize profits. Enter your email to join the waitlist and be the first to get access!</p>
-    
-    <form id="waitlistForm">
-      <input type="email" id="userEmail" placeholder="Enter your business email" required style="width: 100%; box-sizing: border-box; padding: 12px 15px; border-radius: 6px; border: 1px solid #444; background-color: #0f0f1a; color: white; margin-bottom: 20px; font-size: 15px;">
-      <button type="submit" style="background-color: #007bff; color: white; width: 100%; padding: 14px; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: bold; transition: background-color 0.3s;">Join the Waitlist</button>
-    </form>
-
-    <div id="successMessage" style="display: none; color: #4CAF50; font-size: 16px; margin-top: 20px; font-weight: bold; padding: 15px; background-color: rgba(76, 175, 80, 0.1); border-radius: 6px; border: 1px solid #4CAF50;">
-      Thank you! You are on the list. We will be in touch soon.
+        Everything you need to master and protect your Buy Box. Don't wait until you lose sales.
     </div>
-  </div>
+
+    <button class="shield-cta" onclick="openModal()">
+        &gt;&gt; Join The Whitelist For Pro Access &lt;&lt;
+    </button>
+</div>
+
+</div>
+</div>
+</div>
+
+<div id="whitelistModal" class="modal-overlay" onclick="closeModalOutside(event)">
+<div class="modal-content">
+<button class="close-modal-btn" onclick="closeModal()">×</button>
+<h3>Join the Whitelist</h3>
+<p style="font-size: 14px; color: #6c757d; margin-bottom: 20px;">Get early access to SAKORP Shield.</p>
+<input type="email" id="whitelist_email" placeholder="work-email@company.com">
+<button onclick="submitWaitlist()" class="primary-btn" style="background: #1a1a1a;">Request Access</button>
+</div>
 </div>
 
 <script>
-  var modal = document.getElementById("waitlistModal");
-  var btn = document.getElementById("openWaitlistBtn");
-  var span = document.getElementById("closeModal");
-  var form = document.getElementById("waitlistForm");
-  var successMsg = document.getElementById("successMessage");
+async function checkBuyBox() {
+    const asin = document.getElementById('asin').value.trim();
+    const sellerId = document.getElementById('seller_id').value.trim();
+    const btn = document.getElementById('submitBtn');
+    const resultBox = document.getElementById('result-box');
 
-  // Otvara prozor na klik
-  btn.onclick = function(e) {
-    e.preventDefault(); 
-    modal.style.display = "block";
-    form.style.display = "block";
-    successMsg.style.display = "none";
-    document.getElementById("userEmail").value = "";
-  }
-
-  // Zatvara prozor na X
-  span.onclick = function() {
-    modal.style.display = "none";
-  }
-
-  // Zatvara prozor ako se klikne van njega
-  window.onclick = function(event) {
-    if (event.target == modal) {
-      modal.style.display = "none";
+    if (!asin) {
+        alert("Please enter ASIN.");
+        return;
     }
-  }
 
-  // Šalje formu na backend
-  form.onsubmit = async function(event) {
-    event.preventDefault(); 
-    var email = document.getElementById("userEmail").value;
-    var submitBtn = form.querySelector('button[type="submit"]');
-    
-    // Promeni tekst dugmeta dok učitava
-    submitBtn.innerText = "Adding...";
-    submitBtn.disabled = true;
+    btn.innerText = "Analyzing...";
+    btn.disabled = true;
+    resultBox.style.display = 'none';
 
     try {
-        const response = await fetch('/api/waitlist', {
+        const response = await fetch('/api/check', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email })
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({ asin, seller_id: sellerId || null })
         });
+
         const data = await response.json();
 
         if (data.status === "success") {
-            // Ako je sve prošlo ok, prikaži poruku zahvalnosti
-            form.style.display = "none";
-            successMsg.style.display = "block";
-        } else {
-            alert("Error: " + data.message);
-        }
-    } catch (error) {
-        alert("Connection error. Please try again.");
-    } finally {
-        // Vrati dugme u normalno stanje
-        submitBtn.innerText = "Join the Waitlist";
-        submitBtn.disabled = false;
-    }
-  }
+            const diagnosis = data.data.diagnosis;
 
+            let extraText = "";
+
+            if (!sellerId) {
+                extraText = "\n\nThis is a surface-level view. Enter Seller ID to reveal hidden pressure and real positioning.";
+            } else {
+                extraText = "\n\nMultiple hidden factors are influencing your Buy Box position. Full cause not visible here.";
+            }
+
+            document.getElementById('diag-headline').innerText = diagnosis.headline;
+            document.getElementById('diag-details').innerText = diagnosis.details + extraText;
+
+            document.getElementById('diagnosis').className =
+                'diagnosis-card ' + diagnosis.threat_level;
+
+            resultBox.style.display = 'block';
+        } else {
+            alert("Error analyzing listing.");
+        }
+
+    } catch(e) {
+        alert("Connection error. Please try again.");
+    }
+
+    btn.innerText = "Analyze My Listing Now";
+    btn.disabled = false;
+}
+
+function openModal(){
+    document.getElementById('whitelistModal').style.display='flex';
+}
+
+function closeModal(){
+    document.getElementById('whitelistModal').style.display='none';
+}
+
+function closeModalOutside(e){
+    if(e.target.id==='whitelistModal') closeModal();
+}
+
+async function submitWaitlist(){
+    const email=document.getElementById('whitelist_email').value;
+    if(!email) {
+        alert("Please enter a valid email address.");
+        return;
+    }
+
+    try {
+        await fetch('/api/waitlist',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({email})
+        });
+
+        alert("Request sent successfully!");
+        document.getElementById('whitelist_email').value = '';
+        closeModal();
+    } catch (e) {
+        alert("Error submitting request.");
+    }
+}
 </script>
 
 </body>
