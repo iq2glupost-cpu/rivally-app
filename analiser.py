@@ -113,109 +113,109 @@ def analyze_buybox(asin, target_seller_id):
             }
 
         # =========================
-# FULL MODE (WITH SELLER ID)
-# =========================
-
-target_id = target_seller_id.strip()
-holds = (target_id == winner_id.strip())
-
-if not holds:
-    if target_id in json.dumps(buybox):
-        holds = True
-
-
-# =========================
-# RISK ENGINE
-# =========================
-
-if holds:
-    if total_sellers == 1:
-        risk_level = "HIGH"
-        risk_score = 72
-    elif total_sellers <= 3:
-        risk_level = "MEDIUM"
-        risk_score = 58
-    elif total_sellers <= 10:
-        risk_level = "HIGH"
-        risk_score = 74
-    else:
-        risk_level = "HIGH"
-        risk_score = 85
-else:
-    risk_level = "CRITICAL"
-    risk_score = 94
-
-
-# =========================
-# HOOK DIAGNOSIS ENGINE
-# =========================
-
-if holds:
-
-    if total_sellers == 1:
-        headline = "You Control the Buy Box — But You're Exposed"
-
-        details = (
-            f"You currently own the Buy Box at ${price}.\n\n"
-            "Single-seller listings are highly vulnerable to sudden hijacking.\n\n"
-            "If a new FBA competitor enters, Buy Box control can shift instantly."
-        )
-
-        hidden = "Hidden risk: FBA hijack entry window detected"
-
-    else:
-        headline = "You Control the Buy Box — But Pressure Is Increasing"
-
-        details = (
-            f"You are currently winning at ${price}, with {total_sellers} active sellers on this listing.\n\n"
-            "Competing sellers are creating measurable pressure on your position.\n\n"
-            "Certain competitive signals suggest your Buy Box stability is weakening."
-        )
-
-        hidden = "Hidden signals: pricing pressure + fulfillment advantage + seller activity spikes"
-
-
-else:
-    headline = "You Are Losing the Buy Box Right Now"
-
-    details = (
-        f"You are not controlling the Buy Box. Current winning price: ${price}.\n\n"
-        "A competing seller has stronger positioning signals.\n\n"
-        "Multiple competitive factors are actively suppressing your Buy Box visibility."
-    )
-
-    hidden = "Detected: price gap + FBA advantage + seller performance signals"
-
-
-# =========================
-# FINAL RESPONSE
-# =========================
-
-return {
-    "status": "success",
-    "data": {
-        "asin": asin,
-        "buybox": {
-            "holds": holds,
-            "price": price,
-            "is_fba": is_fba
-        },
-        "market": {
-            "total_sellers": total_sellers
-        },
-        "risk": {
-            "score": risk_score,
-            "level": risk_level
-        },
-        "diagnosis": {
-            "headline": headline,
-            "details": details,
-            "risk_block": f"Risk level: {risk_level}",
-            "hidden_trigger": hidden,
-            "threat_level": risk_level
+        # FULL MODE (WITH SELLER ID)
+        # =========================
+        
+        target_id = target_seller_id.strip()
+        holds = (target_id == winner_id.strip())
+        
+        if not holds:
+            if target_id in json.dumps(buybox):
+                holds = True
+        
+        
+        # =========================
+        # RISK ENGINE
+        # =========================
+        
+        if holds:
+            if total_sellers == 1:
+                risk_level = "HIGH"
+                risk_score = 72
+            elif total_sellers <= 3:
+                risk_level = "MEDIUM"
+                risk_score = 58
+            elif total_sellers <= 10:
+                risk_level = "HIGH"
+                risk_score = 74
+            else:
+                risk_level = "HIGH"
+                risk_score = 85
+        else:
+            risk_level = "CRITICAL"
+            risk_score = 94
+        
+        
+        # =========================
+        # HOOK DIAGNOSIS ENGINE
+        # =========================
+        
+        if holds:
+        
+            if total_sellers == 1:
+                headline = "You Control the Buy Box — But You're Exposed"
+        
+                details = (
+                    f"You currently own the Buy Box at ${price}.\n\n"
+                    "Single-seller listings are highly vulnerable to sudden hijacking.\n\n"
+                    "If a new FBA competitor enters, Buy Box control can shift instantly."
+                )
+        
+                hidden = "Hidden risk: FBA hijack entry window detected"
+        
+            else:
+                headline = "You Control the Buy Box — But Pressure Is Increasing"
+        
+                details = (
+                    f"You are currently winning at ${price}, with {total_sellers} active sellers on this listing.\n\n"
+                    "Competing sellers are creating measurable pressure on your position.\n\n"
+                    "Certain competitive signals suggest your Buy Box stability is weakening."
+                )
+        
+                hidden = "Hidden signals: pricing pressure + fulfillment advantage + seller activity spikes"
+        
+        
+        else:
+            headline = "You Are Losing the Buy Box Right Now"
+        
+            details = (
+                f"You are not controlling the Buy Box. Current winning price: ${price}.\n\n"
+                "A competing seller has stronger positioning signals.\n\n"
+                "Multiple competitive factors are actively suppressing your Buy Box visibility."
+            )
+        
+            hidden = "Detected: price gap + FBA advantage + seller performance signals"
+        
+        
+        # =========================
+        # FINAL RESPONSE
+        # =========================
+        
+        return {
+            "status": "success",
+            "data": {
+                "asin": asin,
+                "buybox": {
+                    "holds": holds,
+                    "price": price,
+                    "is_fba": is_fba
+                },
+                "market": {
+                    "total_sellers": total_sellers
+                },
+                "risk": {
+                    "score": risk_score,
+                    "level": risk_level
+                },
+                "diagnosis": {
+                    "headline": headline,
+                    "details": details,
+                    "risk_block": f"Risk level: {risk_level}",
+                    "hidden_trigger": hidden,
+                    "threat_level": risk_level
+                }
+            }
         }
-    }
-}
 
 
     except Exception as e:
