@@ -65,22 +65,18 @@ def analyze_buybox(asin, target_seller_id):
         # =========================
         # SELLER COUNT
         # =========================
-        total_sellers = 1
-
-        if buybox.get("mixed_offers_count") is not None:
+        if buybox.get("new_offers_count") is not None:
+            total_sellers = int(buybox.get("new_offers_count"))
+        
+        elif buybox.get("mixed_offers_count") is not None:
             total_sellers = int(buybox.get("mixed_offers_count"))
-
-        elif product.get("mixed_offers_count") is not None:
-            total_sellers = int(product.get("mixed_offers_count"))
-
+        
         elif product.get("offers_count") is not None:
             total_sellers = int(product.get("offers_count"))
-
-        elif product.get("offers"):
-            total_sellers = len(product.get("offers"))
-
-        if total_sellers < 1:
+        
+        else:
             total_sellers = 1
+
 
         # =========================
         # 🔥 BASIC MODE (NO SELLER ID)
